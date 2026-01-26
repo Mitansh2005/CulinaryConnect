@@ -1,17 +1,79 @@
 import { IoShareSocial } from "react-icons/io5";
 import { AiOutlineStar } from "react-icons/ai";
 import { ImLocation2 } from "react-icons/im";
-import DefaultLogo from "../../../assets/restaurant.png";
-import { useState } from "react";
+import DefaultLogo from "../../../assets/icons/restaurant.png";
+import { useEffect, useState } from "react";
+import { AiFillStar } from "react-icons/ai";
 import { DetailJobCard } from "./JobDetailNewDesign";
 import { motion, AnimatePresence } from "framer-motion";
-export const JobCardDesign = ({ items, className }) => {
+import { getFreshIdToken } from "@/firebase/authUtils";
+import axios from "axios";
+import { baseUrl } from "@/constants/constants";
+export const JobCardDesign = ({
+	items,
+	className,
+	triggerRefresh = () => {},
+}) => {
 	const [expandedJobId, setExpandedJobId] = useState(null);
 	const [isClosing, setIsClosing] = useState(false);
+	const [likedJobsMap, setLikedJobsMap] = useState({});
+	useEffect(() => {
+		const fetchLikedJobs = async () => {
+			try {
+				const token = await getFreshIdToken(true);
+				const res = await axios.get(`${baseUrl}/jobseeker/liked-jobs/`, {
+					headers: { Authorization: `Bearer ${token}` },
+				});
+				const likedJobIds = res.data.map((job) => job.job_id); // Assuming response is list of jobs
+				const map = {};
+				likedJobIds.forEach((id) => {
+					map[id] = true;
+				});
+				setLikedJobsMap(map);
+			} catch (error) {
+				console.error("Failed to fetch liked jobs", error);
+			}
+		};
+
+		fetchLikedJobs();
+	}, []);
 
 	const handleLearnMoreClick = (jobId) => {
 		setExpandedJobId(jobId);
 	};
+	const handleShare = (jobId) => {
+		const url = `${window.location.origin}/job/${jobId}`;
+		navigator.clipboard
+			.writeText(url)
+			.then(() => alert("Link copied to clipboard!"))
+			.catch(() => alert("Failed to copy link"));
+	};
+	const handleToggleLike = async (jobId) => {
+		try {
+			const token = await getFreshIdToken(true);
+
+			// If already liked, send DELETE to unlike
+			if (likedJobsMap[jobId]) {
+				await axios.delete(`${baseUrl}/jobseeker/liked-jobs/${jobId}/`, {
+					headers: { Authorization: `Bearer ${token}` },
+				});
+				setLikedJobsMap((prev) => ({ ...prev, [jobId]: false }));
+			} else {
+				// Not liked, send POST to like
+				await axios.post(
+					`${baseUrl}/jobseeker/save-liked-jobs/`,
+					{ id: jobId },
+					{ headers: { Authorization: `Bearer ${token}` } }
+				);
+				setLikedJobsMap((prev) => ({ ...prev, [jobId]: true }));
+			}
+		} catch (error) {
+			console.error("Toggle like failed:", error);
+		} finally {
+			triggerRefresh(); // Refresh liked jobs after toggling
+		}
+	};
+
 	return (
 		<>
 			<div className={("grid grid-cols-4 gap-2 mt-16 p-4 w-full", className)}>
@@ -38,8 +100,21 @@ export const JobCardDesign = ({ items, className }) => {
 							/>
 
 							<div className="flex justify-between w-fit mt-1 mr-[-15px] cursor-pointer">
-								<IoShareSocial className="w-10" />
-								<AiOutlineStar className="w-10" />
+								<IoShareSocial
+									className="w-10"
+									onClick={() => handleShare(item.job_id)}
+								/>
+								{likedJobsMap[item.job_id] ? (
+									<AiFillStar
+										className="w-10 text-yellow-500"
+										onClick={() => handleToggleLike(item.job_id)}
+									/>
+								) : (
+									<AiOutlineStar
+										className="w-10"
+										onClick={() => handleToggleLike(item.job_id)}
+									/>
+								)}
 							</div>
 						</div>
 						<div className="ml-4">
@@ -61,12 +136,15 @@ export const JobCardDesign = ({ items, className }) => {
 							</h2>
 							<div className="font-customFont3 text-base text-gray-500 flex items-center mt-3">
 								<ImLocation2 />
-								<h4 className="ml-1 mt-1">{item.location.state}</h4>
+								<h4 className="ml-1 mt-1">
+									{item.location.state}, {item.location.city},{" "}
+									{item.location.postal_code}
+								</h4>
 							</div>
 						</div>
 						{/* 👇 Bottom Right Button */}
 						<button
-							className="absolute bottom-6 right-6 bg-[#0C6291] text-white px-4 py-2 rounded-lg shadow hover:bg-[#0c6391c9] transition-all"
+							className="absolute bottom-6 right-6 bg-brandAccent text-white px-4 py-2 rounded-lg shadow hover:bg-[#0c6391c9] transition-all"
 							onClick={() => handleLearnMoreClick(item.job_id)}
 						>
 							Learn More

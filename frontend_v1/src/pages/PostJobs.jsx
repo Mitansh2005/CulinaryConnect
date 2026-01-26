@@ -5,10 +5,15 @@ import axios from "axios";
 import { baseUrl } from "@/constants/constants";
 import { getNames } from "country-list";
 import ReactQuill from "react-quill";
+import { useNavigate } from "react-router-dom";
+import { ImCross } from "react-icons/im";
+import { Button } from "@/components/ui/button";
 export default function PostJobForm() {
 	const [jobCreateStatus, setJobCreateStatus] = useState("");
 	const [selectedCountry, setSelectedCountry] = useState("");
 	const [recruiters, setRecruiters] = useState([]);
+	const [showPopup, setShowPopup] = useState(false);
+	const navigate  = useNavigate();
 	const [formData, setFormData] = useState({
 		assignee: "",
 		company: "",
@@ -22,7 +27,7 @@ export default function PostJobForm() {
 		},
 		salary: "",
 		employment_type: "Full Time",
-		posted_date: "",
+		posted_date: new Date().toISOString().split("T")[0], // Current date in YYYY-MM-DD format
 		application_deadline: "",
 		requirements: "",
 	});
@@ -46,7 +51,7 @@ export default function PostJobForm() {
 	const getRecruiters = async () => {
 		try {
 			const token = await getFreshIdToken(true);
-			const res = await axios.get(`${baseUrl}/recruiters/company`, {
+			const res = await axios.get(`${baseUrl}/recruiters/company/`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
@@ -80,22 +85,60 @@ export default function PostJobForm() {
 		e.preventDefault();
 		try {
 			const token = await getFreshIdToken(true);
-			const res = await axios.post(`${baseUrl}/jobs`, formData, {
+			const res = await axios.post(`${baseUrl}/jobs/`, formData, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 					"Content-Type": "Application/json",
 				},
 			});
 			console.log(res.data);
-			setJobCreateStatus("created");
+			setJobCreateStatus("success");
 		} catch (err) {
 			console.error("Something went wrong: ", err);
+			setJobCreateStatus("failed");
+		}finally{
+			setShowPopup(true);
 		}
 		console.log("Job Post Submitted:", formData);
 	};
-
+	const closePopup = () => {
+		setShowPopup(false);
+		setJobCreateStatus("");
+		navigate("/home"); // Redirect to home after closing the popup
+	}
 	return (
 		<div className="max-w-4xl mx-auto mt-12 p-8 bg-white text-black rounded-xl shadow-lg">
+			{showPopup && (
+				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+					<div className="bg-white p-6 rounded-lg shadow-lg text-center">
+						<div className="flex justify-end mt-{-4px}">
+							<ImCross
+								className="hover:text-red-600 hover:cursor-pointer"
+								onClick={closePopup}
+							></ImCross>
+						</div>
+						<h2
+							className={`text-xl font-semibold mb-4 ${
+								jobCreateStatus === "success" ? "text-green-600" : "text-red-600"
+							}`}
+						>
+							{jobCreateStatus === "success" ? "Success!" : "Failed"}
+						</h2>
+						<p>
+							{" "}
+							{jobCreateStatus === "success"
+								? "The process completed successfully."
+								: "The process failed. Please try again."}
+						</p>
+						<Button
+							onClick={closePopup}
+							className="mt-4 px-4 py-1 hover:bg-red-600 hover:text-black rounded-md"
+						>
+							Close
+						</Button>
+					</div>
+				</div>
+			)}
 			<h2 className="text-3xl font-semibold mb-6">Create a Job Posting</h2>
 
 			<form onSubmit={handleSubmit} className="space-y-5">
@@ -128,6 +171,8 @@ export default function PostJobForm() {
 						name="salary"
 						value={formData.salary}
 						onChange={handleChange}
+						max={1000000}
+						step={1000}
 						isRequired={true}
 					/>
 
@@ -148,16 +193,6 @@ export default function PostJobForm() {
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<InputComponent
-						label="Posted Date"
-						type="date"
-						name="posted_date"
-						value={formData.posted_date}
-						onChange={handleChange}
-						isRequired={true}
-						labelClassname="mt-3"
-					/>
-
-					<InputComponent
 						label="Application Deadline"
 						type="date"
 						name="application_deadline"
@@ -175,7 +210,7 @@ export default function PostJobForm() {
 						value={selectedCountry}
 						onChange={handleCountryChange}
 						className="border-2 p-2 m-2 rounded-lg focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150 appearance-auto"
-						>
+					>
 						<option value="" disabled>
 							Select a country
 						</option>
@@ -185,7 +220,7 @@ export default function PostJobForm() {
 							</option>
 						))}
 					</select>
-						</div>
+				</div>
 				<div>
 					<InputComponent
 						label="State"

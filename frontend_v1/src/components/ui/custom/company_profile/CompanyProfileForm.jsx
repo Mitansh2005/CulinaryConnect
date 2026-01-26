@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { InputComponent } from "../input-component";
 import { NormalButtons } from "../../ui_buttons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { getNames } from "country-list";
-import 'react-quill/dist/quill.snow.css';
+import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import {
 	Card,
@@ -17,11 +17,16 @@ import {
 import { getFreshIdToken } from "@/firebase/authUtils";
 import axios from "axios";
 import { baseUrl } from "@/constants/constants";
+import { ImCross } from "react-icons/im";
+import { Button } from "../../button";
 
 export const CompanyProfileForm = () => {
 	const location = useLocation();
+	const navigate = useNavigate();
 	console.log(location.state.companyData);
 	const companyId = location.state?.companyData?.id || "";
+	const [showPopup, setShowPopup] = useState(false);
+	const [status, setStatus] = useState("");
 	const [form, setForm] = useState({
 		name: "",
 		location: {
@@ -98,16 +103,26 @@ export const CompanyProfileForm = () => {
 		e.preventDefault();
 		try {
 			const token = await getFreshIdToken(true);
-			const res = await axios.patch(`${baseUrl}/company/${companyId}`, form, {
+			const res = await axios.patch(`${baseUrl}/company/${companyId}/`, form, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${token}`,
 				},
 			});
 			console.log("Submitting form:", form);
+			setStatus("success");
 		} catch (err) {
+			setStatus("failed")
 			console.error("Error submitting form:", err);
+		}finally{
+			setShowPopup(true);
 		}
+	};
+	const closePopup = () => {
+		setShowPopup(false);
+		setStatus("");
+		navigate("/company-profile");
+
 	};
 
 	return (
@@ -124,6 +139,37 @@ export const CompanyProfileForm = () => {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
+					{showPopup && (
+						<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+							<div className="bg-white p-6 rounded-lg shadow-lg text-center">
+								<div className="flex justify-end mt-{-4px}">
+									<ImCross
+										className="hover:text-red-600 hover:cursor-pointer"
+										onClick={closePopup}
+									></ImCross>
+								</div>
+								<h2
+									className={`text-xl font-semibold mb-4 ${
+										status === "success" ? "text-green-600" : "text-red-600"
+									}`}
+								>
+									{status === "success" ? "Success!" : "Failed"}
+								</h2>
+								<p>
+									{" "}
+									{status === "success"
+										? "The process completed successfully."
+										: "The process failed. Please try again."}
+								</p>
+								<Button
+									onClick={closePopup}
+									className="mt-4 px-4 py-1 hover:bg-red-600 hover:text-black rounded-md"
+								>
+									Close
+								</Button>
+							</div>
+						</div>
+					)}
 					<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 						<InputComponent
 							label="Company Name"

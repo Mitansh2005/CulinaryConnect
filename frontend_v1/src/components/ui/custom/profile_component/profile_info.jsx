@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { auth } from "@/firebase/firebase";
+import { getSafeUserData } from "@/utils/localStorage";
 export function ProfileInfo() {
-	const savedUserdata = JSON.parse(localStorage.getItem("userData"));
+	const savedUserdata = getSafeUserData();
+
 	const phoneNumber = savedUserdata?.phone_number;
 	const location = savedUserdata?.location;
 	const user = auth.currentUser;

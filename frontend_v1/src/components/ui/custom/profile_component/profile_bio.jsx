@@ -20,27 +20,28 @@ export function ProfileBio() {
 	const navigate = useNavigate();
 	const uid = getUid();
 	useEffect(() => {
-		const fetch = async () => {
+		const fetchBio = async () => {
 			try {
+				setLoading(true);
 				const token = await getFreshIdToken(true);
-				const res = await axios.get(`${baseUrl}/profile/${uid}`, {
+				const res = await axios.get(`${baseUrl}/profile_detail/${uid}/`, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
 				});
-				const data = res.data[0];
+				const data = res.data;
 				setBio(data.bio);
 				setPopupType("success");
-				setLoading(false);
 			} catch (err) {
 				console.error("Something went wrong in fetching the bio.", err);
 				setErrorData(err);
 				setPopupType("error");
+			} finally{
 				setLoading(false);
 			}
 		};
 		if (uid) {
-			fetch();
+			fetchBio();
 		}
 	}, [uid]);
 	const saveUserData = (data) => {
@@ -49,9 +50,10 @@ export function ProfileBio() {
 	};
 	const saveBio = async () => {
 		try {
+			setLoading(true);
 			const token = await getFreshIdToken(true);
 			const res = await axios.put(
-				`${baseUrl}/profile_detail/${uid}`,
+				`${baseUrl}/profile_detail/${uid}/`,
 				{ bio },
 				{
 					headers: {
@@ -63,15 +65,14 @@ export function ProfileBio() {
 			console.log("Profile updated:", res.data);
 			setBio(res.data.bio);
 			saveUserData(res.data);
-			setShowPopup(true);
-			setLoading(false);
 			setPopupType("success");
 		} catch (error) {
 			console.error("Something went wrong updating profile.", error);
-			setShowPopup(true);
 			setErrorData(error);
 			setPopupType("error");
+		}finally{
 			setLoading(false);
+			setShowPopup(true);
 		}
 	};
 
@@ -88,7 +89,7 @@ export function ProfileBio() {
 		<>
 			<section className="flex flex-col items-center overflow-hidden ">
 				{showPopup && (
-					<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+					<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
 						<div className="bg-white p-6 rounded-lg shadow-lg text-center">
 							<div className="flex justify-end mt-{-4px}">
 								<ImCross

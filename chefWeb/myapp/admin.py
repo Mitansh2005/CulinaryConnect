@@ -1,15 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import CustomUser,ProfileTable,Countries,JobsTable,ApplicationTable,MessageTable,NotificationTable
-from django.utils.html import format_html
+from .models import Company, CompanyMembership, CustomUser, JobSeekerProfile,Location,Job,Application,Notification,Message, RecruiterProfile
 # Register your models here.
-
+    
 class UserAdmin(BaseUserAdmin):
     model = CustomUser
-    list_display=["user_id","email","first_name","last_name","phone_number","profile_picture","user_type","is_staff"]
+    list_display=["user_id","uid","username","first_name","last_name","email","phone_number","user_type","location","short_bio","consent_box","is_staff","created_at","updated_at"]
     fieldsets = (
-    (None, {'fields': ('email', 'password')}),
-    ('Personal info', {'fields': ('first_name', 'last_name', 'phone_number', 'profile_picture', 'user_type')}),
+    ('Personal info', {'fields': ('username',"first_name","last_name","email",'phone_number', 'user_type',"location","bio")}),
     ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
     ('Important dates', {'fields': ('last_login',)}),
     )
@@ -17,51 +15,69 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
     (None, {
         'classes': ('wide',),
-        'fields': ('email', 'password1', 'password2', 'user_type','profile_picture','is_staff', 'is_active')}
+        'fields': ('uid','user_type','is_staff', 'is_active')}
     ),
     )
-    readonly_fields=('date_joined',)
-    search_fields = ('email', 'first_name', 'last_name', 'user_type')
-    ordering = ('email', 'date_joined')
-    def profile_picture_tag(self, obj):
-        if obj.profile_picture:
-            return format_html('<img src="{}" style="height:50px;width:50px;object-fit:cover;" />', obj.profile_picture.url)
-        return "No Image"
-    profile_picture_tag.short_description = 'Profile Picture'
- 
-class ProfileAdmin(admin.ModelAdmin):
-  list_display=["profile_id","user_id","first_name","last_name","location","bio","experience_years","speciality"]
+    readonly_fields=('created_at','updated_at','uid')
+    search_fields = ('uid','email','user_type')
+    ordering = ('email', 'created_at')
+    
 
-
+  # Method to return the shortened bio
+    def short_bio(self, obj):
+        # Limit the bio to the first 50 characters, adding '...' if it's longer
+        if(obj.bio is None):
+          return ""
+        
+        return obj.bio[:50] + '...' if len(obj.bio) > 50 else obj.bio
+    short_bio.admin_order_field = 'bio'  # Allow sorting by the original bio field
+    short_bio.short_description = 'Bio'  # Label for the column
+class CompanyMemberShipAdmin(admin.ModelAdmin):
+  list_display=["user","company","role","created_at"]
 class LocationAdmin(admin.ModelAdmin):
   list_display=["country","state","city","postal_code"]
 
-class JobAdmin(admin.ModelAdmin):
-  list_display=["user_id","job_id","title","description","location","salary","employment_type","posted_date","application_deadline","short_description"]
+class CompanyAdmin(admin.ModelAdmin):
+  list_display=["id","name","size","description","fssai_license_no","logo","slug","created_at","updated_at"]
   def short_description(self, obj):
         length = 100  # Adjust this value to your desired length
         return (obj.description[:length] + '...') if len(obj.description) > length else obj.description
-  short_description.short_description = 'requirements'
+  readonly_fields=("created_at","updated_at","slug","fssai_license_no")
+class RecruiterProfileAdmin(admin.ModelAdmin):
+  list_display=["recruiter_id","user","company","designation"]
+class JobSeekerProfileAdmin(admin.ModelAdmin):
+  list_display=["jobseeker_id","user","experience_years","achievements","job_type_preference","preferred_job_roles","display_liked_jobs","relocate_confirmation","job_search_status"]
+  
+  def display_liked_jobs(self, obj):
+        return ", ".join([job.title for job in obj.liked_jobs.all()])
+    
+  display_liked_jobs.short_description = "Liked Jobs"
+class JobAdmin(admin.ModelAdmin):
+  list_display=["assignee","job_id","company","title","description","location","salary","employment_type","posted_date","application_deadline","short_requirements","created_at","updated_at"]
+  def short_requirements(self, obj):
+        length = 100  # Adjust this value to your desired length
+        return (obj.requirements[:length] + '...') if len(obj.requirements) > length else obj.requirements
+  short_requirements.short_requirements = 'requirements'
+  readonly_fields=("created_at","updated_at")
 
 class ApplicationAdmin(admin.ModelAdmin):
-  list_display=["application_id","job_id","applicant_id","application_date","status"]
-
+  list_display=["application_id","job","applicant","application_date","status","updated_at"]
+  readonly_fields=("updated_at",)
 class MessageAdmin(admin.ModelAdmin):
-  list_display=["user","sender","receiver","message_content","sent_date","read_status"]
+  list_display=["sender","receiver","content","timestamp","read"]
   
 class NotificationAdmin(admin.ModelAdmin):
-  list_display=["notification_id","user_id","notification_type","message","sent_date","read_status"]
+  list_display=["notification_id","user","notification_type","message","sent_date","read_status"]
   
-  
-  
-  
-  
-  
-admin.site.register(ProfileTable,ProfileAdmin)
+ 
 admin.site.register(CustomUser,UserAdmin)
-admin.site.register(Countries,LocationAdmin)
-admin.site.register(JobsTable,JobAdmin)
-admin.site.register(ApplicationTable,ApplicationAdmin)
-admin.site.register(MessageTable,MessageAdmin)
-admin.site.register(NotificationTable,NotificationAdmin)
+admin.site.register(CompanyMembership,CompanyMemberShipAdmin)
+admin.site.register(Location,LocationAdmin)
+admin.site.register(JobSeekerProfile,JobSeekerProfileAdmin)
+admin.site.register(RecruiterProfile,RecruiterProfileAdmin)
+admin.site.register(Company,CompanyAdmin)
+admin.site.register(Job,JobAdmin)
+admin.site.register(Application,ApplicationAdmin)
+admin.site.register(Message,MessageAdmin)
+admin.site.register(Notification,NotificationAdmin)
 

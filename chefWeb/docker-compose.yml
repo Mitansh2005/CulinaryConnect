@@ -1,18 +1,33 @@
-version: '3'
+version: "3.9"
 
 services:
   web:
     build: .
-    command: python backend/manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code
+      - .:/app
+      - C:/Users/Mitansh/OneDrive/Desktop/Django Projects/Chef App/ChefApp/chefWeb/service_account.json:/app/service_account.json
+    working_dir: /app
     ports:
       - "8000:8000"
     depends_on:
       - db
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=mydatabase
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - FIREBASE_CREDENTIALS_FILE_PATH=/app/service_account.json
+
   db:
-    image: postgres
+    image: postgres:14
     environment:
       POSTGRES_DB: mydatabase
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

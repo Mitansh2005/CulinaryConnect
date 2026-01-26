@@ -6,8 +6,8 @@ import { getFreshIdToken } from "@/firebase/authUtils";
 export default function ProfilePictureUploader({
   id,
   username,
-  getProfileUrl = `/api/profile_detail/`,
-  uploadUrl = `/api/upload`,
+  getProfileUrl = `/api/profile-detail/`,
+  uploadUrl = `/api/upload/`,
   defaultImage,
   className = "",
 }) {
@@ -35,16 +35,14 @@ export default function ProfilePictureUploader({
     const getImage = async () => {
       try {
         const token = await getFreshIdToken(true);
-        const res = await axios.get(`${getProfileUrl}/${id}`, {
+        const res = await axios.get(`${getProfileUrl}/${id}/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         const image = res.data.profile_picture || res.data.logo;
         if (image) {
-          const blob = b64toBlob(image, "image/jpeg");
-          const blobUrl = URL.createObjectURL(blob);
-          setProfileImageUrl(blobUrl);
+          setProfileImageUrl(`data:image/jpeg;base64,${image}`);
         }
       } catch (error) {
         console.error("Error fetching profile image:", error);
@@ -100,9 +98,9 @@ export default function ProfilePictureUploader({
   };
 
   return (
-    <div className={`flex items-center justify-between space-x-6 p-12 w-full max-w-lg ${className}`}>
+    <div className={`flex items-center justify-between space-x-2 px-12 py-7 w-full max-w-lg ${className}`}>
       <div>
-        <h2 className="text-4xl font-bold">
+        <h2 className="text-2xl font-heading font-semibold text-beige-100">
           {username?.toUpperCase() || "USERNAME"}
         </h2>
       </div>

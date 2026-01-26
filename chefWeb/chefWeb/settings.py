@@ -15,29 +15,51 @@ import django
 import django.utils
 from django.utils.encoding import force_str
 import django.utils.encoding
+from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import credentials
+from corsheaders.defaults import default_headers
 django.utils.encoding.force_text=force_str
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+# Build paths inside the project like this: BAS_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from the .env file
+load_dotenv()
+FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
+FIREBASE_CREDENTIALS_FILE_PATH = os.getenv('FIREBASE_CREDENTIALS_FILE_PATH')
+print("Firebase Credentials Path:", FIREBASE_CREDENTIALS_FILE_PATH)
+# Path to the Firebase service account key JSON file
+cred = credentials.Certificate(FIREBASE_CREDENTIALS_FILE_PATH)
+
+firebase_admin.initialize_app(cred)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-31us55w_!rm2e80a1rh=b50+@_5q^_=#yt7ji+m3a9gvu@^!o-'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+        'DEFAULT_AUTHENTICATION_CLASSES': [
+        'myapp.authentication.FirebaseAuthentication',
+    ]
+}
 
 # Application definition
 
 INSTALLED_APPS = [
     'myapp',
     'corsheaders',
-    'graphene_django',
+    'dotenv',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,9 +69,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-GRAPHENE = {
-    'SCHEMA': 'myapp.schema.schema'
-}
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
@@ -87,8 +106,12 @@ WSGI_APPLICATION = 'chefWeb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'postgres-db'), 
+        'USER': os.getenv('DB_USER', 'chefweb_user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'your_password'),  
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),  
     }
 }
 
@@ -138,10 +161,13 @@ STATIC_DIRS=[
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "authorization",
+]
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",  # Your React app's URL
+    "http://localhost:5173",  
 ]

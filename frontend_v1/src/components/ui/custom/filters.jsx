@@ -7,8 +7,8 @@ export default function FiltersDropdown({ jobs, handleFilter }) {
 	const [postedDate, setPostedDate] = useState("");
 	const [showText, setShowText] = useState(false);
 
-	const uniqueLocations = [...new Set(jobs.map((job) => job.city))];
-	const employmentTypes = ["FULL", "PART"];
+	const uniqueLocations = [...new Set(jobs.map((job) => job.location.city))];
+	const employmentTypes = ["Full Time", "Part Time"];
 	const getFilters = () => {
 		const filters = {
 			employmentType,

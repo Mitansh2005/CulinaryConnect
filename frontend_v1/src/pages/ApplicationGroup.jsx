@@ -28,7 +28,7 @@ export const ApplicationGroup = ({ title, applications }) => {
           <div
             className="flex gap-4"
             style={{
-              maxWidth: `${visibleApps.length * 280}px`,
+              maxWidth: `${visibleApps.length * 340}px`,
             }}
           >
             {visibleApps.map((app) => (

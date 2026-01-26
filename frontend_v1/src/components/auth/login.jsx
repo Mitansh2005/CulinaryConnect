@@ -1,188 +1,602 @@
 import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
-import loginImg from "../../assets/login.png";
+import GoogleIcon from "../../assets/icons/google.png";
 import {
-	doSignInWithGoogle,
-	doSignInWithEmailPassword,
-	doPasswordChange,
+  doSignInWithGoogle,
+  doSignInWithEmailPassword,
+  doCreateUserWithEmailPassword,
 } from "../../firebase/auth";
 import { useAuth } from "../../contexts/authContext";
-import { Link, useNavigate } from "react-router-dom";
-import {
-	InputComponent,
-	PasswordInputComponent,
-} from "../ui/custom/input-component";
+import { useNavigate } from "react-router-dom";
 import { auth } from "@/firebase/firebase";
-import { getUid, setUpProfile } from "@/firebase/authUtils";
+import { getFreshIdToken, getUid, setUpProfile } from "@/firebase/authUtils";
+import { baseUrl } from "@/constants/constants";
+import { MdErrorOutline } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 
 function LoginTemplate() {
-	const navigate = useNavigate();
-	const { userLoggedIn } = useAuth();
+  const navigate = useNavigate();
+  const { userLoggedIn } = useAuth();
+  const [userType, setUserType] = useState("restaurant"); // default is restaurant
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [companyName, setCompanyName] = useState("");
+  const [fssaiLicense, setFssaiLicense] = useState("");
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [authMode, setAuthMode] = useState("signin"); // or "signup"
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [isRegisterIn, setIsRegisterIn] = useState(false);
+  const [formValid, setFormValid] = useState(false);
+  const [profileSetUpComplete, setProfileSetUpComplete] = useState(false);
 
-	useEffect(() => {
-		if (userLoggedIn) {
-			navigate("/home");
-		}
-	}, [userLoggedIn, navigate]);
-	const [userType, setUserType] = useState("jobseeker"); // default is jobseeker
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [isSigningIn, setIsSigningIn] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
-	const [passwordVisible, setPasswordVisible] = useState(false);
+  // Redirect to home if user is already logged in
+  useEffect(() => {
+    if (userLoggedIn) {
+      // If signing up, wait for profile setup
+      if (authMode === "signup" && !profileSetUpComplete) {
+        return;
+      }
+      // Otherwise redirect immediately
+      navigate("/home");
+    }
+  }, [userLoggedIn, profileSetUpComplete, authMode, navigate]);
 
-	const onSubmit = async (e) => {
-		e.preventDefault();
-		if (!isSigningIn) {
-			setIsSigningIn(true);
-			try {
-				await doSignInWithEmailPassword(email, password);
-				console.log("Token verified and user logged in");
-			} catch (err) {
-				setErrorMessage("Something went wrong. Please Try Again");
-			} finally {
-				setIsSigningIn(false);
-			}
-		}
-	};
+  useEffect(() => {
+    // This runs whenever userType, companyName, or fssaiLicense changes
+    const valid = isFormValid();
+    setFormValid(valid);
+  }, [userType, companyName, fssaiLicense]);
 
-	const onGoogleSignIn = async (e) => {
-		e.preventDefault();
-		if (!isSigningIn) {
-			setIsSigningIn(true);
-			try {
-				console.log(userType);
-				await doSignInWithGoogle();
-				const uid = getUid();
-				const res = await setUpProfile({
-					uid: uid,
-					username: "New user",
-					user_type: userType,
-				});
-				console.log("Token verified and user logged in", res);
-			} catch (err) {
-				setErrorMessage("Something went wrong. Please Try Again");
-			} finally {
-				setIsSigningIn(false);
-			}
-		}
-	};
+  const isFormValid = () => {
+    if (!userType) return false;
 
-	const togglePasswordVisibility = (e) => {
-		e.preventDefault();
-		setPasswordVisible(!passwordVisible);
-	};
-	return (
-		<>
-			<section className="flex items-center justify-center">
-				{/* login container */}
-				<div className="bg-gray-200 flex rounded-xl shadow-lg max-w-3xl px-16 py-5 m-9">
-					{/* form */}
-					<div className="smw-1/2 px-10">
-						<h2 className="font-black text-4xl mt-4 text-[#615519]">SIGN IN</h2>
-						<p className="text-lg mt-2 text-[#9a8a38]">
-							If you already a member sign in easily
-						</p>
-						{errorMessage && (
-							<p className="text-red-600 text-lg bg-red-200 px-2 py-1 rounded-md mt-1">
-								{errorMessage}
-							</p>
-						)}
-						<div className="flex gap-4 my-4">
-							<Button
-								variant={userType === "jobseeker" ? "default" : "outline"}
-								onClick={() => setUserType("jobseeker")}
-							>
-								I am a Jobseeker
-							</Button>
-							<Button
-								variant={userType === "recruiter" ? "default" : "outline"}
-								onClick={() => setUserType("recruiter")}
-							>
-								I am a Recruiter
-							</Button>
-						</div>
+    if (userType === "restaurant") {
+      return companyName.trim() !== "" && fssaiLicense.trim() !== "";
+    }
+    return true;
+  };
 
-						<form action="" onSubmit={onSubmit} className="flex flex-col gap-4">
-							<InputComponent
-								type="text"
-								name="email"
-								placeholder="Email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-							></InputComponent>
-							<PasswordInputComponent
-								name="password"
-								placeholder="Password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								btnOnClick={togglePasswordVisibility}
-								passwordVisiblity={passwordVisible}
-							></PasswordInputComponent>
-							<Button variant="default" onClick={onSubmit}>
-								SignIn
-							</Button>
-							<button className=" w-fit text-sm italic text-blue-500 hover:underline decoration-sky-500">
-								Forgot Password
-							</button>
-						</form>
-						<div className="mt-2 grid grid-cols-3 items-center text-grey-100">
-							<hr className="border-gray-500"></hr>
-							<p className="text-center text-sm">Or</p>
-							<hr className="border-gray-500"></hr>
-						</div>
-						{/* google sign in options  */}
-						<button
-							className="bg-white w-full py-2 rounded-xl mt-3 flex justify-center hover:shadow-xl ease-linear duration-200"
-							onClick={onGoogleSignIn}
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								className="mr-3"
-								viewBox="0 0 48 48"
-								width="25px"
-								height="25px"
-							>
-								<path
-									fill="#FFC107"
-									d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-								/>
-								<path
-									fill="#FF3D00"
-									d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-								/>
-								<path
-									fill="#4CAF50"
-									d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-								/>
-								<path
-									fill="#1976D2"
-									d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-								/>
-							</svg>
-							<p className="text-base font-sans text-center   text-gray-500">
-								Login with Google
-							</p>
-						</button>
-						<div className="flex mt-10 justify-between ">
-							<p className="text-base mr-2">Don't Have A Account? Click Here</p>
-							<Link to="/register">
-								<Button>SignUp</Button>
-							</Link>
-						</div>
-					</div>
+  const onSubmit = async (e, mode) => {
+    e.preventDefault();
+    if (mode === "signup") {
+      if (!isRegisterIn && checkFunction() && formValid) {
+        setIsRegisterIn(true);
+        try {
+          setSubmitLoading(true);
+          await doCreateUserWithEmailPassword(email, password);
+          const uid = getUid();
+          try {
+            const res = await setUpProfile({
+              uid: uid,
+              username: "New User",
+              user_type: userType,
+              company_name: companyName || null,
+              fssai_license_no: fssaiLicense || null,
+            });
+            console.log(res);
+            localStorage.setItem("userData", JSON.stringify(res.data));
+          } catch (err) {
+            setProfileSetUpComplete(false);
+            setErrorMessage("Something went wrong while creating profile!");
+            const user = auth.currentUser;
+            if (user) {
+              await user.delete(); // This removes user from Firebase
+            }
+          }
+          setProfileSetUpComplete(true);
+          console.log("Token verified and user logged in");
+        } catch (err) {
+          // Rollback Firebase user if profile setup fails
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            await currentUser.delete(); // This removes user from Firebase
+          }
+          console.error(err);
+          setErrorMessage("Please try again with correct email and password!");
+        } finally {
+          setIsRegisterIn(false);
+          setSubmitLoading(false);
+        }
+      }
+    } else {
+      console.log(mode);
+      if (!isSigningIn) {
+        setIsSigningIn(true);
+        try {
+          setSubmitLoading(true);
 
-					{/* image */}
-					<div className="sm:block hidden w-1/2 mt-7 ml-7">
-						<img
-							className="rounded-2xl h-auto"
-							src={loginImg}
-							alt="login-img"
-						></img>
-					</div>
-				</div>
-			</section>
-		</>
-	);
+          await doSignInWithEmailPassword(email, password);
+
+          const typeMatch = await checkUserType(userType);
+          if (!typeMatch) {
+            await auth.signOut();
+            setErrorMessage("User type does not match. Please try again.");
+            return;
+          }
+          console.log("Token verified and user logged in");
+          localStorage.setItem("userType", userType);
+          setProfileSetUpComplete(true); // Trigger navigation to home
+        } catch (err) {
+          setErrorMessage("Try again with correct email and password!");
+        } finally {
+          setIsSigningIn(false);
+          setSubmitLoading(false);
+        }
+      }
+    }
+  };
+
+  const checkUserType = async (selectedType) => {
+    console.log("Checking user type...");
+    try {
+      const uid = getUid();
+      if (!uid) {
+        throw new Error("User not authenticated");
+      }
+      const token = await getFreshIdToken(true);
+      const res = await axios.get(`${baseUrl}/profile-detail/${uid}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const dbType = res.data.user_type;
+      console.log(dbType, selectedType); // adjust according to your API's response
+      if (dbType !== selectedType) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error checking user type:", error);
+    }
+  };
+
+  const onGoogleAuth = async (mode) => {
+    if (mode === "signup") {
+      if (!isRegisterIn && formValid) {
+        setIsRegisterIn(true);
+        try {
+          setGoogleLoading(true);
+          await doSignInWithGoogle();
+          const uid = getUid();
+          console.log(userType);
+          try {
+            const res = await setUpProfile({
+              uid: uid,
+              username: "New User",
+              user_type: userType,
+              company_name: companyName || null,
+              fssai_license_no: fssaiLicense || null,
+            });
+            localStorage.setItem("userData", res.data);
+          } catch (err) {
+            setProfileSetUpComplete(false);
+            setErrorMessage("Something went wrong: " + err.message);
+            const user = auth.currentUser;
+            if (user) {
+              await user.delete(); // This removes user from Firebase
+            }
+          }
+          setProfileSetUpComplete(true);
+          console.log("Token verified and user logged in");
+        } catch (err) {
+          setErrorMessage("Something went wrong: " + err.message);
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            await currentUser.delete(); // This removes user from Firebase
+          }
+        } finally {
+          setIsRegisterIn(false);
+          setGoogleLoading(false);
+        }
+      }
+    } else {
+      if (!isSigningIn) {
+        setIsSigningIn(true);
+        try {
+          setGoogleLoading(true);
+
+          await doSignInWithGoogle();
+
+          const typeMatch = await checkUserType(userType);
+
+          if (!typeMatch) {
+            await auth.signOut();
+            setErrorMessage("User type does not match. Please try again.");
+            return;
+          }
+          console.log("Token verified and user logged in");
+          localStorage.setItem("userType", userType);
+          setProfileSetUpComplete(true); // Trigger navigation to home
+        } catch (err) {
+          setErrorMessage("Something went wrong. Please try again!");
+        } finally {
+          setIsSigningIn(false);
+          setGoogleLoading(false);
+        }
+      }
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
+
+  const checkFunction = (e) => {
+    if (password == confirmpassword) {
+      return true;
+    }
+    setErrorMessage("Both fields should be same");
+    return false;
+  };
+
+  return (
+    <>
+      <div className="flex min-h-screen w-full bg-background-light dark:bg-background-dark font-display">
+        {/* Left Section: Form */}
+        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white dark:bg-background-dark max-w-[640px] w-full mx-auto lg:mx-0 shadow-xl lg:shadow-none z-10">
+          <div className="mx-auto w-full max-w-sm lg:w-96">
+            {/* Header */}
+            <div className="mb-10">
+              <div className="flex items-center gap-2 mb-8">
+                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                  <span className="material-symbols-outlined text-black font-bold text-xl">
+                    restaurant
+                  </span>
+                </div>
+                <span className="text-xl font-bold tracking-tight text-black dark:text-white">
+                  Culinary Connect
+                </span>
+              </div>
+              <h1 className="text-3xl font-black leading-tight tracking-tight text-[#111813] dark:text-white">
+                {authMode === "signin" ? "Welcome back" : "Create your account"}
+              </h1>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                Connect with top talent or find your next kitchen.
+              </p>
+            </div>
+
+            {/* Error Message */}
+            {errorMessage && (
+              <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-4 mb-6">
+                <div className="flex">
+                  <MdErrorOutline className="h-5 w-5 text-red-400" />
+                  <p className="ml-3 text-sm font-medium text-red-800 dark:text-red-200">
+                    {errorMessage}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Role Switcher */}
+            <div className="mb-8">
+              <div className="flex h-12 w-full items-center justify-center rounded-lg bg-[#f0f4f2] dark:bg-white/5 p-1">
+                <label className="group flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 transition-all has-[:checked]:bg-primary has-[:checked]:shadow-sm">
+                  <span className="truncate text-sm font-medium text-gray-600 dark:text-gray-300 group-has-[:checked]:text-[#111813]">
+                    Restaurant
+                  </span>
+                  <input
+                    checked={userType === "restaurant"}
+                    onChange={() => setUserType("restaurant")}
+                    className="invisible w-0"
+                    name="role-selection"
+                    type="radio"
+                    value="restaurant"
+                  />
+                </label>
+                <label className="group flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 transition-all has-[:checked]:bg-primary has-[:checked]:shadow-sm">
+                  <span className="truncate text-sm font-medium text-gray-600 dark:text-gray-300 group-has-[:checked]:text-[#111813]">
+                    Chef
+                  </span>
+                  <input
+                    checked={userType === "chef"}
+                    onChange={() => setUserType("chef")}
+                    className="invisible w-0"
+                    name="role-selection"
+                    type="radio"
+                    value="chef"
+                  />
+                </label>
+              </div>
+            </div>
+
+            {/* Main Form */}
+            <motion.form
+              layout
+              onSubmit={(e) => onSubmit(e, authMode)}
+              className="space-y-6"
+            >
+              {/* Email Field */}
+              <div className="space-y-2">
+                <label
+                  className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
+                  htmlFor="email"
+                >
+                  Email Address
+                </label>
+                <div className="relative rounded-lg shadow-sm">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <span className="material-symbols-outlined text-gray-400 text-[20px]">
+                      mail
+                    </span>
+                  </div>
+                  <input
+                    className="block w-full rounded-lg border-0 py-3 pl-10 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                    id="email"
+                    name="email"
+                    placeholder="name@restaurant.com"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Password Field(s) - Side by side in signup mode */}
+              <div
+                className={`${authMode === "signup" ? "grid grid-cols-1 md:grid-cols-2 gap-4" : ""}`}
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label
+                      className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
+                      htmlFor="password"
+                    >
+                      Password
+                    </label>
+                    {authMode === "signin" && (
+                      <div className="text-sm">
+                        <a
+                          className="font-medium text-[#111813] hover:text-primary dark:text-[#0fdc53] hover:underline transition-colors"
+                          href="#"
+                        >
+                          Forgot password?
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                  <div className="relative rounded-lg shadow-sm">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                      <span className="material-symbols-outlined text-gray-400 text-[20px]">
+                        lock
+                      </span>
+                    </div>
+                    <input
+                      className="block w-full rounded-lg border-0 py-3 pl-10 pr-10 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      id="password"
+                      name="password"
+                      placeholder="••••••••"
+                      type={passwordVisible ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[20px]">
+                        {passwordVisible ? "visibility_off" : "visibility"}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Confirm Password (Signup Only) */}
+                {authMode === "signup" && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    className="space-y-2"
+                  >
+                    <label
+                      className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
+                      htmlFor="confirmPassword"
+                    >
+                      Confirm Password
+                    </label>
+                    <div className="relative rounded-lg shadow-sm">
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <span className="material-symbols-outlined text-gray-400 text-[20px]">
+                          lock
+                        </span>
+                      </div>
+                      <input
+                        className="block w-full rounded-lg border-0 py-3 pl-10 pr-10 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="••••••••"
+                        type={confirmPasswordVisible ? "text" : "password"}
+                        value={confirmpassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={toggleConfirmPasswordVisibility}
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[20px]">
+                          {confirmPasswordVisible
+                            ? "visibility_off"
+                            : "visibility"}
+                        </span>
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Restaurant extra fields */}
+              <AnimatePresence mode="wait">
+                {userType === "restaurant" && authMode === "signup" && (
+                  <motion.div
+                    key="restaurant_fields"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                  >
+                    <div className="space-y-2">
+                      <label
+                        className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
+                        htmlFor="companyName"
+                      >
+                        Company Name
+                      </label>
+                      <div className="relative rounded-lg shadow-sm">
+                        <input
+                          className="block w-full rounded-lg border-0 py-3 px-3 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                          id="companyName"
+                          name="companyName"
+                          placeholder="Your Restaurant Name"
+                          type="text"
+                          value={companyName}
+                          onChange={(e) => setCompanyName(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
+                        htmlFor="fssaiLicense"
+                      >
+                        FSSAI License No
+                      </label>
+                      <div className="relative rounded-lg shadow-sm">
+                        <input
+                          className="block w-full rounded-lg border-0 py-3 px-3 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                          id="fssaiLicense"
+                          name="fssaiLicense"
+                          placeholder="FSSAI License Number"
+                          type="text"
+                          value={fssaiLicense}
+                          onChange={(e) => setFssaiLicense(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Action Button */}
+              <div>
+                <button
+                  className="flex w-full justify-center rounded-lg bg-primary px-3 py-3 text-sm font-bold leading-6 text-[#111813] shadow-sm hover:bg-[#0fdc53] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                  type="submit"
+                  disabled={submitLoading || googleLoading}
+                >
+                  {submitLoading
+                    ? "Loading..."
+                    : authMode === "signin"
+                      ? "Log In"
+                      : "Sign Up"}
+                </button>
+              </div>
+            </motion.form>
+
+            {/* Divider */}
+            <div className="mt-8">
+              <div className="relative">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 flex items-center"
+                >
+                  <div className="w-full border-t border-gray-200 dark:border-white/10"></div>
+                </div>
+                <div className="relative flex justify-center text-sm font-medium leading-6">
+                  <span className="bg-white dark:bg-background-dark px-6 text-gray-500">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+
+              {/* Social Login */}
+              <div className="mt-6">
+                <button
+                  className="flex w-full items-center justify-center gap-3 rounded-lg bg-white dark:bg-white/5 px-3 py-3 text-sm font-semibold text-[#111813] dark:text-white shadow-sm ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 hover:bg-gray-50 dark:hover:bg-white/10 focus-visible:ring-transparent transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                  onClick={() => onGoogleAuth(authMode)}
+                  disabled={googleLoading || submitLoading}
+                  type="button"
+                >
+                  {googleLoading ? (
+                    <div className="animate-spin border-4 border-t-transparent rounded-full w-6 h-6 border-primary" />
+                  ) : (
+                    <>
+                      <img src={GoogleIcon} alt="Google" className="w-5 h-5" />
+                      <span className="text-sm">Google</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Footer Mode Toggle */}
+            <p className="mt-10 text-center text-sm text-gray-500 dark:text-gray-400">
+              {authMode === "signin"
+                ? "Don't have an account?"
+                : "Already have an account?"}
+              <button
+                className="font-bold leading-6 text-[#111813] hover:text-primary dark:text-[#0fdc53] hover:underline transition-colors ml-1"
+                onClick={() => {
+                  setAuthMode(authMode === "signin" ? "signup" : "signin");
+                  setErrorMessage("");
+                }}
+                type="button"
+              >
+                {authMode === "signin" ? "Sign up for free" : "Sign in"}
+              </button>
+            </p>
+          </div>
+        </div>
+
+        {/* Right Section: Image */}
+        <div className="relative hidden w-0 flex-1 lg:block">
+          {/* Background Image */}
+          <div
+            className="absolute inset-0 h-full w-full bg-cover bg-center object-cover"
+            style={{
+              backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpO8bfhCfQww6xc54ZweC0kQ-1BXNEizGw9dm4jc78HGiu7TPAWAibf2Bo4oFVGK6yRZtZ0cmzaNUBG8VgnhJr5g5Eu6uWvxBC3hO8iDlVYPhp22v3wCke97hdon5PnI_g-yRZEOCVYAE15sfvlCD6whmfRHnagGA5d_psHijVn_3qBpGC0c0H0RR23asKwqtbYksb16swa53D_zD9u6ZStubjcwF12lPSpAuCu_G7eKww_JdbxqWlJb-Cu3eDww9h17Vzqo-AoI8")`,
+            }}
+          ></div>
+
+          {/* Overlay Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+
+          {/* Quote/Content on Image */}
+          <div className="absolute bottom-0 left-0 right-0 p-12 lg:p-20 text-white">
+            <div className="max-w-xl">
+              <h2 className="text-4xl font-black leading-tight mb-4">
+                Connecting Culinary Talent with Opportunity
+              </h2>
+              <p className="text-xl font-medium leading-relaxed text-gray-200">
+                The fastest way to hire top chefs or land your dream kitchen
+                job. Join thousands of restaurants and culinary professionals
+                building their future together.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
+
 export default LoginTemplate;

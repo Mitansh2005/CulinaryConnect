@@ -31,13 +31,13 @@
 		--chart-5: 27 87% 67%;
 	}
 
-	.bg-dark-grid {
+	/* .bg-dark-grid {
 		background-color: #0c6291;
 		background-image:
 			linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
 			linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
 		background-size: 40px 40px;
-	}
+	} */
 
 	.dark {
 		--background: 222.2 84% 4.9%;
