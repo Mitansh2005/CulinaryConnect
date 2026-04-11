@@ -5,7 +5,7 @@ export const ApplicantApplications = ({ applications }) => {
   console.log(applications);
 	if (!applications || applications.length === 0) {
 		return (
-			<div className="text-center text-gray-600 py-10 bg-white rounded-xl shadow-md">
+			<div className="text-center text-text-sub-light dark:text-gray-400 py-10 bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark mt-6">
 				<h2 className="text-2xl font-semibold">No Applications Found</h2>
 				<p className="mt-2">You haven’t applied to any jobs yet.</p>
 			</div>
@@ -26,16 +26,16 @@ export const ApplicantApplications = ({ applications }) => {
 				return (
 					<div
 						key={app.application_id}
-						className={`p-5 rounded-xl shadow-md transition duration-300 ${
-							status ==='r' ? "opacity-80 bg-red-50" :  status === 'a' ? "bg-green-50 opacity-80" :"bg-yellow-50"
+						className={`p-5 rounded-xl border border-border-light dark:border-border-dark shadow-sm transition hover:shadow-md ${
+							status ==='r' ? "bg-red-50/50 dark:bg-red-900/10" :  status === 'a' ? "bg-green-50/50 dark:bg-green-900/10" :"bg-white dark:bg-[#1a2c20]"
 						}`}
 					>
             <div className="flex flex-row justify-between">
-						<h3 className="text-xl font-bold mb-1">{job.title}</h3>
-            <LuExternalLink className="cursor-pointer hover:text-blue-600" onClick={() => navigate(`/job/${job.job_id}`)} />
+						<h3 className="text-xl font-bold mb-1 text-text-main-light dark:text-white">{job.title}</h3>
+            <LuExternalLink className="cursor-pointer text-text-sub-light hover:text-primary" onClick={() => navigate(`/job/${job.job_id}`)} />
             </div>
-						<p className="text-gray-700 font-semibold">{job.company_name}</p>
-						<p className="text-sm text-gray-500">{job.location.city}, {job.location.state}</p>
+						<p className="text-text-sub-light dark:text-gray-300 font-medium">{job.company_name}</p>
+						<p className="text-sm text-gray-400">{job.location.city}, {job.location.state}</p>
 						<p className={`inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium ${statusColor}`}>
 							{status === "a" ? "Accepted" : status === "r" ? "Rejected" : "Pending"}
 						</p>

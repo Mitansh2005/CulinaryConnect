@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Spinner from "@/components/ui/custom/spinner";
+import { ApplicationRowSkeleton } from "@/components/ui/custom/skeletons/Skeletons";
 import { ApplicationGroup } from "./ApplicationGroup";
-import { getFreshIdToken, getUid } from "@/firebase/authUtils";
+import { getFreshIdToken } from "@/firebase/authUtils";
 import { baseUrl } from "@/constants/constants";
 import { ApplicantApplications } from "./ApplicantApplication";
-import { DetailJobCard } from "@/components/ui/custom/JobDetailNewDesign";
 export const Applications = () => {
   const [groupedApplications, setGroupedApplications] = useState({});
-  const [applications, setApplications] = useState({});
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const userType = localStorage.getItem("userType");
@@ -45,14 +44,24 @@ export const Applications = () => {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center h-screen -mt-10">
-        <Spinner />
+      <div className="flex flex-col items-center justify-start h-screen py-10 px-4 w-full">
+        <div className="w-full max-w-6xl">
+            <h1 className="text-4xl font-bold mb-8 text-text-main-light dark:text-white tracking-wide">
+              JOB APPLICATIONS
+            </h1>
+            <div className="flex flex-col gap-4">
+                <ApplicationRowSkeleton />
+                <ApplicationRowSkeleton />
+                <ApplicationRowSkeleton />
+                <ApplicationRowSkeleton />
+            </div>
+        </div>
       </div>
     );
   if (error) {
     return (
       <div className="flex items-start justify-center h-screen mt-10">
-        <div className="min-h-[5vh] max-w-2xl flex flex-col items-center justify-center bg-red-50 border border-red-200 rounded-lg p-6 shadow-md mx-4">
+        <div className="min-h-[5vh] max-w-2xl flex flex-col items-center justify-center bg-red-50 border border-red-200 rounded-xl p-6 shadow-md mx-4">
           <div className="flex items-center text-red-700 mb-2">
             <svg
               className="w-6 h-6 mr-2 text-red-600"
@@ -80,14 +89,14 @@ export const Applications = () => {
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-start py-10 px-4">
-      <div className="backdrop-blur-0 hover:backdrop-blur-sm bg-white/20 rounded-xl shadow-xl p-8 w-full max-w-6xl  ease-linear duration-1000">
-        <h1 className="text-4xl font-bold mb-8 text-white tracking-wide">
+    <div className="min-h-screen flex justify-center items-start py-10 px-4 bg-background-light dark:bg-background-dark">
+      <div className="bg-white dark:bg-[#1a2c20] rounded-xl shadow-sm border border-border-light dark:border-border-dark p-8 w-full max-w-6xl ease-linear duration-300">
+        <h1 className="text-3xl font-bold mb-8 text-text-main-light dark:text-white tracking-wide border-b border-border-light pb-4">
           JOB APPLICATIONS
         </h1>
 
         {Object.keys(groupedApplications).length === 0 ? (
-          <div className="bg-white text-center text-gray-600 py-10 rounded-xl shadow-md">
+          <div className="bg-surface-light dark:bg-surface-dark text-center text-text-sub-light py-10 rounded-xl shadow-sm border border-border-light dark:border-border-dark">
             <h2 className="text-2xl font-semibold">No Applications Found</h2>
             <p className="text-base mt-2">
               You haven’t received any applications yet.

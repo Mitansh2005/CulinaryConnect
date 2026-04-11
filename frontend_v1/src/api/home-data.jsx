@@ -63,6 +63,34 @@ export const useLikedJobs = () => {
     return { likedJobs, loading, error };
 };
 
+export const useRecommendedJobs = () => {
+    const [recommendedJobs, setRecommendedJobs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchRecommendedJobs = async () => {
+            try {
+                const token = await getFreshIdToken(true);
+                const res = await axios.get(`${baseUrl}/jobs/recommended/`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setRecommendedJobs(res.data);
+            } catch (e) {
+                setError("Failed to load recommended jobs: " + e.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRecommendedJobs();
+    }, []);
+
+    return { recommendedJobs, loading, error };
+};
+
 /**
  * Hook to fetch user profile for completion calculation
  */

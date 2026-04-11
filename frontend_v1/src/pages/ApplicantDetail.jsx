@@ -5,13 +5,18 @@ import axios from 'axios';
 import { baseUrl } from '@/constants/constants';
 import Spinner from '@/components/ui/custom/spinner';
 
+const statusStyles = {
+    p: 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/12 dark:text-amber-200',
+    a: 'border-forest-200 bg-forest-50 text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200',
+    r: 'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-500/20 dark:bg-rose-500/12 dark:text-rose-200',
+    h: 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/12 dark:text-emerald-200',
+};
+
 export default function ApplicantDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [application, setApplication] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [noteInput, setNoteInput] = useState('');
-    const [notes, setNotes] = useState([]);
 
     useEffect(() => {
         fetchApplicationDetails();
@@ -47,10 +52,10 @@ export default function ApplicantDetail() {
 
     const getStatusBadge = (status) => {
         const badges = {
-            p: { label: 'In Progress', class: 'bg-yellow-100 text-yellow-800' },
-            a: { label: 'Accepted', class: 'bg-green-100 text-green-800' },
-            r: { label: 'Rejected', class: 'bg-red-100 text-red-800' },
-            h: { label: 'Hired', class: 'bg-blue-100 text-blue-800' },
+            p: { label: 'In Progress', class: statusStyles.p },
+            a: { label: 'Accepted', class: statusStyles.a },
+            r: { label: 'Rejected', class: statusStyles.r },
+            h: { label: 'Hired', class: statusStyles.h },
         };
         const badge = badges[status] || badges.p;
         return (
@@ -62,7 +67,7 @@ export default function ApplicantDetail() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
+            <div className="flex h-screen items-center justify-center">
                 <Spinner />
             </div>
         );
@@ -70,12 +75,13 @@ export default function ApplicantDetail() {
 
     if (!application) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold text-red-600">Application Not Found</h2>
+            <div className="flex h-screen items-center justify-center">
+                <div className="max-w-lg rounded-xl border border-rose-200 bg-rose-50 p-6 text-center dark:border-rose-500/20 dark:bg-rose-500/12">
+                    <h2 className="text-2xl font-bold text-red-700">Application Not Found</h2>
+                    <p className="mt-2 text-red-600 text-sm">The application may have been removed or is no longer available.</p>
                     <button
                         onClick={() => navigate('/applications')}
-                        className="mt-4 px-4 py-2 bg-primary text-black rounded-lg font-bold"
+                        className="mt-4 px-4 py-2 rounded-lg bg-gradient-to-br from-primary to-primary/85 text-white font-semibold hover:brightness-105"
                     >
                         Back to Applications
                     </button>
@@ -88,48 +94,48 @@ export default function ApplicantDetail() {
     const job = application.job;
 
     return (
-        <div className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-8">
+        <div className="mx-auto flex w-full max-w-7xl flex-1 px-4 py-8 md:px-8">
             {/* Breadcrumbs & Header */}
             <div className="mb-6">
                 <div className="flex flex-wrap gap-2 items-center text-sm mb-4">
                     <button
                         onClick={() => navigate('/applications')}
-                        className="text-text-secondary hover:text-primary transition-colors"
+                        className="text-text-sub-light transition-colors hover:text-primary dark:text-text-sub-dark"
                     >
                         Applications
                     </button>
-                    <span className="text-text-secondary">/</span>
-                    <span className="text-text-main dark:text-white font-medium">
+                    <span className="text-text-sub-light dark:text-text-sub-dark">/</span>
+                    <span className="font-medium text-text-main-light dark:text-text-main-dark">
                         {applicant?.first_name} {applicant?.last_name}
                     </span>
                 </div>
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold text-text-main dark:text-white tracking-tight">
+                        <h1 className="text-2xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">
                             Applicant Details
                         </h1>
-                        <p className="text-text-secondary text-sm mt-1">
-                            Applied for <span className="font-medium text-text-main dark:text-white">{job?.title}</span>
+                        <p className="mt-1 text-sm text-text-sub-light dark:text-text-sub-dark">
+                            Applied for <span className="font-medium text-text-main-light dark:text-text-main-dark">{job?.title}</span>
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-3">
                         <button
                             onClick={() => navigate('/messages')}
-                            className="flex items-center justify-center gap-2 px-4 h-10 rounded-lg bg-white dark:bg-[#2a3c30] border border-border-color dark:border-[#35483b] text-text-main dark:text-white font-medium text-sm hover:bg-gray-50 dark:hover:bg-[#35483b] transition-colors shadow-sm"
+                            className="flex h-10 items-center justify-center gap-2 rounded-lg border border-border-light/80 bg-white/92 px-4 text-sm font-medium text-text-main-light shadow-sm transition-colors hover:bg-stone-50 dark:border-border-dark dark:bg-white/10 dark:text-text-main-dark dark:hover:bg-white/14"
                         >
                             <span className="material-symbols-outlined text-[18px]">chat</span>
                             <span>Open Chat</span>
                         </button>
                         <button
                             onClick={() => handleStatusUpdate('r')}
-                            className="flex items-center justify-center gap-2 px-4 h-10 rounded-lg border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 font-medium text-sm transition-colors"
+                            className="flex h-10 items-center justify-center gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-100 dark:border-rose-500/20 dark:bg-rose-500/12 dark:text-rose-200 dark:hover:bg-rose-500/18"
                         >
                             <span className="material-symbols-outlined text-[18px]">close</span>
                             <span>Reject</span>
                         </button>
                         <button
                             onClick={() => handleStatusUpdate('a')}
-                            className="flex items-center justify-center gap-2 px-6 h-10 rounded-lg bg-primary hover:bg-primary-dark text-[#003310] font-bold text-sm shadow-md transition-all transform active:scale-95"
+                            className="flex h-10 items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-primary via-ember-500 to-ember-600 px-6 text-sm font-bold text-primary-foreground shadow-md transition-all active:scale-95 hover:brightness-105"
                         >
                             <span>Accept Applicant</span>
                             <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -142,10 +148,10 @@ export default function ApplicantDetail() {
                 {/* LEFT SIDEBAR: Candidate Profile */}
                 <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
                     {/* Profile Card */}
-                    <div className="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-color dark:border-[#2a3c30] p-6 flex flex-col items-center text-center">
+                    <div className="flex flex-col items-center rounded-xl border border-border-light/80 bg-white/92 p-6 text-center shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
                         <div className="relative mb-4 group">
                             <div
-                                className="bg-center bg-no-repeat bg-cover rounded-full size-32 shadow-md bg-gray-200 dark:bg-gray-700"
+                                className="size-32 rounded-full bg-stone-100 bg-cover bg-center bg-no-repeat shadow-md dark:bg-[#332b25]"
                                 style={
                                     applicant?.profile_picture
                                         ? { backgroundImage: `url('data:image/png;base64,${applicant.profile_picture}')` }
@@ -153,38 +159,38 @@ export default function ApplicantDetail() {
                                 }
                             >
                                 {!applicant?.profile_picture && (
-                                    <div className="w-full h-full flex items-center justify-center text-gray-500 font-bold text-4xl">
+                                    <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-text-sub-light dark:text-text-sub-dark">
                                         {applicant?.first_name?.charAt(0)}
                                     </div>
                                 )}
                             </div>
                             <div
-                                className="absolute bottom-1 right-1 bg-white dark:bg-surface-dark p-1.5 rounded-full shadow-sm border border-gray-100 dark:border-gray-700"
+                                className="absolute bottom-1 right-1 rounded-full border border-forest-200 bg-forest-50 p-1.5 shadow-sm dark:border-forest-500/20 dark:bg-forest-500/12"
                                 title="Verified Applicant"
                             >
-                                <span className="material-symbols-outlined text-blue-500 text-[20px] block">verified</span>
+                                <span className="material-symbols-outlined block text-[20px] text-forest-600 dark:text-forest-200">verified</span>
                             </div>
                         </div>
-                        <h3 className="text-xl font-bold text-text-main dark:text-white mb-1">
+                        <h3 className="mb-1 text-xl font-bold text-text-main-light dark:text-text-main-dark">
                             {applicant?.first_name} {applicant?.last_name}
                         </h3>
-                        <p className="text-text-secondary font-medium text-sm mb-4">{applicant?.speciality || 'Chef'}</p>
-                        <div className="flex items-center justify-center gap-2 text-sm text-text-secondary mb-6 bg-background-light dark:bg-[#102216] py-2 px-4 rounded-full">
+                        <p className="mb-4 text-sm font-medium text-text-sub-light dark:text-text-sub-dark">{applicant?.speciality || 'Chef'}</p>
+                        <div className="mb-6 flex items-center justify-center gap-2 rounded-full bg-forest-50 px-4 py-2 text-sm text-forest-700 dark:bg-forest-500/12 dark:text-forest-200">
                             <span className="material-symbols-outlined text-[16px]">location_on</span>
                             <span>
                                 {applicant?.location?.city}, {applicant?.location?.state}
                             </span>
                         </div>
-                        <div className="w-full grid grid-cols-2 gap-4 border-t border-border-color dark:border-[#2a3c30] pt-4 mb-4">
+                        <div className="mb-4 grid w-full grid-cols-2 gap-4 border-t border-border-light/80 pt-4 dark:border-border-dark">
                             <div className="text-center">
-                                <p className="text-xs text-text-secondary uppercase tracking-wider font-semibold">Experience</p>
-                                <p className="text-lg font-bold text-text-main dark:text-white">
+                                <p className="text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">Experience</p>
+                                <p className="text-lg font-bold text-text-main-light dark:text-text-main-dark">
                                     {applicant?.experience_years || 0} Yrs
                                 </p>
                             </div>
-                            <div className="text-center border-l border-border-color dark:border-[#2a3c30]">
-                                <p className="text-xs text-text-secondary uppercase tracking-wider font-semibold">Status</p>
-                                <p className="text-lg font-bold text-text-main dark:text-white">
+                            <div className="border-l border-border-light/80 text-center dark:border-border-dark">
+                                <p className="text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">Status</p>
+                                <p className="text-lg font-bold text-text-main-light dark:text-text-main-dark">
                                     {applicant?.job_search_status || 'Active'}
                                 </p>
                             </div>
@@ -192,29 +198,29 @@ export default function ApplicantDetail() {
                     </div>
 
                     {/* Contact & Info */}
-                    <div className="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-color dark:border-[#2a3c30] overflow-hidden">
-                        <div className="px-5 py-4 border-b border-border-color dark:border-[#2a3c30] bg-gray-50 dark:bg-[#1a2c20]">
-                            <h4 className="font-semibold text-text-main dark:text-white">Contact Info</h4>
+                    <div className="overflow-hidden rounded-xl border border-border-light/80 bg-white/92 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
+                        <div className="border-b border-border-light/80 bg-stone-50/90 px-5 py-4 dark:border-border-dark dark:bg-white/6">
+                            <h4 className="font-semibold text-text-main-light dark:text-text-main-dark">Contact Info</h4>
                         </div>
                         <div className="p-5 space-y-4">
                             <div className="flex items-start gap-3 group cursor-pointer">
-                                <div className="mt-0.5 text-text-secondary">
+                                <div className="mt-0.5 text-text-sub-light dark:text-text-sub-dark">
                                     <span className="material-symbols-outlined text-[20px]">mail</span>
                                 </div>
                                 <div className="flex-1 overflow-hidden">
-                                    <p className="text-xs text-text-secondary font-medium">Email Address</p>
-                                    <p className="text-sm font-medium text-text-main dark:text-white truncate group-hover:text-primary transition-colors">
+                                    <p className="text-xs font-medium text-text-sub-light dark:text-text-sub-dark">Email Address</p>
+                                    <p className="truncate text-sm font-medium text-text-main-light transition-colors group-hover:text-primary dark:text-text-main-dark">
                                         {applicant?.email}
                                     </p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3 group cursor-pointer">
-                                <div className="mt-0.5 text-text-secondary">
+                                <div className="mt-0.5 text-text-sub-light dark:text-text-sub-dark">
                                     <span className="material-symbols-outlined text-[20px]">call</span>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-xs text-text-secondary font-medium">Phone Number</p>
-                                    <p className="text-sm font-medium text-text-main dark:text-white group-hover:text-primary transition-colors">
+                                    <p className="text-xs font-medium text-text-sub-light dark:text-text-sub-dark">Phone Number</p>
+                                    <p className="text-sm font-medium text-text-main-light transition-colors group-hover:text-primary dark:text-text-main-dark">
                                         {applicant?.phone_number || 'Not provided'}
                                     </p>
                                 </div>
@@ -223,20 +229,20 @@ export default function ApplicantDetail() {
                     </div>
 
                     {/* Specialties */}
-                    <div className="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-color dark:border-[#2a3c30] p-5">
-                        <h4 className="font-semibold text-text-main dark:text-white mb-3 text-sm uppercase tracking-wide">
+                    <div className="rounded-xl border border-border-light/80 bg-white/92 p-5 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
+                        <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-text-main-light dark:text-text-main-dark">
                             Specialties
                         </h4>
                         <div className="flex flex-wrap gap-2">
                             {applicant?.speciality && (
-                                <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-[#f0f4f2] dark:bg-[#2a3c30] text-text-main dark:text-gray-200 border border-transparent hover:border-primary/50 transition-colors cursor-default">
+                                <span className="inline-flex cursor-default items-center rounded-md border border-forest-200 bg-forest-50 px-2.5 py-1 text-xs font-medium text-forest-700 transition-colors hover:border-primary/50 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200">
                                     {applicant.speciality}
                                 </span>
                             )}
                             {applicant?.preferred_job_roles?.split(',').map((role, index) => (
                                 <span
                                     key={index}
-                                    className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-[#f0f4f2] dark:bg-[#2a3c30] text-text-main dark:text-gray-200 border border-transparent hover:border-primary/50 transition-colors cursor-default"
+                                    className="inline-flex cursor-default items-center rounded-md border border-forest-200 bg-forest-50 px-2.5 py-1 text-xs font-medium text-forest-700 transition-colors hover:border-primary/50 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200"
                                 >
                                     {role.trim()}
                                 </span>
@@ -248,25 +254,25 @@ export default function ApplicantDetail() {
                 {/* RIGHT CONTENT AREA */}
                 <div className="lg:col-span-8 xl:col-span-9 flex flex-col gap-6">
                     {/* Timeline Section */}
-                    <section className="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-color dark:border-[#2a3c30] p-6">
+                    <section className="rounded-xl border border-border-light/80 bg-white/92 p-6 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
                         <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-lg font-bold text-text-main dark:text-white">Application Timeline</h3>
+                            <h3 className="text-lg font-bold text-text-main-light dark:text-text-main-dark">Application Timeline</h3>
                             {getStatusBadge(application.status)}
                         </div>
                         <div className="relative pl-4">
-                            <div className="absolute left-[27px] top-2 bottom-6 w-0.5 bg-gray-200 dark:bg-[#2a3c30]"></div>
+                            <div className="absolute bottom-6 left-[27px] top-2 w-0.5 bg-border-light dark:bg-border-dark"></div>
 
                             {/* Application Received */}
                             <div className="relative flex gap-6 pb-8 group">
-                                <div className="relative z-10 flex-none size-6 rounded-full bg-green-100 border-2 border-green-500 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[14px] text-green-600 font-bold">check</span>
+                                <div className="relative z-10 flex size-6 flex-none items-center justify-center rounded-full border-2 border-forest-500 bg-forest-50 dark:border-forest-300 dark:bg-forest-500/14">
+                                    <span className="material-symbols-outlined text-[14px] font-bold text-forest-600 dark:text-forest-200">check</span>
                                 </div>
                                 <div className="flex flex-col sm:flex-row sm:justify-between sm:w-full gap-1">
                                     <div>
-                                        <p className="text-sm font-bold text-text-main dark:text-white">Application Received</p>
-                                        <p className="text-sm text-text-secondary">Submitted via platform.</p>
+                                        <p className="text-sm font-bold text-text-main-light dark:text-text-main-dark">Application Received</p>
+                                        <p className="text-sm text-text-sub-light dark:text-text-sub-dark">Submitted via platform.</p>
                                     </div>
-                                    <p className="text-xs text-text-secondary font-medium whitespace-nowrap">
+                                    <p className="whitespace-nowrap text-xs font-medium text-text-sub-light dark:text-text-sub-dark">
                                         {new Date(application.application_date).toLocaleDateString()}
                                     </p>
                                 </div>
@@ -275,17 +281,17 @@ export default function ApplicantDetail() {
                             {/* Current Status */}
                             {application.status !== 'p' && (
                                 <div className="relative flex gap-6 group">
-                                    <div className="relative z-10 flex-none size-6 rounded-full bg-primary ring-4 ring-primary/20 flex items-center justify-center">
-                                        <div className="size-2 rounded-full bg-[#003310]"></div>
+                                    <div className="relative z-10 flex size-6 flex-none items-center justify-center rounded-full bg-primary ring-4 ring-primary/20">
+                                        <div className="size-2 rounded-full bg-primary-foreground"></div>
                                     </div>
-                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:w-full gap-1 p-3 rounded-lg bg-[#f0f4f2] dark:bg-[#223628] border border-primary/30">
+                                    <div className="flex flex-col gap-1 rounded-lg border border-primary/30 bg-primary/8 p-3 dark:bg-primary/14 sm:w-full sm:flex-row sm:justify-between">
                                         <div>
-                                            <p className="text-sm font-bold text-text-main dark:text-white">
+                                            <p className="text-sm font-bold text-text-main-light dark:text-text-main-dark">
                                                 {application.status === 'a' && 'Accepted'}
                                                 {application.status === 'r' && 'Rejected'}
                                                 {application.status === 'h' && 'Hired'}
                                             </p>
-                                            <p className="text-sm text-text-secondary">Current application status.</p>
+                                            <p className="text-sm text-text-sub-light dark:text-text-sub-dark">Current application status.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -295,17 +301,17 @@ export default function ApplicantDetail() {
 
                     {/* Bio Section */}
                     {applicant?.bio && (
-                        <section className="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-color dark:border-[#2a3c30] p-6">
-                            <h3 className="text-lg font-bold text-text-main dark:text-white mb-4">About</h3>
-                            <p className="text-sm text-text-main dark:text-gray-300 leading-relaxed">{applicant.bio}</p>
+                        <section className="rounded-xl border border-border-light/80 bg-white/92 p-6 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
+                            <h3 className="mb-4 text-lg font-bold text-text-main-light dark:text-text-main-dark">About</h3>
+                            <p className="text-sm leading-relaxed text-text-main-light dark:text-text-main-dark/90">{applicant.bio}</p>
                         </section>
                     )}
 
                     {/* Achievements */}
                     {applicant?.achievements && (
-                        <section className="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-color dark:border-[#2a3c30] p-6">
-                            <h3 className="text-lg font-bold text-text-main dark:text-white mb-4">Achievements</h3>
-                            <p className="text-sm text-text-main dark:text-gray-300 leading-relaxed whitespace-pre-line">
+                        <section className="rounded-xl border border-border-light/80 bg-white/92 p-6 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
+                            <h3 className="mb-4 text-lg font-bold text-text-main-light dark:text-text-main-dark">Achievements</h3>
+                            <p className="whitespace-pre-line text-sm leading-relaxed text-text-main-light dark:text-text-main-dark/90">
                                 {applicant.achievements}
                             </p>
                         </section>

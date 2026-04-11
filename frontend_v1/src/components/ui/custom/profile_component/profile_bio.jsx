@@ -24,7 +24,7 @@ export function ProfileBio() {
 			try {
 				setLoading(true);
 				const token = await getFreshIdToken(true);
-				const res = await axios.get(`${baseUrl}/profile_detail/${uid}/`, {
+				const res = await axios.get(`${baseUrl}/profile-detail/${uid}/`, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
@@ -53,7 +53,7 @@ export function ProfileBio() {
 			setLoading(true);
 			const token = await getFreshIdToken(true);
 			const res = await axios.put(
-				`${baseUrl}/profile_detail/${uid}/`,
+				`${baseUrl}/profile-detail/${uid}/`,
 				{ bio },
 				{
 					headers: {

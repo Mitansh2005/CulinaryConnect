@@ -3,24 +3,30 @@ import { Sidebar } from "./components/ui/custom/Sidebar";
 import { ChefNavbar } from "./components/ui/custom/ChefNavbar";
 
 export default function MainLayout() {
-	const userType = localStorage.getItem("userType");
+  const userType = localStorage.getItem("userType");
+  const isRestaurant = userType === "restaurant";
 
-	if (userType === "restaurant") {
-		return (
-			<div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
-				<Sidebar />
-				<main className="flex-1 h-full overflow-y-auto w-full">
-					{/* For recruiters, the Sidebar provides navigation */}
-					<Outlet />
-				</main>
-			</div>
-		);
-	}
+  if (isRestaurant) {
+    return (
+      <div className="shell-canvas">
+        <div className="relative z-10 flex min-h-screen flex-col lg:flex-row">
+          <Sidebar />
+          <main className="flex-1 overflow-hidden">
+            <div className="min-h-screen overflow-y-auto">
+              <Outlet />
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
 
-	return (
-		<>
-			<ChefNavbar />
-			<Outlet />
-		</>
-	);
+  return (
+    <div className="shell-canvas">
+      <ChefNavbar />
+      <main className="relative z-10 min-h-[calc(100vh-5rem)]">
+        <Outlet />
+      </main>
+    </div>
+  );
 }

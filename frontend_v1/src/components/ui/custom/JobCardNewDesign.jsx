@@ -1,14 +1,25 @@
+/* eslint-disable react/prop-types */
 import { IoShareSocial } from "react-icons/io5";
-import { AiOutlineStar } from "react-icons/ai";
+import { MdBookmark, MdBookmarkBorder } from "react-icons/md";
 import { ImLocation2 } from "react-icons/im";
+import { CalendarDays, Clock3, Wallet } from "lucide-react";
 import DefaultLogo from "../../../assets/icons/restaurant.png";
 import { useEffect, useState } from "react";
-import { AiFillStar } from "react-icons/ai";
 import { DetailJobCard } from "./JobDetailNewDesign";
 import { motion, AnimatePresence } from "framer-motion";
 import { getFreshIdToken } from "@/firebase/authUtils";
 import axios from "axios";
 import { baseUrl } from "@/constants/constants";
+import { formatDate } from "@/utils/formatters";
+
+const badgeStyles = {
+	salary:
+		"border-ember-200 bg-ember-50 text-ember-700 dark:border-ember-500/20 dark:bg-ember-500/12 dark:text-ember-200",
+	location:
+		"border-forest-200 bg-forest-50 text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200",
+	meta:
+		"border-white/80 bg-white/90 text-text-sub-light dark:border-white/10 dark:bg-white/10 dark:text-text-sub-dark",
+};
 export const JobCardDesign = ({
 	items,
 	className,
@@ -76,18 +87,18 @@ export const JobCardDesign = ({
 
 	return (
 		<>
-			<div className={("grid grid-cols-4 gap-2 mt-16 p-4 w-full", className)}>
-				{items.map((item, idx) => (
+			<div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8 p-2 w-full ${className || ""}`}>
+				{items.map((item) => (
 					<motion.div
 						layoutId={`job-${item.job_id}`} // 🧠 Unique ID used to "link" animations
 						key={item.job_id}
-						className={`relative bg-brandPrimary mt-10 bg-gradient-to-br from-brandPrimary to-gray-100 p-6 rounded-xl shadow-2xl border border-gray-200 transition-opacity duration-200 ${
+						className={`relative group rounded-[1.4rem] border border-white/80 bg-white/92 p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md dark:border-white/10 dark:bg-[#241f1b] ${
 							expandedJobId === item.job_id
 								? "opacity-0 pointer-events-none"
 								: "opacity-100"
 						}`}
 					>
-						<div className="p-4 flex justify-between items-stretch mt-[-11px]">
+						<div className="flex justify-between items-start">
 							<img
 								loading="lazy"
 								src={`data:image/jpeg;base64,${item.company_logo?.replace(/\s/g, "")}`}
@@ -96,59 +107,72 @@ export const JobCardDesign = ({
 									e.target.src = DefaultLogo;
 								}}
 								alt="Company Logo"
-								className="h-14 w-14 object-cover  rounded-full"
+								className="h-14 w-14 rounded-xl border border-border-light object-cover"
 							/>
 
-							<div className="flex justify-between w-fit mt-1 mr-[-15px] cursor-pointer">
+							<div className="flex gap-2 cursor-pointer">
 								<IoShareSocial
-									className="w-10"
+									className="h-5 w-5 text-text-sub-light transition hover:text-primary"
 									onClick={() => handleShare(item.job_id)}
 								/>
 								{likedJobsMap[item.job_id] ? (
-									<AiFillStar
-										className="w-10 text-yellow-500"
+									<MdBookmark
+										className="w-5 h-5 text-primary transition-all duration-200 hover:scale-110"
 										onClick={() => handleToggleLike(item.job_id)}
 									/>
 								) : (
-									<AiOutlineStar
-										className="w-10"
+									<MdBookmarkBorder
+										className="w-5 h-5 text-gray-400 hover:text-primary transition-all duration-200 hover:scale-110"
 										onClick={() => handleToggleLike(item.job_id)}
 									/>
 								)}
 							</div>
 						</div>
-						<div className="ml-4">
-							<h2 className="font-customFont3 font-semibold text-xl">
+						<div className="mt-4">
+							<h2 className="text-lg font-semibold text-text-main-light dark:text-text-main-dark">
 								{item.company_name}
 							</h2>
 						</div>
-						<div className="mt-[-4px] ml-4">
-							<h2 className="font-customFont3 text-gray-600 text-lg">
+						<div className="mt-1">
+							<h2 className="text-base text-text-sub-light dark:text-text-sub-dark">
 								{item.title}
 							</h2>
-							<h2 className="mt-4 font-customFont3 ">
-								{new Intl.NumberFormat("en-IN", {
-									style: "currency",
-									currency: "INR",
-									maximumFractionDigits: 0,
-								}).format(item.salary)}
-								/yr
-							</h2>
-							<div className="font-customFont3 text-base text-gray-500 flex items-center mt-3">
-								<ImLocation2 />
-								<h4 className="ml-1 mt-1">
-									{item.location.state}, {item.location.city},{" "}
-									{item.location.postal_code}
-								</h4>
+							<div className="mt-4 flex flex-wrap gap-2">
+								<div className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold ${badgeStyles.salary}`}>
+									<Wallet className="h-3.5 w-3.5" />
+									{new Intl.NumberFormat("en-IN", {
+										style: "currency",
+										currency: "INR",
+										maximumFractionDigits: 0,
+									}).format(item.salary)}
+									<span>/yr</span>
+								</div>
+								<div className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold ${badgeStyles.location}`}>
+									<ImLocation2 className="h-3.5 w-3.5" />
+									<span>
+										{item.location.state}, {item.location.city}
+									</span>
+								</div>
+								<div className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold ${badgeStyles.meta}`}>
+									<Clock3 className="h-3.5 w-3.5" />
+									<span>{item.employment_type || "Full Time"}</span>
+								</div>
+								{item.application_deadline ? (
+									<div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/12 dark:text-amber-200">
+										<CalendarDays className="h-3.5 w-3.5" />
+										<span>Apply by {formatDate(item.application_deadline)}</span>
+									</div>
+								) : null}
 							</div>
 						</div>
-						{/* 👇 Bottom Right Button */}
-						<button
-							className="absolute bottom-6 right-6 bg-brandAccent text-white px-4 py-2 rounded-lg shadow hover:bg-[#0c6391c9] transition-all"
+						<div className="mt-4 flex justify-end">
+							<button
+								className="rounded-xl bg-gradient-to-br from-primary to-primary/85 text-white px-4 py-2 text-sm font-semibold hover:brightness-105 transition-all"
 							onClick={() => handleLearnMoreClick(item.job_id)}
-						>
-							Learn More
-						</button>
+							>
+								View Details
+							</button>
+						</div>
 					</motion.div>
 				))}
 			</div>

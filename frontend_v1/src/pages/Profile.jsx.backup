@@ -12,7 +12,6 @@ import { baseUrl } from "@/constants/constants";
 import DOMpurify from "dompurify";
 import ReactQuill from "react-quill";
 import axios from "axios";
-import { ProfileLayoutSkeleton } from "@/components/ui/custom/skeletons/Skeletons";
 import { Button } from "@/components/ui/button";
 import { ImCross } from "react-icons/im";
 import { getSafeUserData } from "@/utils/localStorage";
@@ -92,7 +91,7 @@ export function ProfileTemplate() {
         <>
           {showprocessPopup && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white dark:bg-[#1a2c20] p-6 rounded-lg shadow-lg text-center border border-border-light dark:border-border-dark">
+              <div className="bg-white p-6 rounded-lg shadow-lg text-center">
                 <div className="flex justify-end mt-{-4px}">
                   <ImCross
                     className="hover:text-red-600 hover:cursor-pointer"
@@ -121,7 +120,7 @@ export function ProfileTemplate() {
               </div>
             </div>
           )}
-          <div className="flex flex-col justify-end items-center bg-white dark:bg-[#1a2c20] w-1/2 rounded-2xl mt-8 mb-8 p-4 border border-border-light dark:border-border-dark shadow-sm">
+          <div className="flex flex-col justify-end items-center bg-white w-1/2 rounded-2xl mt-8 mb-8 p-4">
             <div className="relative w-full">
               <FaArrowLeft
                 className="mb-5 text-lg hover:cursor-pointer hover:text-red-600 left-0 "
@@ -154,7 +153,7 @@ export function ProfileTemplate() {
       {/* entire screen  */}
       <section className="flex flex-col items-center overflow-hidden ">
         {!showPopup ? (
-          <div className="flex flex-col items-center justify-center bg-white dark:bg-[#1a2c20] w-8/12 rounded-2xl mt-8 mb-8 pb-10 border border-border-light dark:border-border-dark shadow-sm">
+          <div className="flex flex-col items-center justify-center bg-white w-8/12 rounded-2xl mt-8 mb-8  pb-10">
             <ProfilePictureUploader
               id={uid}
               username={username}

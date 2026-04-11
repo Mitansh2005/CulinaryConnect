@@ -12,7 +12,6 @@ import { FaArrowLeft } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "@/UserContext";
-import { getName } from "country-list";
 import { ImCross } from "react-icons/im";
 import { Button } from "../../button";
 import { NormalButtons } from "../../ui_buttons";
@@ -24,9 +23,9 @@ export function ProfileForm() {
   const { userData, setUserData } = useUser();
   const uid = getUid();
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
-  const navigate = useNavigate();
-  const [status, setStatus] = useState(""); // "success" or "fail"
+	const [showPopup, setShowPopup] = useState(false);
+	const navigate = useNavigate();
+	const [status, setStatus] = useState(""); // "success" or "fail"
   const [formData, setFormData] = useState({
     username: "",
     first_name: "",
@@ -59,7 +58,7 @@ export function ProfileForm() {
     const fetch = async () => {
       try {
         const token = await getFreshIdToken(true);
-        const res = await axios.get(`${baseUrl}/profile_detail/${uid}/`, {
+        const res = await axios.get(`${baseUrl}/profile-detail/${uid}/`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -160,7 +159,7 @@ export function ProfileForm() {
     const fetch = async () => {
       const token = await getFreshIdToken(true);
       const res = axios
-        .get(`${baseUrl}/profile_detail/${uid}/`, {
+        .get(`${baseUrl}/profile-detail/${uid}/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -232,7 +231,7 @@ export function ProfileForm() {
     try {
       const token = await getFreshIdToken(true);
       const response = await axios.patch(
-        `${baseUrl}/profile_detail/${uid}/`,
+        `${baseUrl}/profile-detail/${uid}/`,
         data,
         {
           headers: {
@@ -263,23 +262,20 @@ export function ProfileForm() {
   return (
     <>
       <div className="flex justify-center">
-        <Card className="w-6/12 mt-8">
+		<Card className="w-full max-w-4xl mt-8">
           <CardHeader>
             <Link to="/profile">
               <FaArrowLeft className="mb-3 text-lg hover:cursor-pointer hover:text-red-600 " />
             </Link>
             <CardTitle>Contact Information</CardTitle>
-            <CardDescription>
-              {" "}
-              Please fill out the form below with your contact details and
-              message. Our team will get back to you as soon as possible. We
-              value your privacy and ensure your information is kept secure.
-            </CardDescription>
+			<CardDescription>
+				Complete your profile to improve matching quality and recruiter trust.
+			</CardDescription>
           </CardHeader>
           <CardContent>
             {showPopup && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+					<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+						<div className="bg-white dark:bg-surface-dark p-6 rounded-xl shadow-lg text-center border border-border-light dark:border-border-dark">
                   <div className="flex justify-end mt-{-4px}">
                     <ImCross
                       className="hover:text-red-600 hover:cursor-pointer"
@@ -298,12 +294,12 @@ export function ProfileForm() {
                       ? "The process completed successfully."
                       : "The process failed. Please try again."}
                   </p>
-                  <Button
-                    onClick={closePopup}
-                    className="mt-4 px-4 py-1 hover:bg-red-600 hover:text-black rounded-md"
-                  >
-                    Close
-                  </Button>
+							<Button
+								onClick={closePopup}
+								className="mt-4 px-4 py-2"
+							>
+								Close
+							</Button>
                 </div>
               </div>
             )}
@@ -388,12 +384,12 @@ export function ProfileForm() {
                     onChange={handleChange}
                   />
                   <label className="m-2">Job Search Status</label>
-                  <select
-                    name="job_search_status"
-                    value={formData.job_search_status}
-                    onChange={handleChange}
-                    className="border-2 p-2 rounded-lg m-2 focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150 w-full"
-                  >
+					<select
+						name="job_search_status"
+						value={formData.job_search_status}
+						onChange={handleChange}
+						className="border border-border-light dark:border-border-dark bg-surface-highest dark:bg-surface-dark p-2.5 rounded-xl m-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary ease-linear duration-150 w-full text-text-main-light dark:text-text-main-dark"
+					>
                     <option value="" disabled>
                       Select status
                     </option>
@@ -402,12 +398,12 @@ export function ProfileForm() {
                     <option value="not_looking">Not Looking</option>
                   </select>
                   <label className="m-2">Job Type Preference</label>
-                  <select
-                    name="job_type_preference"
-                    value={formData.job_type_preference}
-                    onChange={handleChange}
-                    className="border-2 p-2 rounded-lg m-2 focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150 w-full"
-                  >
+					<select
+						name="job_type_preference"
+						value={formData.job_type_preference}
+						onChange={handleChange}
+						className="border border-border-light dark:border-border-dark bg-surface-highest dark:bg-surface-dark p-2.5 rounded-xl m-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary ease-linear duration-150 w-full text-text-main-light dark:text-text-main-dark"
+					>
                     <option value="">Select type</option>
                     <option value="Full Time">Full-Time</option>
                     <option value="Part Time">Part-Time</option>
@@ -436,13 +432,13 @@ export function ProfileForm() {
                   : "This helps match you with nearby jobs."}
               </p>
               <label htmlFor="country">Country</label>
-              <select
-                id="country"
-                name="location.country"
-                value={selectedCountry}
-                onChange={handleCountryChange}
-                className="border-2 p-2 rounded-lg m-2 focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150 w-full"
-              >
+				<select
+					id="country"
+					name="location.country"
+					value={selectedCountry}
+					onChange={handleCountryChange}
+					className="border border-border-light dark:border-border-dark bg-surface-highest dark:bg-surface-dark p-2.5 rounded-xl m-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary ease-linear duration-150 w-full text-text-main-light dark:text-text-main-dark"
+				>
                 <option value="" disabled>
                   Select a country
                 </option>

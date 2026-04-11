@@ -1,328 +1,320 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useJobs } from '@/api/jobs-data';
-import { useApplications, useCompanyInfo } from '@/api/home-data';
-import { getUid } from '@/firebase/authUtils';
-import Spinner from '@/components/ui/custom/spinner';
+import { useNavigate } from "react-router-dom";
+import {
+  ArrowRight,
+  BadgeCheck,
+  BriefcaseBusiness,
+  PlusCircle,
+  Sparkles,
+  Users,
+} from "lucide-react";
+import { useJobs } from "@/api/jobs-data";
+import { useApplications, useCompanyInfo } from "@/api/home-data";
+import { getUid } from "@/firebase/authUtils";
+import { Button } from "@/components/ui/button";
+import {
+  Avatar,
+  EmptyPanel,
+  MetricCard,
+  PageShell,
+  SectionHeading,
+  StatusPill,
+  SurfaceCard,
+} from "@/components/ui/custom/enterprise-shell";
+import { JobCardSkeleton, StatCardSkeleton } from "@/components/ui/custom/skeletons/Skeletons";
+import { formatDate } from "@/utils/formatters";
+
+function getApplicationTone(status) {
+  if (status === "a" || status === "h") return "success";
+  if (status === "r") return "danger";
+  return "warning";
+}
+
+function getApplicationLabel(status) {
+  if (status === "a") return "Shortlisted";
+  if (status === "h") return "Hired";
+  if (status === "r") return "Rejected";
+  return "Pending";
+}
 
 export default function RecruiterHome() {
-    const navigate = useNavigate();
-    const uid = getUid();
+  const navigate = useNavigate();
+  const uid = getUid();
 
-    // API hooks
-    const { jobs, loading: jobsLoading, error: jobsError } = useJobs();
-    const { applications, loading: appsLoading } = useApplications();
-    const { company, loading: companyLoading } = useCompanyInfo(uid);
+  const { jobs = [], loading: jobsLoading, error: jobsError } = useJobs();
+  const { applications = [], loading: appsLoading, error: appsError } = useApplications();
+  const { company, loading: companyLoading, error: companyError } = useCompanyInfo(uid);
 
-    // Calculate stats from data
-    const stats = {
-        activeJobs: jobs?.length || 0,
-        totalApplicants: applications?.length || 0,
-        shortlisted: applications?.filter(app => app.status === 'a')?.length || 0,
-        hired: applications?.filter(app => app.status === 'h')?.length || 0,
-    };
+  const stats = {
+    activeJobs: jobs.filter((job) => job.status !== "closed").length,
+    totalApplicants: applications.length,
+    shortlisted: applications.filter((app) => app.status === "a").length,
+    hired: applications.filter((app) => app.status === "h").length,
+  };
 
-    // Get time-based greeting
-    const getGreeting = () => {
-        const hour = new Date().getHours();
-        if (hour < 12) return 'Good Morning';
-        if (hour < 17) return 'Good Afternoon';
-        return 'Good Evening';
-    };
+  const recentApplicants = applications.slice(0, 4);
+  const topJobs = jobs.slice(0, 4);
+  const hasError = jobsError || appsError || companyError;
 
-    // Get recent applicants (last 5)
-    const recentApplicants = applications?.slice(0, 5) || [];
-
-    // Get top active jobs (first 3)
-    const topJobs = jobs?.slice(0, 3) || [];
-
-    const getStatusBadge = (status) => {
-        switch (status) {
-            case 'p':
-                return <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-400 dark:ring-blue-400/30">New</span>;
-            case 'a':
-                return <span className="inline-flex items-center rounded-full bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-400 dark:ring-purple-400/30">Shortlisted</span>;
-            case 'r':
-                return <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-700/10 dark:bg-red-900/30 dark:text-red-400 dark:ring-red-400/30">Rejected</span>;
-            default:
-                return <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20 dark:bg-yellow-900/30 dark:text-yellow-400 dark:ring-yellow-400/30">Reviewed</span>;
-        }
-    };
-
-    const getJobIcon = (index) => {
-        const icons = [
-            { bg: 'bg-orange-100 dark:bg-orange-900/20', text: 'text-orange-600 dark:text-orange-400', icon: 'soup_kitchen' },
-            { bg: 'bg-blue-100 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400', icon: 'skillet' },
-            { bg: 'bg-purple-100 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400', icon: 'local_bar' },
-        ];
-        return icons[index % icons.length];
-    };
-
-    if (jobsLoading && companyLoading) {
-        return (
-            <div className="flex items-center justify-center h-screen -mt-20">
-                <Spinner />
-            </div>
-        );
-    }
-
+  if (jobsLoading || appsLoading || companyLoading) {
     return (
-        <div className="flex flex-1 justify-center py-8 px-4 md:px-8 lg:px-12">
-            <div className="flex w-full max-w-6xl flex-col gap-8">
-                {/* Welcome Header & Primary CTA */}
-                <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-                    <div className="flex flex-col gap-2">
-                        <h1 className="text-3xl font-black leading-tight tracking-[-0.033em] text-text-main-light dark:text-white md:text-4xl">
-                            {getGreeting()}, {company?.name || 'Restaurant'}
-                        </h1>
-                        <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                            Here's what's happening at your restaurant today.
-                        </p>
-                    </div>
-                    <button
-                        onClick={() => navigate('/post-job')}
-                        className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold text-black shadow-lg shadow-primary/20 transition-transform hover:scale-105 active:scale-95"
-                    >
-                        <span className="material-symbols-outlined text-[20px]">add</span>
-                        <span>Post New Job</span>
-                    </button>
-                </div>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    {/* Active Jobs */}
-                    <div className="flex flex-col justify-between rounded-xl bg-white dark:bg-[#1a3322] p-6 shadow-sm ring-1 ring-gray-100 dark:ring-[#1f3625] transition-shadow hover:shadow-md">
-                        <div className="flex items-start justify-between">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Active Jobs</span>
-                                <span className="text-3xl font-bold text-text-main-light dark:text-white">{stats.activeJobs}</span>
-                            </div>
-                            <div className="flex size-10 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
-                                <span className="material-symbols-outlined">work</span>
-                            </div>
-                        </div>
-                        <div className="mt-4 flex items-center gap-1 text-xs font-medium text-gray-400 dark:text-gray-500">
-                            <span className="material-symbols-outlined text-[16px]">info</span>
-                            <span>Click to manage jobs</span>
-                        </div>
-                    </div>
-
-                    {/* Total Applicants */}
-                    <div className="flex flex-col justify-between rounded-xl bg-white dark:bg-[#1a3322] p-6 shadow-sm ring-1 ring-gray-100 dark:ring-[#1f3625] transition-shadow hover:shadow-md">
-                        <div className="flex items-start justify-between">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Applicants</span>
-                                <span className="text-3xl font-bold text-text-main-light dark:text-white">{stats.totalApplicants}</span>
-                            </div>
-                            <div className="flex size-10 items-center justify-center rounded-full bg-primary/20 text-green-700 dark:text-primary">
-                                <span className="material-symbols-outlined">group</span>
-                            </div>
-                        </div>
-                        <div className="mt-4 flex items-center gap-1 text-xs font-medium text-green-600 dark:text-primary">
-                            <span className="material-symbols-outlined text-[16px]">trending_up</span>
-                            <span>View all applicants</span>
-                        </div>
-                    </div>
-
-                    {/* Shortlisted */}
-                    <div className="flex flex-col justify-between rounded-xl bg-white dark:bg-[#1a3322] p-6 shadow-sm ring-1 ring-gray-100 dark:ring-[#1f3625] transition-shadow hover:shadow-md">
-                        <div className="flex items-start justify-between">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Shortlisted</span>
-                                <span className="text-3xl font-bold text-text-main-light dark:text-white">{stats.shortlisted}</span>
-                            </div>
-                            <div className="flex size-10 items-center justify-center rounded-full bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
-                                <span className="material-symbols-outlined">star</span>
-                            </div>
-                        </div>
-                        <div className="mt-4 flex items-center gap-1 text-xs font-medium text-gray-400 dark:text-gray-500">
-                            <span className="material-symbols-outlined text-[16px]">remove</span>
-                            <span>Accepted candidates</span>
-                        </div>
-                    </div>
-
-                    {/* Hired */}
-                    <div className="flex flex-col justify-between rounded-xl bg-white dark:bg-[#1a3322] p-6 shadow-sm ring-1 ring-gray-100 dark:ring-[#1f3625] transition-shadow hover:shadow-md">
-                        <div className="flex items-start justify-between">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Hired</span>
-                                <span className="text-3xl font-bold text-text-main-light dark:text-white">{stats.hired}</span>
-                            </div>
-                            <div className="flex size-10 items-center justify-center rounded-full bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">
-                                <span className="material-symbols-outlined">handshake</span>
-                            </div>
-                        </div>
-                        <div className="mt-4 flex items-center gap-1 text-xs font-medium text-green-600 dark:text-primary">
-                            <span className="material-symbols-outlined text-[16px]">check_circle</span>
-                            <span>Completed hires</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Recent Applicants Section */}
-                <div className="flex flex-col gap-4 rounded-xl border border-[#e5e7eb] dark:border-[#1f3625] bg-white dark:bg-[#1a3322] p-0 shadow-sm overflow-hidden">
-                    <div className="flex items-center justify-between border-b border-[#e5e7eb] dark:border-[#1f3625] px-6 py-4">
-                        <h2 className="text-lg font-bold leading-tight text-text-main-light dark:text-white">Recent Applicants</h2>
-                        <button
-                            onClick={() => navigate('/applications')}
-                            className="text-sm font-semibold text-primary hover:underline"
-                        >
-                            View All
-                        </button>
-                    </div>
-                    <div className="overflow-x-auto">
-                        {appsLoading ? (
-                            <div className="flex justify-center py-8">
-                                <Spinner />
-                            </div>
-                        ) : recentApplicants.length === 0 ? (
-                            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                                No applications received yet.
-                            </div>
-                        ) : (
-                            <table className="w-full min-w-[600px] text-left text-sm">
-                                <thead className="bg-gray-50 dark:bg-[#102216]">
-                                    <tr>
-                                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">Name</th>
-                                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">Role Applied For</th>
-                                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">Applied Date</th>
-                                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">Status</th>
-                                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-gray-400 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100 dark:divide-[#1f3625]">
-                                    {recentApplicants.map((app) => (
-                                        <tr key={app.id} className="group hover:bg-gray-50 dark:hover:bg-[#1f3625]/50 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div
-                                                        className="size-9 rounded-full bg-gray-200 bg-cover bg-center"
-                                                        style={{
-                                                            backgroundImage: app.applicant?.profile_picture
-                                                                ? `url('data:image/png;base64,${app.applicant.profile_picture}')`
-                                                                : 'none'
-                                                        }}
-                                                    >
-                                                        {!app.applicant?.profile_picture && (
-                                                            <div className="size-9 rounded-full bg-primary/20 flex items-center justify-center">
-                                                                <span className="material-symbols-outlined text-primary text-sm">person</span>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <span className="font-medium text-text-main-light dark:text-white">
-                                                        {app.applicant?.first_name || 'Unknown'} {app.applicant?.last_name || 'Applicant'}
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-gray-600 dark:text-gray-300">{app.job?.title}</td>
-                                            <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                                                {new Date(app.application_date).toLocaleDateString()}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                {getStatusBadge(app.status)}
-                                            </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <button
-                                                    onClick={() => navigate('/applications')}
-                                                    className="text-gray-400 hover:text-text-main-light dark:hover:text-white"
-                                                >
-                                                    <span className="material-symbols-outlined">more_vert</span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        )}
-                    </div>
-                </div>
-
-                {/* Active Jobs Grid */}
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                    <div className="col-span-1 lg:col-span-2">
-                        <div className="flex flex-col gap-4">
-                            <h2 className="text-xl font-bold text-text-main-light dark:text-white">Your Top Active Jobs</h2>
-                            {jobsLoading ? (
-                                <div className="flex justify-center py-8">
-                                    <Spinner />
-                                </div>
-                            ) : topJobs.length === 0 ? (
-                                <div className="text-center py-8 bg-white dark:bg-[#1a3322] rounded-xl border border-gray-100 dark:border-[#1f3625]">
-                                    <p className="text-gray-500 dark:text-gray-400 mb-4">No active jobs posted yet.</p>
-                                    <button
-                                        onClick={() => navigate('/post-job')}
-                                        className="px-4 py-2 bg-primary text-black rounded-lg font-bold text-sm"
-                                    >
-                                        Post Your First Job
-                                    </button>
-                                </div>
-                            ) : (
-                                topJobs.map((job, index) => {
-                                    const iconStyle = getJobIcon(index);
-                                    const applicantCount = applications?.filter(app => app.job?.id === job.id)?.length || 0;
-
-                                    return (
-                                        <div
-                                            key={job.id}
-                                            className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-xl border border-gray-100 dark:border-[#1f3625] bg-white dark:bg-[#1a3322] p-5 shadow-sm hover:border-primary/50 transition-colors cursor-pointer"
-                                        >
-                                            <div className="flex items-center gap-4">
-                                                <div className={`flex size-12 items-center justify-center rounded-lg ${iconStyle.bg} ${iconStyle.text}`}>
-                                                    <span className="material-symbols-outlined">{iconStyle.icon}</span>
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-text-main-light dark:text-white">{job.title}</h3>
-                                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                        {job.employment_type} • {applicantCount} Applicants
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="mt-4 sm:mt-0 flex items-center gap-2">
-                                                <button
-                                                    onClick={() => navigate(`/job/${job.id}`)}
-                                                    className="rounded-lg px-3 py-2 text-xs font-bold text-text-main-light dark:text-white hover:bg-gray-100 dark:hover:bg-[#1f3625]"
-                                                >
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    onClick={() => navigate('/applications')}
-                                                    className="rounded-lg bg-gray-900 px-3 py-2 text-xs font-bold text-white dark:bg-white dark:text-black hover:opacity-90"
-                                                >
-                                                    View Applicants
-                                                </button>
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Quick Tips / Promo */}
-                    <div className="col-span-1">
-                        <div className="relative h-full overflow-hidden rounded-xl bg-gradient-to-br from-[#111813] to-[#1a3322] p-6 text-white shadow-md min-h-[280px]">
-                            <div className="absolute -right-10 -top-10 size-40 rounded-full bg-primary/20 blur-3xl"></div>
-                            <div className="relative z-10 flex h-full flex-col justify-between gap-6">
-                                <div>
-                                    <div className="mb-4 inline-flex items-center justify-center rounded-lg bg-white/10 p-2 backdrop-blur-sm">
-                                        <span className="material-symbols-outlined text-primary">lightbulb</span>
-                                    </div>
-                                    <h3 className="text-xl font-bold">Boost your visibility</h3>
-                                    <p className="mt-2 text-sm text-gray-300">
-                                        Restaurants with complete profiles get 2x more applicants. Add photos of your kitchen now.
-                                    </p>
-                                </div>
-                                <button
-                                    onClick={() => navigate('/company-profile')}
-                                    className="w-full rounded-lg bg-white py-3 text-sm font-bold text-black hover:bg-gray-100 transition-colors"
-                                >
-                                    Complete Profile
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <PageShell
+        description="Loading company performance, hiring pipeline, and open roles."
+        eyebrow="Recruiter studio"
+        title="Preparing your hiring workspace"
+      >
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+          <StatCardSkeleton />
+          <StatCardSkeleton />
         </div>
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+          <div className="grid gap-4">
+            <JobCardSkeleton />
+            <JobCardSkeleton />
+          </div>
+          <div className="skeleton-shimmer h-72 rounded-[1.75rem]" />
+        </div>
+      </PageShell>
     );
+  }
+
+  if (hasError) {
+    return (
+      <PageShell
+        description="The dashboard could not be assembled from the current API responses."
+        eyebrow="Recruiter studio"
+        title="We could not load your dashboard"
+      >
+        <EmptyPanel
+          action={
+            <Button onClick={() => window.location.reload()} type="button">
+              Reload dashboard
+            </Button>
+          }
+          description={hasError}
+          title="Hiring analytics are temporarily unavailable."
+        />
+      </PageShell>
+    );
+  }
+
+  return (
+    <PageShell
+      actions={
+        <>
+          <Button onClick={() => navigate("/jobs/manage")} type="button" variant="outline">
+            Manage roles
+          </Button>
+          <Button onClick={() => navigate("/post-job")} type="button">
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Post new role
+          </Button>
+        </>
+      }
+      description="Monitor open roles, candidate flow, and where your team should act next."
+      eyebrow="Recruiter studio"
+      title={`Run a sharper hiring operation for ${company?.name || "your kitchen"}`}
+    >
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <MetricCard
+          helper="Roles still open or actively recruiting."
+          icon={BriefcaseBusiness}
+          label="Active roles"
+          value={stats.activeJobs}
+        />
+        <MetricCard
+          helper="Applicants currently in your pipeline."
+          icon={Users}
+          label="Total applicants"
+          tone="brass"
+          value={stats.totalApplicants}
+        />
+        <MetricCard
+          helper="Candidates you have moved forward."
+          icon={BadgeCheck}
+          label="Shortlisted"
+          tone="slate"
+          value={stats.shortlisted}
+        />
+        <MetricCard
+          helper="Roles converted into confirmed hires."
+          icon={Sparkles}
+          label="Hired"
+          tone="primary"
+          value={stats.hired}
+        />
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="grid gap-6">
+          <SurfaceCard className="p-5 sm:p-6">
+            <SectionHeading
+              action={
+                <Button onClick={() => navigate("/applications")} type="button" variant="ghost">
+                  View all candidates
+                </Button>
+              }
+              description="The latest applicants across your active positions."
+              eyebrow="Candidate activity"
+              title="Recent applicants"
+            />
+            <div className="mt-5 grid gap-3">
+              {recentApplicants.length === 0 ? (
+                <EmptyPanel
+                  className="min-h-[220px]"
+                  description="Post a role to start building a reviewed pipeline of chefs and hospitality talent."
+                  title="No applications yet"
+                />
+              ) : (
+                recentApplicants.map((application) => {
+                  const applicant = application.applicant || {};
+                  const appId = application.application_id || application.id;
+
+                  return (
+                    <button
+                      className="flex flex-col gap-4 rounded-[1.5rem] border border-white/80 bg-white/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-sm dark:border-white/10 dark:bg-white/10 sm:flex-row sm:items-center sm:justify-between"
+                      key={appId}
+                      onClick={() => navigate(`/applicant/${appId}`)}
+                      type="button"
+                    >
+                      <div className="flex items-center gap-4">
+                        <Avatar
+                          className="h-14 w-14 rounded-[1.25rem]"
+                          name={`${applicant.first_name || ""} ${applicant.last_name || ""}`}
+                          src={applicant.profile_picture}
+                        />
+                        <div>
+                          <p className="font-semibold text-text-main-light dark:text-text-main-dark">
+                            {applicant.first_name || "Chef"} {applicant.last_name || "Applicant"}
+                          </p>
+                          <p className="mt-1 text-sm text-text-sub-light dark:text-text-sub-dark">
+                            Applied for {application.job?.title || "open role"}
+                          </p>
+                          <p className="mt-1 text-xs uppercase tracking-[0.18em] text-text-sub-light/80 dark:text-text-sub-dark/80">
+                            {formatDate(application.application_date)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <StatusPill tone={getApplicationTone(application.status)}>
+                          {getApplicationLabel(application.status)}
+                        </StatusPill>
+                        <ArrowRight className="h-4 w-4 text-text-sub-light dark:text-text-sub-dark" />
+                      </div>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </SurfaceCard>
+
+          <SurfaceCard className="p-5 sm:p-6">
+            <SectionHeading
+              action={
+                <Button onClick={() => navigate("/jobs/manage")} type="button" variant="ghost">
+                  Open role board
+                </Button>
+              }
+              description="Roles with the highest current attention from candidates."
+              eyebrow="Role performance"
+              title="Top active jobs"
+            />
+            <div className="mt-5 grid gap-3">
+              {topJobs.length === 0 ? (
+                <EmptyPanel
+                  className="min-h-[220px]"
+                  description="Create the first job posting to start collecting applicants and analytics."
+                  title="No roles posted yet"
+                />
+              ) : (
+                topJobs.map((job) => {
+                  const applicantCount = applications.filter(
+                    (application) => application.job?.job_id === job.job_id
+                  ).length;
+
+                  return (
+                    <div
+                      className="flex flex-col gap-4 rounded-[1.5rem] border border-white/80 bg-white/90 p-5 dark:border-white/10 dark:bg-white/10 sm:flex-row sm:items-center sm:justify-between"
+                      key={job.job_id}
+                    >
+                      <div>
+                        <p className="font-display text-2xl font-semibold tracking-[-0.04em] text-text-main-light dark:text-text-main-dark">
+                          {job.title}
+                        </p>
+                        <p className="mt-2 text-sm text-text-sub-light dark:text-text-sub-dark">
+                          {job.employment_type || "Full Time"} role at {company?.name || job.company_name}
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <StatusPill tone="info">{applicantCount} applicants</StatusPill>
+                          <StatusPill tone={job.status === "closed" ? "danger" : "success"}>
+                            {job.status === "closed" ? "Closed" : "Live"}
+                          </StatusPill>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button onClick={() => navigate(`/job/${job.job_id}`)} type="button" variant="outline">
+                          Review role
+                        </Button>
+                        <Button onClick={() => navigate("/applications")} type="button">
+                          View applicants
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </SurfaceCard>
+        </div>
+
+        <div className="grid gap-6">
+          <SurfaceCard className="p-5 sm:p-6">
+            <SectionHeading
+              description="This company identity follows the Verdant Atelier direction and acts as the hiring trust anchor."
+              eyebrow="Company signal"
+              title="Brand at a glance"
+            />
+            <div className="mt-5 flex items-center gap-4">
+              <Avatar className="h-16 w-16 rounded-[1.4rem]" name={company?.name || "Kitchen"} src={company?.logo} />
+              <div>
+                <p className="font-display text-2xl font-semibold tracking-[-0.04em] text-text-main-light dark:text-text-main-dark">
+                  {company?.name || "Restaurant"}
+                </p>
+                <p className="mt-1 text-sm text-text-sub-light dark:text-text-sub-dark">
+                  {company?.size || "Hospitality team"} workforce
+                </p>
+              </div>
+            </div>
+            <p className="mt-4 text-sm leading-7 text-text-sub-light dark:text-text-sub-dark">
+              {company?.description
+                ? String(company.description).replace(/<[^>]+>/g, " ").slice(0, 220).trim() + "..."
+                : "Complete the company profile to communicate credibility, kitchen standards, and what candidates should expect."}
+            </p>
+            <Button className="mt-5 w-full" onClick={() => navigate("/company-profile")} type="button">
+              Open company profile
+            </Button>
+          </SurfaceCard>
+
+          <SurfaceCard className="bg-gradient-to-br from-primary via-ember-500 to-secondary p-6 text-primary-foreground dark:border-white/10">
+            <p className="section-kicker text-primary-foreground/70">Operating note</p>
+            <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.05em]">
+              Verified work history is your advantage.
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-primary-foreground/80">
+              Every clear job brief, every quick response, and every consistent review strengthens trust in the marketplace.
+            </p>
+            <Button
+              className="mt-6 w-full border-white/20 bg-white/15 text-white hover:bg-white/20"
+              onClick={() => navigate("/post-job")}
+              type="button"
+              variant="outline"
+            >
+              Publish another opening
+            </Button>
+          </SurfaceCard>
+        </div>
+      </div>
+    </PageShell>
+  );
 }

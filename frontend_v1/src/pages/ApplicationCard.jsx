@@ -1,17 +1,15 @@
+/* eslint-disable react/prop-types */
 import { JobSeekerProfileCard } from "@/components/ui/custom/ApplicantResume";
 import { baseUrl } from "@/constants/constants";
 import { getFreshIdToken } from "@/firebase/authUtils";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ImLocation } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 export const ApplicationCard = ({ application }) => {
 	const { job, applicant, application_date } = application;
 	const user = applicant.user;
-	const navigate = useNavigate();
-	console.log(user);
 	const [currentStatus, setCurrentStatus] = useState(application.status);
 	const [loading, setLoading] = useState(false);
 	const [loadingResume, setLoadingResume] = useState(false);
@@ -25,6 +23,12 @@ export const ApplicationCard = ({ application }) => {
 			: currentStatus === "a"
 				? "Accepted"
 				: "Rejected";
+	const statusClass =
+		currentStatus === "p"
+			? "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/12 dark:text-amber-200"
+			: currentStatus === "a"
+				? "border-forest-200 bg-forest-50 text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200"
+				: "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-500/20 dark:bg-rose-500/12 dark:text-rose-200";
 	const handleHireClick = async (status) => {
 		// Handle hire click logic here
 		const applicationId = application.application_id;
@@ -73,7 +77,7 @@ export const ApplicationCard = ({ application }) => {
 
 	return (
 		<>
-			<div className="bg-white shadow rounded-lg p-5 w-fit flex flex-col justify-between border border-gray-200 text-base">
+			<div className="flex w-full flex-col justify-between rounded-xl border border-border-light/80 bg-white/92 p-5 text-base shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
 				<AnimatePresence>
 					{showProfile && selectedProfile && (
 						<motion.div
@@ -94,7 +98,7 @@ export const ApplicationCard = ({ application }) => {
 
 							{/* MODAL */}
 							<motion.div
-								className="relative z-[101] bg-white rounded-xl shadow-xl p-6 w-[90%] max-w-4xl"
+								className="relative z-[101] w-[90%] max-w-4xl rounded-xl bg-white p-6 shadow-xl dark:bg-[#241f1b]"
 								initial={{ opacity: 0, scale: 0.95 }}
 								animate={{ opacity: 1, scale: 1 }}
 								exit={{ opacity: 0, scale: 0.95 }}
@@ -102,7 +106,7 @@ export const ApplicationCard = ({ application }) => {
 							>
 								<button
 									onClick={() => setShowProfile(false)}
-									className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-xl"
+									className="absolute right-4 top-4 text-xl text-text-sub-light hover:text-rose-500 dark:text-text-sub-dark dark:hover:text-rose-300"
 								>
 									✕
 								</button>
@@ -113,33 +117,28 @@ export const ApplicationCard = ({ application }) => {
 				</AnimatePresence>
 
 				<div className="flex flex-col gap-2">
-					<div className="font-semibold text-xl text-gray-800">
+					<div className="text-xl font-semibold text-text-main-light dark:text-text-main-dark">
 						{user.username}
 					</div>
 
-					<div className="text-gray-700 text-lg">
+					<div className="text-lg text-text-main-light dark:text-text-main-dark">
 						<div className="font-medium">{user.email}</div>
-						<div className="text-gray-600">
+						<div className="text-text-sub-light dark:text-text-sub-dark">
 							{job.title} @ {job.company_name}
 						</div>
-						<div className="text-gray-600 flex items-center">
+						<div className="flex items-center text-text-sub-light dark:text-text-sub-dark">
 							<ImLocation className="mr-1" />
 							{jobLocation}
 						</div>
 					</div>
 
-					<div className="text-lg	 text-gray-500 mt-2">
+					<div className="mt-2 text-sm text-text-sub-light dark:text-text-sub-dark">
 						Applied on: {application_date}
 					</div>
 
 					<div className="mt-2">
 						<span
-							className={`text-sm px-2 py-1 rounded ${currentStatus === "p"
-								? "bg-yellow-100 text-yellow-800"
-								: currentStatus === "a"
-									? "bg-green-100 text-green-800"
-									: "bg-red-100 text-red-800"
-								}`}
+							className={`rounded-full border px-3 py-1 text-sm font-semibold ${statusClass}`}
 						>
 							{statusText}
 						</span>
@@ -148,10 +147,10 @@ export const ApplicationCard = ({ application }) => {
 
 				<div className="flex flex-wrap gap-2 mt-4">
 					<button
-						className={`border ${currentStatus !== "p"
-							? "border-gray-400 text-gray-400 cursor-not-allowed"
-							: "border-green-700 text-green-700 hover:bg-green-700 hover:text-white"
-							} text-sm px-4 py-1.5 rounded-md transition`}
+						className={`rounded-lg border px-4 py-1.5 text-sm font-medium transition ${currentStatus !== "p"
+							? "cursor-not-allowed border-border-light text-text-sub-light dark:border-border-dark dark:text-text-sub-dark"
+							: "border-forest-600 text-forest-700 hover:bg-forest-600 hover:text-white dark:border-forest-400 dark:text-forest-200 dark:hover:bg-forest-500 dark:hover:text-[#102216]"
+							}`}
 						onClick={() => handleHireClick("a")}
 						disabled={currentStatus !== "p" || loading}
 					>
@@ -159,10 +158,10 @@ export const ApplicationCard = ({ application }) => {
 					</button>
 
 					<button
-						className={`border ${currentStatus !== "p"
-							? "border-gray-400 text-gray-400 cursor-not-allowed"
-							: "border-red-700 text-red-700 hover:bg-red-700 hover:text-white"
-							} text-sm px-4 py-1.5 rounded-md transition`}
+						className={`rounded-lg border px-4 py-1.5 text-sm font-medium transition ${currentStatus !== "p"
+							? "cursor-not-allowed border-border-light text-text-sub-light dark:border-border-dark dark:text-text-sub-dark"
+							: "border-rose-600 text-rose-700 hover:bg-rose-600 hover:text-white dark:border-rose-400 dark:text-rose-200 dark:hover:bg-rose-500 dark:hover:text-white"
+							}`}
 						onClick={() => handleHireClick("r")}
 						disabled={currentStatus !== "p" || loading}
 					>
@@ -175,14 +174,13 @@ export const ApplicationCard = ({ application }) => {
 
 					<Link
 						to={`/messages?uid=${user.uid}`}
-						className="border text-sm px-4 py-1.5 rounded-md transition
-								 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+						className="rounded-lg border border-secondary px-4 py-1.5 text-sm font-medium text-secondary transition hover:bg-secondary hover:text-white dark:border-secondary dark:text-secondary dark:hover:text-[#102216]"
 					>
 						Message
 					</Link>
 
 					<button
-						className="border text-sm px-4 py-1.5 rounded-md transition border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white"
+						className="rounded-lg border border-primary px-4 py-1.5 text-sm font-medium text-primary transition hover:bg-primary hover:text-white dark:border-primary dark:text-primary"
 						onClick={() => {
 							handleViewResume();
 						}}

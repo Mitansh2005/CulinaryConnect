@@ -1,24 +1,95 @@
-import { Button } from "../ui/button";
-import { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, BadgeCheck, Clock3, ShieldCheck, Users } from "lucide-react";
+import { MdErrorOutline } from "react-icons/md";
+import axios from "axios";
 import GoogleIcon from "../../assets/icons/google.png";
 import {
-  doSignInWithGoogle,
-  doSignInWithEmailPassword,
   doCreateUserWithEmailPassword,
+  doSignInWithEmailPassword,
+  doSignInWithGoogle,
 } from "../../firebase/auth";
-import { useAuth } from "../../contexts/authContext";
-import { useNavigate } from "react-router-dom";
 import { auth } from "@/firebase/firebase";
-import { getFreshIdToken, getUid, setUpProfile } from "@/firebase/authUtils";
 import { baseUrl } from "@/constants/constants";
-import { MdErrorOutline } from "react-icons/md";
-import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
+import { useAuth } from "../../contexts/authContext";
+import { getFreshIdToken, getUid, setUpProfile } from "@/firebase/authUtils";
+import { BrandMark } from "@/components/ui/custom/enterprise-shell";
 
-function LoginTemplate() {
+const showcasePoints = [
+  {
+    icon: BadgeCheck,
+    title: "Verified marketplace rhythm",
+    description: "Recruiter onboarding captures business details early so hiring conversations start with more trust.",
+  },
+  {
+    icon: Users,
+    title: "Chefs and restaurants in one flow",
+    description: "Switch between chef and restaurant access without jumping into a separate product experience.",
+  },
+  {
+    icon: Clock3,
+    title: "Faster shortlist decisions",
+    description: "Cleaner profiles and clearer role matching reduce back-and-forth before interviews are scheduled.",
+  },
+];
+
+const roleCopy = {
+  restaurant: {
+    title: "Restaurant",
+    description: "Post roles, verify your business, and track applicants from one calmer dashboard.",
+  },
+  chef: {
+    title: "Chef",
+    description: "Build your profile, show your experience, and move through openings with less friction.",
+  },
+};
+
+function AuthInput({
+  label,
+  id,
+  icon,
+  value,
+  onChange,
+  type = "text",
+  placeholder,
+  required = true,
+  action,
+}) {
+  return (
+    <div className="space-y-1.5">
+      <label
+        className="block text-sm font-semibold text-text-main-light dark:text-text-main-dark"
+        htmlFor={id}
+      >
+        {label}
+      </label>
+      <div className="relative">
+        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-text-sub-light dark:text-text-sub-dark">
+          <span className="material-symbols-outlined text-[19px]">{icon}</span>
+        </span>
+        <input
+          className="block w-full rounded-[1.2rem] border border-stone-200 bg-stone-50/95 py-3 pl-12 pr-12 text-sm text-text-main-light shadow-sm outline-none transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10 dark:border-white/10 dark:bg-white/6 dark:text-text-main-dark"
+          id={id}
+          onChange={onChange}
+          placeholder={placeholder}
+          required={required}
+          type={type}
+          value={value}
+        />
+        {action ? (
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4">{action}</div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function LoginTemplate({ initialMode = "signin" }) {
   const navigate = useNavigate();
   const { userLoggedIn } = useAuth();
-  const [userType, setUserType] = useState("restaurant"); // default is restaurant
+  const [userType, setUserType] = useState(initialMode === "signup" ? "chef" : "restaurant");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
@@ -29,111 +100,43 @@ function LoginTemplate() {
   const [fssaiLicense, setFssaiLicense] = useState("");
   const [submitLoading, setSubmitLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [authMode, setAuthMode] = useState("signin"); // or "signup"
+  const [authMode, setAuthMode] = useState(initialMode);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [isRegisterIn, setIsRegisterIn] = useState(false);
-  const [formValid, setFormValid] = useState(false);
+  const [formValid, setFormValid] = useState(initialMode === "signup");
   const [profileSetUpComplete, setProfileSetUpComplete] = useState(false);
 
-  // Redirect to home if user is already logged in
+  useEffect(() => {
+    setAuthMode(initialMode);
+    setErrorMessage("");
+  }, [initialMode]);
+
   useEffect(() => {
     if (userLoggedIn) {
-      // If signing up, wait for profile setup
       if (authMode === "signup" && !profileSetUpComplete) {
         return;
       }
-      // Otherwise redirect immediately
       navigate("/home");
     }
   }, [userLoggedIn, profileSetUpComplete, authMode, navigate]);
 
   useEffect(() => {
-    // This runs whenever userType, companyName, or fssaiLicense changes
-    const valid = isFormValid();
+    const valid =
+      userType !== "restaurant" ||
+      (companyName.trim() !== "" && fssaiLicense.trim() !== "");
     setFormValid(valid);
   }, [userType, companyName, fssaiLicense]);
 
-  const isFormValid = () => {
-    if (!userType) return false;
-
-    if (userType === "restaurant") {
-      return companyName.trim() !== "" && fssaiLicense.trim() !== "";
+  const checkFunction = () => {
+    if (password === confirmpassword) {
+      return true;
     }
-    return true;
-  };
 
-  const onSubmit = async (e, mode) => {
-    e.preventDefault();
-    if (mode === "signup") {
-      if (!isRegisterIn && checkFunction() && formValid) {
-        setIsRegisterIn(true);
-        try {
-          setSubmitLoading(true);
-          await doCreateUserWithEmailPassword(email, password);
-          const uid = getUid();
-          try {
-            const res = await setUpProfile({
-              uid: uid,
-              username: "New User",
-              user_type: userType,
-              company_name: companyName || null,
-              fssai_license_no: fssaiLicense || null,
-            });
-            console.log(res);
-            localStorage.setItem("userData", JSON.stringify(res.data));
-          } catch (err) {
-            setProfileSetUpComplete(false);
-            setErrorMessage("Something went wrong while creating profile!");
-            const user = auth.currentUser;
-            if (user) {
-              await user.delete(); // This removes user from Firebase
-            }
-          }
-          setProfileSetUpComplete(true);
-          console.log("Token verified and user logged in");
-        } catch (err) {
-          // Rollback Firebase user if profile setup fails
-          const currentUser = auth.currentUser;
-          if (currentUser) {
-            await currentUser.delete(); // This removes user from Firebase
-          }
-          console.error(err);
-          setErrorMessage("Please try again with correct email and password!");
-        } finally {
-          setIsRegisterIn(false);
-          setSubmitLoading(false);
-        }
-      }
-    } else {
-      console.log(mode);
-      if (!isSigningIn) {
-        setIsSigningIn(true);
-        try {
-          setSubmitLoading(true);
-
-          await doSignInWithEmailPassword(email, password);
-
-          const typeMatch = await checkUserType(userType);
-          if (!typeMatch) {
-            await auth.signOut();
-            setErrorMessage("User type does not match. Please try again.");
-            return;
-          }
-          console.log("Token verified and user logged in");
-          localStorage.setItem("userType", userType);
-          setProfileSetUpComplete(true); // Trigger navigation to home
-        } catch (err) {
-          setErrorMessage("Try again with correct email and password!");
-        } finally {
-          setIsSigningIn(false);
-          setSubmitLoading(false);
-        }
-      }
-    }
+    setErrorMessage("Both password fields should match.");
+    return false;
   };
 
   const checkUserType = async (selectedType) => {
-    console.log("Checking user type...");
     try {
       const uid = getUid();
       if (!uid) {
@@ -145,457 +148,449 @@ function LoginTemplate() {
           Authorization: `Bearer ${token}`,
         },
       });
-      const dbType = res.data.user_type;
-      console.log(dbType, selectedType); // adjust according to your API's response
-      if (dbType !== selectedType) {
-        return false;
-      }
 
-      return true;
+      return res.data.user_type === selectedType;
     } catch (error) {
       console.error("Error checking user type:", error);
+      return false;
+    }
+  };
+
+  const onSubmit = async (e, mode) => {
+    e.preventDefault();
+
+    if (mode === "signup") {
+      if (!isRegisterIn && checkFunction() && formValid) {
+        setIsRegisterIn(true);
+        try {
+          setSubmitLoading(true);
+          await doCreateUserWithEmailPassword(email, password);
+          const uid = getUid();
+
+          try {
+            const res = await setUpProfile({
+              uid,
+              username: "New User",
+              user_type: userType,
+              company_name: companyName || null,
+              fssai_license_no: fssaiLicense || null,
+            });
+            localStorage.setItem("userData", JSON.stringify(res.data));
+            localStorage.setItem("userType", userType);
+          } catch {
+            setProfileSetUpComplete(false);
+            setErrorMessage("Something went wrong while creating your profile.");
+            const user = auth.currentUser;
+            if (user) {
+              await user.delete();
+            }
+            return;
+          }
+
+          setProfileSetUpComplete(true);
+        } catch (err) {
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            await currentUser.delete();
+          }
+          console.error(err);
+          setErrorMessage("Please try again with a valid email and password.");
+        } finally {
+          setIsRegisterIn(false);
+          setSubmitLoading(false);
+        }
+      }
+      return;
+    }
+
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      try {
+        setSubmitLoading(true);
+        await doSignInWithEmailPassword(email, password);
+
+        const typeMatch = await checkUserType(userType);
+        if (!typeMatch) {
+          await auth.signOut();
+          setErrorMessage("User type does not match this account. Please try again.");
+          return;
+        }
+
+        localStorage.setItem("userType", userType);
+        setProfileSetUpComplete(true);
+      } catch {
+        setErrorMessage("Try again with the correct email and password.");
+      } finally {
+        setIsSigningIn(false);
+        setSubmitLoading(false);
+      }
     }
   };
 
   const onGoogleAuth = async (mode) => {
     if (mode === "signup") {
+      if (!isRegisterIn || !formValid) {
+        if (!formValid && userType === "restaurant") {
+          setErrorMessage("Add company name and FSSAI license number to continue.");
+        }
+      }
       if (!isRegisterIn && formValid) {
         setIsRegisterIn(true);
         try {
           setGoogleLoading(true);
           await doSignInWithGoogle();
           const uid = getUid();
-          console.log(userType);
+
           try {
             const res = await setUpProfile({
-              uid: uid,
+              uid,
               username: "New User",
               user_type: userType,
               company_name: companyName || null,
               fssai_license_no: fssaiLicense || null,
             });
-            localStorage.setItem("userData", res.data);
+            localStorage.setItem("userData", JSON.stringify(res.data));
+            localStorage.setItem("userType", userType);
           } catch (err) {
             setProfileSetUpComplete(false);
-            setErrorMessage("Something went wrong: " + err.message);
+            setErrorMessage(`Something went wrong: ${err.message}`);
             const user = auth.currentUser;
             if (user) {
-              await user.delete(); // This removes user from Firebase
+              await user.delete();
             }
+            return;
           }
+
           setProfileSetUpComplete(true);
-          console.log("Token verified and user logged in");
         } catch (err) {
-          setErrorMessage("Something went wrong: " + err.message);
+          setErrorMessage(`Something went wrong: ${err.message}`);
           const currentUser = auth.currentUser;
           if (currentUser) {
-            await currentUser.delete(); // This removes user from Firebase
+            await currentUser.delete();
           }
         } finally {
           setIsRegisterIn(false);
           setGoogleLoading(false);
         }
       }
-    } else {
-      if (!isSigningIn) {
-        setIsSigningIn(true);
-        try {
-          setGoogleLoading(true);
+      return;
+    }
 
-          await doSignInWithGoogle();
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      try {
+        setGoogleLoading(true);
+        await doSignInWithGoogle();
 
-          const typeMatch = await checkUserType(userType);
-
-          if (!typeMatch) {
-            await auth.signOut();
-            setErrorMessage("User type does not match. Please try again.");
-            return;
-          }
-          console.log("Token verified and user logged in");
-          localStorage.setItem("userType", userType);
-          setProfileSetUpComplete(true); // Trigger navigation to home
-        } catch (err) {
-          setErrorMessage("Something went wrong. Please try again!");
-        } finally {
-          setIsSigningIn(false);
-          setGoogleLoading(false);
+        const typeMatch = await checkUserType(userType);
+        if (!typeMatch) {
+          await auth.signOut();
+          setErrorMessage("User type does not match this account. Please try again.");
+          return;
         }
+
+        localStorage.setItem("userType", userType);
+        setProfileSetUpComplete(true);
+      } catch {
+        setErrorMessage("Something went wrong. Please try again.");
+      } finally {
+        setIsSigningIn(false);
+        setGoogleLoading(false);
       }
     }
   };
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setConfirmPasswordVisible(!confirmPasswordVisible);
-  };
-
-  const checkFunction = (e) => {
-    if (password == confirmpassword) {
-      return true;
-    }
-    setErrorMessage("Both fields should be same");
-    return false;
-  };
+  const roleDetail = roleCopy[userType];
 
   return (
-    <>
-      <div className="flex min-h-screen w-full bg-background-light dark:bg-background-dark font-display">
-        {/* Left Section: Form */}
-        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white dark:bg-background-dark max-w-[640px] w-full mx-auto lg:mx-0 shadow-xl lg:shadow-none z-10">
-          <div className="mx-auto w-full max-w-sm lg:w-96">
-            {/* Header */}
-            <div className="mb-10">
-              <div className="flex items-center gap-2 mb-8">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                  <span className="material-symbols-outlined text-black font-bold text-xl">
-                    restaurant
-                  </span>
+    <div className="shell-canvas">
+      <div className="relative z-10 flex min-h-screen flex-col lg:flex-row">
+        <div className="flex w-full items-center justify-center px-4 py-5 sm:px-6 lg:min-h-screen lg:w-[48%] lg:px-8 lg:py-4">
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="glass-panel w-full max-w-[42rem] overflow-hidden"
+          >
+            <div className="border-b border-white/60 bg-white/60 px-5 py-4 dark:border-white/10 dark:bg-white/6 sm:px-7">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <BrandMark compact subtitle="Culinary hiring atelier" />
+                <div className="rounded-full border border-ember-200 bg-ember-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-ember-700 dark:border-ember-500/20 dark:bg-ember-500/12 dark:text-ember-200">
+                  {authMode === "signin" ? "Welcome back" : "Join the network"}
                 </div>
-                <span className="text-xl font-bold tracking-tight text-black dark:text-white">
-                  Culinary Connect
-                </span>
               </div>
-              <h1 className="text-3xl font-black leading-tight tracking-tight text-[#111813] dark:text-white">
-                {authMode === "signin" ? "Welcome back" : "Create your account"}
-              </h1>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Connect with top talent or find your next kitchen.
-              </p>
             </div>
 
-            {/* Error Message */}
-            {errorMessage && (
-              <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-4 mb-6">
-                <div className="flex">
-                  <MdErrorOutline className="h-5 w-5 text-red-400" />
-                  <p className="ml-3 text-sm font-medium text-red-800 dark:text-red-200">
-                    {errorMessage}
+            <div className="grid gap-5 px-5 py-5 sm:px-7 sm:py-6">
+              <div className="space-y-2">
+                <p className="section-kicker">{authMode === "signin" ? "Access portal" : "Create your workspace"}</p>
+                <h1 className="font-display text-[2rem] font-semibold tracking-[-0.05em] text-text-main-light dark:text-text-main-dark sm:text-[2.35rem]">
+                  {authMode === "signin" ? "Enter the culinary hiring floor." : "Create an account that fits your role."}
+                </h1>
+                <p className="max-w-xl text-sm leading-6 text-text-sub-light dark:text-text-sub-dark">
+                  Switch your role first, then continue with email or Google. Restaurant sign-up
+                  captures verification details immediately so the platform stays usable and credible.
+                </p>
+              </div>
+
+              {errorMessage ? (
+                <div className="rounded-[1.35rem] border border-rose-200 bg-rose-50/95 p-4 dark:border-rose-500/20 dark:bg-rose-500/10">
+                  <div className="flex items-start gap-3">
+                    <MdErrorOutline className="mt-0.5 h-5 w-5 shrink-0 text-rose-600 dark:text-rose-300" />
+                    <p className="text-sm font-medium text-rose-800 dark:text-rose-100">{errorMessage}</p>
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="grid gap-3 rounded-[1.45rem] border border-stone-200 bg-stone-50/70 p-3 dark:border-white/10 dark:bg-white/5 sm:grid-cols-[1.2fr_0.8fr]">
+                <div>
+                  <p className="section-kicker">Choose your role</p>
+                  <div className="mt-2 flex h-11 w-full items-center rounded-[1rem] bg-stone-100 p-1 dark:bg-white/5">
+                    {["restaurant", "chef"].map((role) => {
+                      const active = userType === role;
+                      return (
+                        <label
+                          key={role}
+                          className={`flex h-full grow cursor-pointer items-center justify-center rounded-[0.85rem] px-2 text-sm font-semibold transition ${
+                            active
+                              ? "bg-primary text-primary-foreground shadow-sm"
+                              : "text-text-sub-light hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
+                          }`}
+                        >
+                          <input
+                            checked={active}
+                            className="sr-only"
+                            name="role-selection"
+                            onChange={() => setUserType(role)}
+                            type="radio"
+                            value={role}
+                          />
+                          {roleDetail && role === userType ? roleDetail.title : role === "restaurant" ? "Restaurant" : "Chef"}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="rounded-[1.1rem] border border-white/80 bg-white/95 p-3.5 dark:border-white/10 dark:bg-white/5">
+                  <p className="text-sm font-semibold text-text-main-light dark:text-text-main-dark">
+                    {roleDetail.title} access
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-text-sub-light dark:text-text-sub-dark">
+                    {roleDetail.description}
                   </p>
                 </div>
               </div>
-            )}
 
-            {/* Role Switcher */}
-            <div className="mb-8">
-              <div className="flex h-12 w-full items-center justify-center rounded-lg bg-[#f0f4f2] dark:bg-white/5 p-1">
-                <label className="group flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 transition-all has-[:checked]:bg-primary has-[:checked]:shadow-sm">
-                  <span className="truncate text-sm font-medium text-gray-600 dark:text-gray-300 group-has-[:checked]:text-[#111813]">
-                    Restaurant
-                  </span>
-                  <input
-                    checked={userType === "restaurant"}
-                    onChange={() => setUserType("restaurant")}
-                    className="invisible w-0"
-                    name="role-selection"
-                    type="radio"
-                    value="restaurant"
-                  />
-                </label>
-                <label className="group flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 transition-all has-[:checked]:bg-primary has-[:checked]:shadow-sm">
-                  <span className="truncate text-sm font-medium text-gray-600 dark:text-gray-300 group-has-[:checked]:text-[#111813]">
-                    Chef
-                  </span>
-                  <input
-                    checked={userType === "chef"}
-                    onChange={() => setUserType("chef")}
-                    className="invisible w-0"
-                    name="role-selection"
-                    type="radio"
-                    value="chef"
-                  />
-                </label>
-              </div>
-            </div>
-
-            {/* Main Form */}
-            <motion.form
-              layout
-              onSubmit={(e) => onSubmit(e, authMode)}
-              className="space-y-6"
-            >
-              {/* Email Field */}
-              <div className="space-y-2">
-                <label
-                  className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
-                  htmlFor="email"
-                >
-                  Email Address
-                </label>
-                <div className="relative rounded-lg shadow-sm">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <span className="material-symbols-outlined text-gray-400 text-[20px]">
-                      mail
-                    </span>
-                  </div>
-                  <input
-                    className="block w-full rounded-lg border-0 py-3 pl-10 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                    id="email"
-                    name="email"
-                    placeholder="name@restaurant.com"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Password Field(s) - Side by side in signup mode */}
-              <div
-                className={`${authMode === "signup" ? "grid grid-cols-1 md:grid-cols-2 gap-4" : ""}`}
+              <motion.form
+                layout
+                className="space-y-4"
+                onSubmit={(e) => onSubmit(e, authMode)}
               >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label
-                      className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
-                      htmlFor="password"
-                    >
-                      Password
-                    </label>
-                    {authMode === "signin" && (
-                      <div className="text-sm">
-                        <a
-                          className="font-medium text-[#111813] hover:text-primary dark:text-[#0fdc53] hover:underline transition-colors"
-                          href="#"
-                        >
-                          Forgot password?
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                  <div className="relative rounded-lg shadow-sm">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <span className="material-symbols-outlined text-gray-400 text-[20px]">
-                        lock
-                      </span>
-                    </div>
-                    <input
-                      className="block w-full rounded-lg border-0 py-3 pl-10 pr-10 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                      id="password"
-                      name="password"
-                      placeholder="••••••••"
-                      type={passwordVisible ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={togglePasswordVisibility}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                    >
-                      <span className="material-symbols-outlined text-[20px]">
-                        {passwordVisible ? "visibility_off" : "visibility"}
-                      </span>
-                    </button>
-                  </div>
-                </div>
+                <AuthInput
+                  id="email"
+                  icon="mail"
+                  label="Email address"
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={userType === "restaurant" ? "name@restaurant.com" : "chef@kitchen.com"}
+                  type="email"
+                  value={email}
+                />
 
-                {/* Confirm Password (Signup Only) */}
-                {authMode === "signup" && (
-                  <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    className="space-y-2"
-                  >
-                    <label
-                      className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
-                      htmlFor="confirmPassword"
-                    >
-                      Confirm Password
-                    </label>
-                    <div className="relative rounded-lg shadow-sm">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        <span className="material-symbols-outlined text-gray-400 text-[20px]">
-                          lock
+                <div className={authMode === "signup" ? "grid gap-4 md:grid-cols-2" : "grid gap-4"}>
+                  <AuthInput
+                    id="password"
+                    icon="lock"
+                    label="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    type={passwordVisible ? "text" : "password"}
+                    value={password}
+                    action={
+                      <button
+                        className="text-text-sub-light transition hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
+                        onClick={() => setPasswordVisible((current) => !current)}
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined text-[20px]">
+                          {passwordVisible ? "visibility_off" : "visibility"}
                         </span>
-                      </div>
-                      <input
-                        className="block w-full rounded-lg border-0 py-3 pl-10 pr-10 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                      </button>
+                    }
+                  />
+
+                  {authMode === "signup" ? (
+                    <motion.div
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 16 }}
+                      initial={{ opacity: 0, x: -16 }}
+                    >
+                      <AuthInput
                         id="confirmPassword"
-                        name="confirmPassword"
+                        icon="lock"
+                        label="Confirm password"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="••••••••"
                         type={confirmPasswordVisible ? "text" : "password"}
                         value={confirmpassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
+                        action={
+                          <button
+                            className="text-text-sub-light transition hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
+                            onClick={() => setConfirmPasswordVisible((current) => !current)}
+                            type="button"
+                          >
+                            <span className="material-symbols-outlined text-[20px]">
+                              {confirmPasswordVisible ? "visibility_off" : "visibility"}
+                            </span>
+                          </button>
+                        }
                       />
-                      <button
-                        type="button"
-                        onClick={toggleConfirmPasswordVisibility}
-                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                      >
-                        <span className="material-symbols-outlined text-[20px]">
-                          {confirmPasswordVisible
-                            ? "visibility_off"
-                            : "visibility"}
-                        </span>
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-
-              {/* Restaurant extra fields */}
-              <AnimatePresence mode="wait">
-                {userType === "restaurant" && authMode === "signup" && (
-                  <motion.div
-                    key="restaurant_fields"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                  >
-                    <div className="space-y-2">
-                      <label
-                        className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
-                        htmlFor="companyName"
-                      >
-                        Company Name
-                      </label>
-                      <div className="relative rounded-lg shadow-sm">
-                        <input
-                          className="block w-full rounded-lg border-0 py-3 px-3 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                          id="companyName"
-                          name="companyName"
-                          placeholder="Your Restaurant Name"
-                          type="text"
-                          value={companyName}
-                          onChange={(e) => setCompanyName(e.target.value)}
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label
-                        className="block text-sm font-medium leading-6 text-[#111813] dark:text-gray-200"
-                        htmlFor="fssaiLicense"
-                      >
-                        FSSAI License No
-                      </label>
-                      <div className="relative rounded-lg shadow-sm">
-                        <input
-                          className="block w-full rounded-lg border-0 py-3 px-3 text-[#111813] dark:text-white bg-white dark:bg-white/5 ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                          id="fssaiLicense"
-                          name="fssaiLicense"
-                          placeholder="FSSAI License Number"
-                          type="text"
-                          value={fssaiLicense}
-                          onChange={(e) => setFssaiLicense(e.target.value)}
-                          required
-                        />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Action Button */}
-              <div>
-                <button
-                  className="flex w-full justify-center rounded-lg bg-primary px-3 py-3 text-sm font-bold leading-6 text-[#111813] shadow-sm hover:bg-[#0fdc53] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                  type="submit"
-                  disabled={submitLoading || googleLoading}
-                >
-                  {submitLoading
-                    ? "Loading..."
-                    : authMode === "signin"
-                      ? "Log In"
-                      : "Sign Up"}
-                </button>
-              </div>
-            </motion.form>
-
-            {/* Divider */}
-            <div className="mt-8">
-              <div className="relative">
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 flex items-center"
-                >
-                  <div className="w-full border-t border-gray-200 dark:border-white/10"></div>
+                    </motion.div>
+                  ) : null}
                 </div>
-                <div className="relative flex justify-center text-sm font-medium leading-6">
-                  <span className="bg-white dark:bg-background-dark px-6 text-gray-500">
+
+                <AnimatePresence mode="wait">
+                  {userType === "restaurant" && authMode === "signup" ? (
+                    <motion.div
+                      key="restaurant-fields"
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.25 }}
+                      className="grid gap-4 rounded-[1.45rem] border border-stone-200 bg-stone-50/70 p-3 dark:border-white/10 dark:bg-white/5 md:grid-cols-2"
+                    >
+                      <AuthInput
+                        id="companyName"
+                        icon="storefront"
+                        label="Company name"
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        placeholder="Your restaurant or hospitality group"
+                        value={companyName}
+                      />
+                      <AuthInput
+                        id="fssaiLicense"
+                        icon="verified"
+                        label="FSSAI license number"
+                        onChange={(e) => setFssaiLicense(e.target.value)}
+                        placeholder="Registration / license number"
+                        value={fssaiLicense}
+                      />
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
+
+                <button
+                  className="flex w-full items-center justify-center gap-2 rounded-[1.2rem] bg-gradient-to-r from-primary via-ember-500 to-ember-600 px-4 py-3 text-sm font-semibold text-primary-foreground shadow-float transition hover:-translate-y-0.5 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={submitLoading || googleLoading}
+                  type="submit"
+                >
+                  <span>{submitLoading ? "Working..." : authMode === "signin" ? "Sign in to dashboard" : "Create account"}</span>
+                  {!submitLoading ? <ArrowRight className="h-4 w-4" /> : null}
+                </button>
+              </motion.form>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-border-light/80 dark:border-border-dark/70" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="bg-background-light px-4 text-xs font-semibold uppercase tracking-[0.22em] text-text-sub-light dark:bg-background-dark dark:text-text-sub-dark">
                     Or continue with
                   </span>
                 </div>
               </div>
 
-              {/* Social Login */}
-              <div className="mt-6">
-                <button
-                  className="flex w-full items-center justify-center gap-3 rounded-lg bg-white dark:bg-white/5 px-3 py-3 text-sm font-semibold text-[#111813] dark:text-white shadow-sm ring-1 ring-inset ring-[#dbe6df] dark:ring-white/10 hover:bg-gray-50 dark:hover:bg-white/10 focus-visible:ring-transparent transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-                  onClick={() => onGoogleAuth(authMode)}
-                  disabled={googleLoading || submitLoading}
-                  type="button"
-                >
-                  {googleLoading ? (
-                    <div className="animate-spin border-4 border-t-transparent rounded-full w-6 h-6 border-primary" />
-                  ) : (
-                    <>
-                      <img src={GoogleIcon} alt="Google" className="w-5 h-5" />
-                      <span className="text-sm">Google</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Footer Mode Toggle */}
-            <p className="mt-10 text-center text-sm text-gray-500 dark:text-gray-400">
-              {authMode === "signin"
-                ? "Don't have an account?"
-                : "Already have an account?"}
               <button
-                className="font-bold leading-6 text-[#111813] hover:text-primary dark:text-[#0fdc53] hover:underline transition-colors ml-1"
-                onClick={() => {
-                  setAuthMode(authMode === "signin" ? "signup" : "signin");
-                  setErrorMessage("");
-                }}
+                className="flex w-full items-center justify-center gap-3 rounded-[1.2rem] border border-stone-200 bg-white/95 px-4 py-3 text-sm font-semibold text-text-main-light shadow-sm transition hover:border-primary/25 hover:bg-white disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark dark:hover:bg-white/10"
+                disabled={googleLoading || submitLoading}
+                onClick={() => onGoogleAuth(authMode)}
                 type="button"
               >
-                {authMode === "signin" ? "Sign up for free" : "Sign in"}
+                {googleLoading ? (
+                  <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-primary border-t-transparent" />
+                ) : (
+                  <>
+                    <img alt="Google" className="h-5 w-5" src={GoogleIcon} />
+                    <span>Continue with Google</span>
+                  </>
+                )}
               </button>
-            </p>
-          </div>
-        </div>
 
-        {/* Right Section: Image */}
-        <div className="relative hidden w-0 flex-1 lg:block">
-          {/* Background Image */}
-          <div
-            className="absolute inset-0 h-full w-full bg-cover bg-center object-cover"
-            style={{
-              backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpO8bfhCfQww6xc54ZweC0kQ-1BXNEizGw9dm4jc78HGiu7TPAWAibf2Bo4oFVGK6yRZtZ0cmzaNUBG8VgnhJr5g5Eu6uWvxBC3hO8iDlVYPhp22v3wCke97hdon5PnI_g-yRZEOCVYAE15sfvlCD6whmfRHnagGA5d_psHijVn_3qBpGC0c0H0RR23asKwqtbYksb16swa53D_zD9u6ZStubjcwF12lPSpAuCu_G7eKww_JdbxqWlJb-Cu3eDww9h17Vzqo-AoI8")`,
-            }}
-          ></div>
-
-          {/* Overlay Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-
-          {/* Quote/Content on Image */}
-          <div className="absolute bottom-0 left-0 right-0 p-12 lg:p-20 text-white">
-            <div className="max-w-xl">
-              <h2 className="text-4xl font-black leading-tight mb-4">
-                Connecting Culinary Talent with Opportunity
-              </h2>
-              <p className="text-xl font-medium leading-relaxed text-gray-200">
-                The fastest way to hire top chefs or land your dream kitchen
-                job. Join thousands of restaurants and culinary professionals
-                building their future together.
+              <p className="text-center text-sm text-text-sub-light dark:text-text-sub-dark">
+                {authMode === "signin" ? "Need an account?" : "Already registered?"}
+                <Link
+                  className="ml-1 font-semibold text-text-main-light transition hover:text-primary dark:text-text-main-dark dark:hover:text-primary"
+                  to={authMode === "signin" ? "/register" : "/login"}
+                >
+                  {authMode === "signin" ? "Create one now" : "Sign in instead"}
+                </Link>
               </p>
             </div>
-          </div>
+          </motion.div>
+        </div>
+
+        <div className="hidden lg:flex lg:min-h-screen lg:w-[52%] lg:items-center lg:justify-center lg:px-6 lg:py-4">
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            transition={{ duration: 0.5, delay: 0.08, ease: "easeOut" }}
+            className="relative w-full max-w-[42rem] overflow-hidden rounded-[2rem] border border-white/70 bg-[linear-gradient(180deg,rgba(255,251,246,0.94),rgba(246,235,221,0.92))] p-6 shadow-atelier backdrop-blur-xl dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(40,33,28,0.92),rgba(24,20,18,0.9))]"
+          >
+            <div className="absolute -left-12 top-10 h-32 w-32 rounded-full bg-primary/15 blur-3xl" />
+            <div className="absolute bottom-0 right-0 h-44 w-44 rounded-full bg-secondary/20 blur-3xl" />
+
+            <div className="relative grid gap-5">
+              <div className="rounded-[1.6rem] border border-white/80 bg-white/82 p-5 dark:border-white/10 dark:bg-white/5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="section-kicker">Platform snapshot</p>
+                    <h2 className="mt-2 max-w-xl font-display text-[2rem] font-semibold tracking-[-0.05em] text-text-main-light dark:text-text-main-dark">
+                      The interface is calmer, but the hiring pace stays fast.
+                    </h2>
+                  </div>
+                  <div className="rounded-full border border-forest-200 bg-forest-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/10 dark:text-forest-200">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="h-3.5 w-3.5" />
+                      Verified flow
+                    </div>
+                  </div>
+                </div>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-text-sub-light dark:text-text-sub-dark">
+                  CulinaryConnect is being reshaped around deliberate spacing, credible onboarding,
+                  and role-specific workflows so the product feels like a hiring studio instead of a
+                  generic listings page.
+                </p>
+              </div>
+
+              <div className="grid gap-3">
+                {showcasePoints.slice(0, 2).map(({ icon: Icon, title, description }, index) => (
+                  <motion.article
+                    key={title}
+                    animate={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, x: 18 }}
+                    transition={{ delay: 0.16 + index * 0.08, duration: 0.45 }}
+                    className="rounded-[1.45rem] border border-white/80 bg-white/84 p-4 shadow-sm dark:border-white/10 dark:bg-white/5"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary/12 text-secondary dark:bg-secondary/16">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-text-main-light dark:text-text-main-dark">
+                          {title}
+                        </h3>
+                        <p className="mt-2 text-sm leading-7 text-text-sub-light dark:text-text-sub-dark">
+                          {description}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

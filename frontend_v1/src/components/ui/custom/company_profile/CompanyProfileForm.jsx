@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { InputComponent } from "../input-component";
 import { NormalButtons } from "../../ui_buttons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -23,7 +23,6 @@ import { Button } from "../../button";
 export const CompanyProfileForm = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	console.log(location.state.companyData);
 	const companyId = location.state?.companyData?.id || "";
 	const [showPopup, setShowPopup] = useState(false);
 	const [status, setStatus] = useState("");
@@ -127,7 +126,7 @@ export const CompanyProfileForm = () => {
 
 	return (
 		<div className="flex justify-center">
-			<Card className="w-7/12 mt-8">
+		<Card className="w-full max-w-5xl mt-8">
 				<CardHeader>
 					<Link to="/company-profile">
 						<FaArrowLeft className="mb-3 text-lg hover:cursor-pointer hover:text-red-600 " />
@@ -141,7 +140,7 @@ export const CompanyProfileForm = () => {
 				<CardContent>
 					{showPopup && (
 						<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-							<div className="bg-white p-6 rounded-lg shadow-lg text-center">
+							<div className="bg-white dark:bg-surface-dark p-6 rounded-xl shadow-lg text-center border border-border-light dark:border-border-dark">
 								<div className="flex justify-end mt-{-4px}">
 									<ImCross
 										className="hover:text-red-600 hover:cursor-pointer"
@@ -163,7 +162,7 @@ export const CompanyProfileForm = () => {
 								</p>
 								<Button
 									onClick={closePopup}
-									className="mt-4 px-4 py-1 hover:bg-red-600 hover:text-black rounded-md"
+									className="mt-4 px-4 py-2"
 								>
 									Close
 								</Button>
@@ -186,7 +185,7 @@ export const CompanyProfileForm = () => {
 							name="location.country"
 							value={selectedCountry}
 							onChange={handleCountryChange}
-							className="border-2 p-2 m-2 rounded-lg focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150 appearance-auto"
+							className="border border-border-light dark:border-border-dark bg-surface-highest dark:bg-surface-dark p-2.5 m-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary ease-linear duration-150 appearance-auto text-text-main-light dark:text-text-main-dark"
 						>
 							<option value="" disabled>
 								Select a country
@@ -228,7 +227,7 @@ export const CompanyProfileForm = () => {
 							name="size"
 							value={form.size}
 							onChange={handleChange}
-							className="border-2 p-2 m-2 rounded-lg focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150 appearance-auto"
+							className="border border-border-light dark:border-border-dark bg-surface-highest dark:bg-surface-dark p-2.5 m-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary ease-linear duration-150 appearance-auto text-text-main-light dark:text-text-main-dark"
 						>
 							<option value="" disabled>
 								Select company size
@@ -249,9 +248,9 @@ export const CompanyProfileForm = () => {
 									setForm((prev) => ({ ...prev, description: value }))
 								}
 								placeholder="Write a brief description about your company"
-								className="border-2 p-2 m-2 rounded-lg focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150"
-								required
-							/>
+							className="border border-border-light dark:border-border-dark rounded-xl m-2"
+							required
+						/>
 						</div>
 						<div className="flex justify-center items-center mt-4">
 							<NormalButtons />
