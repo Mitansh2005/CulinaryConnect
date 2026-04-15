@@ -1,192 +1,190 @@
+import { getUid } from "@/firebase/authUtils";
+import { baseUrl } from "@/constants/constants";
+import { Link, useNavigate } from "react-router-dom";
+import DOMPurify from "dompurify";
+import { useCompanyInfo } from "@/api/home-data";
+import {
+  PageShell,
+  SectionHeading,
+  SurfaceCard,
+  StatusPill,
+  Avatar,
+} from "@/components/ui/custom/enterprise-shell";
+import { Button } from "@/components/ui/button";
+import { JobCardSkeleton } from "@/components/ui/custom/skeletons/Skeletons";
 import ProfilePictureUploader from "@/components/ui/custom/profile_component/profile_picture_uploader";
 import CompanyIcon from "../assets/icons/company-icon.png";
-import { useEffect, useState } from "react";
-import { getFreshIdToken, getUid } from "@/firebase/authUtils";
-import axios from "axios";
-import { baseUrl } from "@/constants/constants";
-import { ImLocation2 } from "react-icons/im";
-import { Link } from "react-router-dom";
-import DOMPurify from "dompurify";
-import Spinner from "@/components/ui/custom/spinner";
+import { Building2, MapPin, Shield, CalendarDays, Users } from "lucide-react";
+
+const sizeMap = {
+  small: "1–50 employees",
+  medium: "51–250 employees",
+  large: "251–1,000 employees",
+  enterprise: "1,000+ employees",
+};
+
+function DetailTile({ icon: Icon, label, value }) {
+  if (!value) return null;
+  return (
+    <div className="flex items-start gap-3 rounded-xl border border-white/70 bg-white/60 p-4 dark:border-white/10 dark:bg-white/5">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-primary/16">
+        <Icon className="h-4 w-4" />
+      </div>
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-widest text-text-sub-light dark:text-text-sub-dark">
+          {label}
+        </p>
+        <p className="mt-0.5 text-sm font-medium text-text-main-light dark:text-text-main-dark">
+          {value}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export const CompanyProfileTemplate = () => {
-	const [currentUserId, setCurrentUserId] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const [companyData, setCompanyData] = useState({
-		id: "",
-		name: "",
-		logo: CompanyIcon,
-		size: 0,
-		description: "",
-		location: {
-			country: "",
-			state: "",
-			city: "",
-			postal_code: "",
-		},
-		fssaiLicenseNo: "",
-		startDate: "",
-	});
-	const uid = getUid();
-	if (!uid) {
-		console.error("No user ID found. User might not be authenticated.");
-		return null;
-	}
-	const getCurrentUserId = async () => {
-		try {
-			const token = await getFreshIdToken(true);
-			const res = await axios.get(`${baseUrl}/profile-detail/${uid}/`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-			return res.data.user_id;
-		} catch (error) {
-			console.error("Error fetching current user ID:", error);
-		}
-	};
-	const sizeMap = {
-		small: "1-50 employees",
-		medium: "51-250 employees",
-		large: "251-1000 employees",
-		enterprise: "1000+ employees",
-	};
+  const uid = getUid();
+  const navigate = useNavigate();
 
-	function getCompanySizeLabel(size) {
-		return sizeMap[size] || "Not specified";
-	}
-	const fetchCompanyData = async (userId) => {
-		try {
-			setLoading(true);
-			const token = await getFreshIdToken(true);
-			const res = await axios.get(`${baseUrl}/company/user/${userId}/`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-			const data = res.data;
-			console.log("Company data fetched:", data);
-			if (!data) {
-				console.warn("No company data found for this user.");
-				return;
-			} else {
-				setCompanyData({
-					id: data.id,
-					name: data.name,
-					logo: data.logo || CompanyIcon,
-					size: data.size || "Not specified",
-					description: data.description || "",
-					location: {
-						country: data.location?.country || "",
-						state: data.location?.state || "",
-						city: data.location?.city || "",
-						postal_code: data.location?.postal_code || "",
-					},
-					fssaiLicenseNo: data.fssai_license_no || "",
-					startDate: data.created_at || "",
-				});
-			}
-		} catch (error) {
-			console.error("Error fetching company data by userId:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
-	useEffect(() => {
-		(async () => {
-			try {
-				const userId = await getCurrentUserId();
-				if (userId) {
-					setCurrentUserId(userId);
-					await fetchCompanyData(userId);
-				} else {
-					console.warn("No user ID found from profile-detail.");
-				}
-			} catch (err) {
-				console.error("Error in loading profile:", err);
-			} finally {
-				setLoading(false); // ✅ Always stop loading, even if userId is null
-			}
-		})();
-	}, []);
+  const { data: company, isLoading } = useCompanyInfo(uid);
 
-	const sanitizedHtml = (data) => DOMPurify.sanitize(data);
-	return (
-		<>
-			<section className="flex flex-col items-center h-screen overflow-hidden ">
-				{loading ? (
-					<div className="flex items-center justify-center h-screen -mt-10">
-						<Spinner />
-					</div>
-				) : (
-					<div className="relative flex flex-col items-center bg-white w-8/12 rounded-xl mt-8 mb-8 pb-6 px-1 shadow-md space-y-4">
-						{/* Profile Uploader */}
-						<ProfilePictureUploader
-							id={companyData.id}
-							username={companyData.name}
-							defaultImage={companyData.logo}
-							getProfileUrl={`${baseUrl}/company`}
-							uploadUrl={`${baseUrl}/company/upload-logo/${companyData.id}/`}
-							className="pb-3 "
-						/>
-						<div className="w-full border-t border-beige-400 -mt-36"></div>
+  const sanitizedDesc = company?.description
+    ? DOMPurify.sanitize(company.description)
+    : null;
 
-						{/* Company description */}
-						<p className="text-base text-beige-100 max-w-2xl text-center leading-relaxed">
-							<span
-								dangerouslySetInnerHTML={{
-									__html:
-										sanitizedHtml(companyData.description) || "Description Not Available",
-								}}
-							/>
-						</p>
+  const locationStr = [
+    company?.location?.city,
+    company?.location?.state,
+    company?.location?.country,
+  ]
+    .filter(Boolean)
+    .join(", ");
 
-						{/* Details grid */}
-						<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl text-gray-700">
-							<div className="flex flex-col p-4 bg-beige-700 rounded-lg space-y-1">
-								<span className="text-xs text-beige-100">FSSAI License</span>
-								<span className="text-base font-medium">
-									{companyData.fssaiLicenseNo}
-								</span>
-							</div>
-							<div className="flex flex-col p-4 bg-beige-700 rounded-lg space-y-1">
-								<span className="text-xs text-beige-100">Company Size</span>
-								<span className="text-base font-medium">
-									{getCompanySizeLabel(companyData.size)}
-								</span>
-							</div>
-							<div className="flex flex-col p-4 bg-beige-700 rounded-lg space-y-1">
-								<span className="text-xs text-beige-100">Location</span>
-								<span className="text-base font-medium flex items-center gap-1">
-									<ImLocation2 className="text-beige-100" />
-									{companyData.location?.country || "Not specified"},{" "}
-									{companyData.location?.state || "Not specified"},{" "}
-									{companyData.location?.city || "Not specified"},{" "}
-									{companyData.location?.postal_code || "Not specified"}
-								</span>
-							</div>
-							<div className="flex flex-col p-4 bg-beige-700 rounded-lg space-y-1">
-								<span className="text-xs text-beige-100">Founded</span>
-								<span className="text-base font-medium">
-									{companyData.startDate?.split("T")[0]}
-								</span>
-							</div>
-						</div>
+  if (isLoading) {
+    return (
+      <PageShell eyebrow="Restaurant" title="Loading company profile...">
+        <JobCardSkeleton />
+      </PageShell>
+    );
+  }
 
-						{/* Divider */}
-						<div className="w-full border-t border-beige-400 pt-5"></div>
+  return (
+    <PageShell
+      eyebrow="Restaurant"
+      title={company?.name || "Company profile"}
+      description="Your public-facing company identity shown to all candidates browsing your listings."
+      actions={
+        <Link to="/edit-company-profile" state={{ companyData: company }}>
+          <Button type="button">Edit company profile</Button>
+        </Link>
+      }
+    >
+      <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+        {/* LEFT: Logo + uploader */}
+        <div className="grid gap-4 self-start">
+          <SurfaceCard className="flex flex-col items-center gap-5 p-6 text-center">
+            <ProfilePictureUploader
+              id={company?.id}
+              username={company?.name}
+              defaultImage={company?.logo || CompanyIcon}
+              getProfileUrl={`${baseUrl}/company`}
+              uploadUrl={`${baseUrl}/company/upload-logo/${company?.id}/`}
+            />
+            <div>
+              <h2 className="font-display text-2xl font-semibold tracking-tight text-text-main-light dark:text-text-main-dark">
+                {company?.name || "Restaurant"}
+              </h2>
+              {company?.size && (
+                <p className="mt-1 text-sm text-text-sub-light dark:text-text-sub-dark">
+                  {sizeMap[company.size] || company.size}
+                </p>
+              )}
+              <div className="mt-3 flex flex-wrap justify-center gap-2">
+                <StatusPill tone="success">Verified kitchen</StatusPill>
+              </div>
+            </div>
+          </SurfaceCard>
 
-						{/* Edit button at bottom-right */}
-						<div className="flex justify-end w-full max-w-3xl">
-							<Link to="/edit-company-profile" state={{ companyData }}>
-								<button className="px-4 py-2 bg-beige-200 text-white rounded-sm shadow hover:bg-beige-200/90 transition text-base">
-									Edit Profile
-								</button>
-							</Link>
-						</div>
-					</div>
-				)}
-			</section>
-		</>
-	);
+          <SurfaceCard className="p-5">
+            <p className="section-kicker mb-3">Company details</p>
+            <div className="grid gap-3">
+              <DetailTile icon={MapPin} label="Location" value={locationStr || "Not specified"} />
+              <DetailTile icon={Users} label="Company size" value={sizeMap[company?.size] || company?.size || "Not specified"} />
+              <DetailTile icon={Shield} label="FSSAI License" value={company?.fssai_license_no || "Not provided"} />
+              <DetailTile
+                icon={CalendarDays}
+                label="Founded"
+                value={
+                  company?.created_at
+                    ? new Date(company.created_at).toLocaleDateString("en-IN", {
+                        year: "numeric",
+                        month: "long",
+                      })
+                    : "Not specified"
+                }
+              />
+            </div>
+          </SurfaceCard>
+        </div>
+
+        {/* RIGHT: About + actions */}
+        <div className="grid gap-6 self-start">
+          <SurfaceCard className="p-6">
+            <SectionHeading
+              eyebrow="About"
+              title="Company overview"
+              description="This description appears on every job listing and your public company page."
+              action={
+                <Link to="/edit-company-profile" state={{ companyData: company }}>
+                  <Button type="button" variant="ghost" className="text-sm">
+                    Edit
+                  </Button>
+                </Link>
+              }
+            />
+            <div className="mt-5 rounded-xl border border-border-light/60 bg-white/50 p-5 dark:border-border-dark/60 dark:bg-white/5">
+              {sanitizedDesc ? (
+                <div
+                  className="text-sm leading-7 text-text-main-light dark:text-text-main-dark/90"
+                  dangerouslySetInnerHTML={{ __html: sanitizedDesc }}
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-3 py-8 text-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary dark:bg-primary/16">
+                    <Building2 className="h-6 w-6" />
+                  </div>
+                  <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
+                    Add a company description to build candidate trust and improve listing quality.
+                  </p>
+                  <Link to="/edit-company-profile" state={{ companyData: company }}>
+                    <Button type="button" variant="outline" className="mt-2">
+                      Add description
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </SurfaceCard>
+
+          <SurfaceCard className="bg-gradient-to-br from-primary via-ember-500 to-secondary p-6 text-primary-foreground dark:border-white/10">
+            <p className="section-kicker text-primary-foreground/70">Hiring signal</p>
+            <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.05em]">
+              A strong profile attracts stronger candidates.
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-primary-foreground/80">
+              Kitchens with complete profiles, verified licenses, and clear job briefs see up to 3× more qualified applicants.
+            </p>
+            <Button
+              className="mt-6 w-full border-white/20 bg-white/15 text-white hover:bg-white/20"
+              onClick={() => navigate("/post-job")}
+              type="button"
+              variant="outline"
+            >
+              Post a new role
+            </Button>
+          </SurfaceCard>
+        </div>
+      </div>
+    </PageShell>
+  );
 };

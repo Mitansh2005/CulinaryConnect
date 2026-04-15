@@ -1,84 +1,57 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-import { baseUrl } from '@/constants/constants';
-import { getFreshIdToken } from '@/firebase/authUtils';
+/**
+ * job-management-data.jsx — React Query hooks for recruiter job management.
+ * Migrated to use shared apiClient.
+ */
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import apiClient from "./apiClient";
 
-// Fetch all jobs for the company
-export const useCompanyJobs = () => {
-    return useQuery({
-        queryKey: ['companyJobs'],
-        queryFn: async () => {
-            const token = await getFreshIdToken();
-            const response = await axios.get(`${baseUrl}/jobs/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            return response.data;
-        },
-    });
-};
+// Fetch all jobs for the recruiter's company
+export const useCompanyJobs = () =>
+  useQuery({
+    queryKey: ["companyJobs"],
+    queryFn: async () => {
+      const res = await apiClient.get("/jobs/");
+      return res.data;
+    },
+  });
 
 // Fetch applications for a specific job
-export const useJobApplications = (jobId) => {
-    return useQuery({
-        queryKey: ['jobApplications', jobId],
-        queryFn: async () => {
-            const token = await getFreshIdToken();
-            const response = await axios.get(`${baseUrl}/application/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                params: {
-                    job_id: jobId,
-                },
-            });
-            return response.data;
-        },
-        enabled: !!jobId,
-    });
-};
+export const useJobApplications = (jobId) =>
+  useQuery({
+    queryKey: ["jobApplications", jobId],
+    queryFn: async () => {
+      const res = await apiClient.get("/application/", {
+        params: { job_id: jobId },
+      });
+      return res.data;
+    },
+    enabled: !!jobId,
+  });
 
 // Delete a job (drafts only)
 export const useDeleteJob = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-        mutationFn: async (jobId) => {
-            const token = await getFreshIdToken();
-            const response = await axios.delete(`${baseUrl}/jobs/${jobId}/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            return response.data;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['companyJobs'] });
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (jobId) => {
+      const res = await apiClient.delete(`/jobs/${jobId}/`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["companyJobs"] });
+    },
+  });
 };
 
-// Update job status (close/reopen)
+// Update job status (close / reopen)
 export const useUpdateJobStatus = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-        mutationFn: async ({ jobId, status }) => {
-            const token = await getFreshIdToken();
-            const response = await axios.patch(
-                `${baseUrl}/jobs/${jobId}/`,
-                { status },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            return response.data;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['companyJobs'] });
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ jobId, status }) => {
+      const res = await apiClient.patch(`/jobs/${jobId}/`, { status });
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["companyJobs"] });
+    },
+  });
 };

@@ -6,9 +6,11 @@ import { applyForJob } from "@/api/apply-for-job";
 import Spinner from "./spinner";
 import { getUid } from "@/firebase/authUtils";
 import DOMpurify from "dompurify";
+import { useUser } from "@/contexts/UserContext";
 export const DetailJobCard = ({ job, onClose }) => {
   const uid = getUid();
-  const userType = localStorage.getItem("userType");
+  const { userData } = useUser();
+  const userType = userData?.user_type;
   console.log("DetailJobCard received job:", job);
   console.log("Job ID:", job?.id, "Job job_id:", job?.job_id);
   const { data, loading, error } = useJobDetails(job.job_id);

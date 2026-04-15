@@ -1,19 +1,23 @@
-import { getFreshIdToken } from "@/firebase/authUtils";
-import axios from "axios";
-import { baseUrl } from "@/constants/constants";
+/**
+ * apply-for-job.jsx — Mutation hook to submit a job application.
+ */
+import { useMutation } from "@tanstack/react-query";
+import apiClient from "./apiClient";
 
+export const useApplyForJob = () =>
+  useMutation({
+    mutationFn: async (data) => {
+      const res = await apiClient.post("/application/create/", data);
+      return res.data;
+    },
+  });
+
+// Keep the plain function for components that call it imperatively (JobDetailPage, JobDetailNewDesign)
 export const applyForJob = async (data) => {
-	try {
-		const token = await getFreshIdToken(true);
-		const res = await axios.post(`${baseUrl}/application/create/`,data, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-				"Content-Type": "application/json",
-			},
-		});
-		return res.data;
-	} catch (err) {
-		console.error("Something went wrong: ", err);
-		throw err.response?.data || { message: "Unexpected error occurred" };
-	}
+  try {
+    const res = await apiClient.post("/application/create/", data);
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Unexpected error occurred" };
+  }
 };

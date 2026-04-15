@@ -11,8 +11,10 @@ import { FaBars } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { useState } from "react";
 import React from "react";
+import { useUser } from "@/contexts/UserContext";
 export function Navbar() {
-  const userType = localStorage.getItem("userType");
+  const { userData } = useUser();
+  const userType = userData?.user_type;
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 

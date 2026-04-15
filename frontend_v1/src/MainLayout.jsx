@@ -1,10 +1,11 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./components/ui/custom/Sidebar";
 import { ChefNavbar } from "./components/ui/custom/ChefNavbar";
+import { useUser } from "@/contexts/UserContext";
 
 export default function MainLayout() {
-  const userType = localStorage.getItem("userType");
-  const isRestaurant = userType === "restaurant";
+  const { userData } = useUser();
+  const isRestaurant = userData?.user_type === "restaurant";
 
   if (isRestaurant) {
     return (

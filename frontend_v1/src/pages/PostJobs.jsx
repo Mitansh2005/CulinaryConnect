@@ -1,294 +1,296 @@
-import { useEffect, useState } from "react";
-import { InputComponent } from "@/components/ui/custom/input-component";
-import { getFreshIdToken } from "@/firebase/authUtils";
-import axios from "axios";
-import { baseUrl } from "@/constants/constants";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getNames } from "country-list";
 import ReactQuill from "react-quill";
-import { useNavigate } from "react-router-dom";
-import { ImCross } from "react-icons/im";
+import { CheckCircle } from "lucide-react";
+import { useRecruiters, usePostJob } from "@/api/home-data";
 import { Button } from "@/components/ui/button";
+import {
+  PageShell,
+  SectionHeading,
+  SurfaceCard,
+} from "@/components/ui/custom/enterprise-shell";
+
+function FieldLabel({ htmlFor, children, required }) {
+  return (
+    <label
+      htmlFor={htmlFor}
+      className="block text-sm font-semibold text-text-main-light dark:text-text-main-dark"
+    >
+      {children}
+      {required && <span className="ml-1 text-rose-500">*</span>}
+    </label>
+  );
+}
+
+function SoftInput({ id, name, type = "text", value, onChange, placeholder, ...props }) {
+  return (
+    <input
+      id={id}
+      name={name}
+      type={type}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className="soft-input mt-1.5"
+      {...props}
+    />
+  );
+}
+
+function SoftSelect({ id, name, value, onChange, children }) {
+  return (
+    <select id={id} name={name} value={value} onChange={onChange} className="soft-input mt-1.5">
+      {children}
+    </select>
+  );
+}
+
 export default function PostJobForm() {
-	const [jobCreateStatus, setJobCreateStatus] = useState("");
-	const [selectedCountry, setSelectedCountry] = useState("");
-	const [recruiters, setRecruiters] = useState([]);
-	const [showPopup, setShowPopup] = useState(false);
-	const navigate  = useNavigate();
-	const [formData, setFormData] = useState({
-		assignee: "",
-		company: "",
-		title: "",
-		description: "",
-		location: {
-			country: "",
-			state: "",
-			city: "",
-			postal_code: "",
-		},
-		salary: "",
-		employment_type: "Full Time",
-		posted_date: new Date().toISOString().split("T")[0], // Current date in YYYY-MM-DD format
-		application_deadline: "",
-		requirements: "",
-	});
-	useEffect(() => {
-		getRecruiters();
-	}, []);
+  const navigate = useNavigate();
+  const [submitted, setSubmitted] = useState(false);
 
-	const handleCountryChange = (e) => {
-		const countryName = e.target.value;
-		setSelectedCountry(countryName);
+  const [formData, setFormData] = useState({
+    assignee: "",
+    title: "",
+    description: "",
+    location: { country: "", state: "", city: "", postal_code: "" },
+    salary: "",
+    employment_type: "Full Time",
+    posted_date: new Date().toISOString().split("T")[0],
+    application_deadline: "",
+    requirements: "",
+  });
 
-		setFormData({
-			...formData,
-			location: {
-				...formData.location,
-				country: countryName, // Use code if available, else fallback to name
-			},
-		});
-	};
+  const { data: recruiters = [] } = useRecruiters();
+  const { mutate: postJob, isPending } = usePostJob();
+  const company = recruiters[0]?.company ?? "";
 
-	const getRecruiters = async () => {
-		try {
-			const token = await getFreshIdToken(true);
-			const res = await axios.get(`${baseUrl}/recruiters/company/`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-			console.log(res.data);
-			formData.company = res.data[0].company;
-			setRecruiters(res.data);
-			console.log("Recruiters are fetched from the db.");
-		} catch (error) {
-			console.error("Something went wrong: ", error);
-		}
-	};
-	const handleChange = (e) => {
-		const { name, value } = e.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name.startsWith("location.")) {
+      const field = name.split(".")[1];
+      setFormData((prev) => ({ ...prev, location: { ...prev.location, [field]: value } }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
 
-		if (name.startsWith("location.")) {
-			const field = name.split(".")[1];
-			setFormData((prev) => ({
-				...prev,
-				location: {
-					...prev.location,
-					[field]: value,
-				},
-			}));
-		} else {
-			setFormData((prev) => ({ ...prev, [name]: value }));
-		}
-	};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    postJob(
+      { ...formData, company },
+      {
+        onSuccess: () => setSubmitted(true),
+      },
+    );
+  };
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		try {
-			const token = await getFreshIdToken(true);
-			const res = await axios.post(`${baseUrl}/jobs/`, formData, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "Application/json",
-				},
-			});
-			console.log(res.data);
-			setJobCreateStatus("success");
-		} catch (err) {
-			console.error("Something went wrong: ", err);
-			setJobCreateStatus("failed");
-		}finally{
-			setShowPopup(true);
-		}
-		console.log("Job Post Submitted:", formData);
-	};
-	const closePopup = () => {
-		setShowPopup(false);
-		setJobCreateStatus("");
-		navigate("/home"); // Redirect to home after closing the popup
-	}
-	return (
-		<div className="max-w-4xl mx-auto mt-12 p-8 bg-white text-black rounded-xl shadow-lg">
-			{showPopup && (
-				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-					<div className="bg-white p-6 rounded-lg shadow-lg text-center">
-						<div className="flex justify-end mt-{-4px}">
-							<ImCross
-								className="hover:text-red-600 hover:cursor-pointer"
-								onClick={closePopup}
-							></ImCross>
-						</div>
-						<h2
-							className={`text-xl font-semibold mb-4 ${
-								jobCreateStatus === "success" ? "text-green-600" : "text-red-600"
-							}`}
-						>
-							{jobCreateStatus === "success" ? "Success!" : "Failed"}
-						</h2>
-						<p>
-							{" "}
-							{jobCreateStatus === "success"
-								? "The process completed successfully."
-								: "The process failed. Please try again."}
-						</p>
-						<Button
-							onClick={closePopup}
-							className="mt-4 px-4 py-1 hover:bg-red-600 hover:text-black rounded-md"
-						>
-							Close
-						</Button>
-					</div>
-				</div>
-			)}
-			<h2 className="text-3xl font-semibold mb-6">Create a Job Posting</h2>
+  if (submitted) {
+    return (
+      <PageShell
+        eyebrow="Role published"
+        title="Job posted successfully"
+        description="Your role is now live and visible to candidates on the platform."
+      >
+        <SurfaceCard className="flex flex-col items-center gap-5 py-12 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-forest-50 text-forest-600 dark:bg-forest-500/12 dark:text-forest-200">
+            <CheckCircle className="h-8 w-8" />
+          </div>
+          <div>
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-text-main-light dark:text-text-main-dark">
+              {formData.title || "Job"} is live
+            </h2>
+            <p className="mt-2 text-sm text-text-sub-light dark:text-text-sub-dark">
+              Candidates can now discover and apply for this role.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button type="button" variant="outline" onClick={() => navigate("/jobs/manage")}>
+              Manage roles
+            </Button>
+            <Button type="button" onClick={() => navigate("/home")}>
+              Back to dashboard
+            </Button>
+          </div>
+        </SurfaceCard>
+      </PageShell>
+    );
+  }
 
-			<form onSubmit={handleSubmit} className="space-y-5">
-				<InputComponent
-					label="Job Title"
-					type="text"
-					placeholder="e.g. Sous Chef"
-					name="title"
-					value={formData.title}
-					onChange={handleChange}
-					isRequired={true}
-				/>
+  return (
+    <PageShell
+      eyebrow="Recruiter studio"
+      title="Post a new role"
+      description="Create a clear, accurate brief to attract the right culinary talent."
+      actions={
+        <div className="flex gap-3">
+          <Button type="button" variant="outline" onClick={() => navigate("/home")}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            form="post-job-form"
+            disabled={isPending}
+          >
+            {isPending ? "Posting…" : "Publish role"}
+          </Button>
+        </div>
+      }
+    >
+      <form id="post-job-form" onSubmit={handleSubmit} className="grid gap-6">
+        {/* Basic info */}
+        <SurfaceCard className="p-6 sm:p-7">
+          <SectionHeading
+            eyebrow="Role details"
+            title="Basic information"
+            description="The essentials candidates see first in the job feed."
+          />
+          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <FieldLabel htmlFor="title" required>Job title</FieldLabel>
+              <SoftInput
+                id="title"
+                name="title"
+                placeholder="e.g. Sous Chef, Pastry Lead"
+                value={formData.title}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <FieldLabel htmlFor="salary" required>Monthly salary (₹)</FieldLabel>
+              <SoftInput
+                id="salary"
+                name="salary"
+                type="number"
+                placeholder="e.g. 40000"
+                value={formData.salary}
+                onChange={handleChange}
+                min={0}
+                max={1000000}
+                step={1000}
+                required
+              />
+            </div>
+            <div>
+              <FieldLabel htmlFor="employment_type">Employment type</FieldLabel>
+              <SoftSelect id="employment_type" name="employment_type" value={formData.employment_type} onChange={handleChange}>
+                <option value="Full Time">Full Time</option>
+                <option value="Part Time">Part Time</option>
+              </SoftSelect>
+            </div>
+            <div>
+              <FieldLabel htmlFor="application_deadline" required>Application deadline</FieldLabel>
+              <SoftInput
+                id="application_deadline"
+                name="application_deadline"
+                type="date"
+                value={formData.application_deadline}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <FieldLabel htmlFor="assignee">Assign recruiter</FieldLabel>
+              <SoftSelect id="assignee" name="assignee" value={formData.assignee} onChange={handleChange}>
+                <option value="">Select a recruiter</option>
+                {recruiters.map((r) => (
+                  <option key={r.recruiter_id} value={r.recruiter_id}>
+                    {r.username}
+                  </option>
+                ))}
+              </SoftSelect>
+            </div>
+          </div>
+        </SurfaceCard>
 
-				<label className="block font-medium text-gray-700">
-					Job Description
-				</label>
-				<ReactQuill
-					value={formData.description}
-					onChange={(value) => setFormData({ ...formData, description: value })}
-					placeholder="Write a brief description about the job...."
-					className="border-2 p-2 m-2 rounded-lg focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150"
-					required
-				/>
+        {/* Description */}
+        <SurfaceCard className="p-6 sm:p-7">
+          <SectionHeading
+            eyebrow="Content"
+            title="Job description"
+            description="Describe the role, the team, and what a great day looks like in this kitchen."
+          />
+          <div className="mt-5">
+            <ReactQuill
+              value={formData.description}
+              onChange={(value) => setFormData((prev) => ({ ...prev, description: value }))}
+              placeholder="Write a clear, honest description of the position..."
+              className="rounded-xl border border-border-light/60 dark:border-border-dark/60"
+            />
+          </div>
+        </SurfaceCard>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-					<InputComponent
-						label="Salary (in ₹)"
-						type="number"
-						placeholder="e.g. 40000"
-						name="salary"
-						value={formData.salary}
-						onChange={handleChange}
-						max={1000000}
-						step={1000}
-						isRequired={true}
-					/>
+        {/* Requirements */}
+        <SurfaceCard className="p-6 sm:p-7">
+          <SectionHeading
+            eyebrow="Requirements"
+            title="Candidate requirements"
+            description="Be specific — better briefs attract candidates who are actually a fit."
+          />
+          <div className="mt-5">
+            <ReactQuill
+              value={formData.requirements}
+              onChange={(value) => setFormData((prev) => ({ ...prev, requirements: value }))}
+              placeholder="e.g. 3+ years experience, Le Cordon Bleu diploma, FSSAI Food Handler certification..."
+              className="rounded-xl border border-border-light/60 dark:border-border-dark/60"
+            />
+          </div>
+        </SurfaceCard>
 
-					<label htmlFor="employment_type" className="whitespace-nowrap">
-						Employment Type
-					</label>
-					<select
-						id="employment_type"
-						name="employment_type"
-						value={formData.employment_type}
-						onChange={handleChange}
-						className="border-2 p-2 rounded-lg m-2 focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150 w-full"
-					>
-						<option value="Full Time">Full Time</option>
-						<option value="Part Time">Part Time</option>
-					</select>
-				</div>
+        {/* Location */}
+        <SurfaceCard className="p-6 sm:p-7">
+          <SectionHeading
+            eyebrow="Location"
+            title="Where is this role based?"
+            description="Accurate location data improves matching with nearby candidates."
+          />
+          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            <div>
+              <FieldLabel htmlFor="location.country">Country</FieldLabel>
+              <SoftSelect
+                id="location.country"
+                name="location.country"
+                value={formData.location.country}
+                onChange={handleChange}
+              >
+                <option value="">Select a country</option>
+                {getNames().map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </SoftSelect>
+            </div>
+            <div>
+              <FieldLabel htmlFor="location.state">State / Province</FieldLabel>
+              <SoftInput id="location.state" name="location.state" value={formData.location.state} onChange={handleChange} />
+            </div>
+            <div>
+              <FieldLabel htmlFor="location.city">City</FieldLabel>
+              <SoftInput id="location.city" name="location.city" value={formData.location.city} onChange={handleChange} />
+            </div>
+            <div>
+              <FieldLabel htmlFor="location.postal_code">Pincode</FieldLabel>
+              <SoftInput id="location.postal_code" name="location.postal_code" value={formData.location.postal_code} onChange={handleChange} />
+            </div>
+          </div>
+        </SurfaceCard>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<InputComponent
-						label="Application Deadline"
-						type="date"
-						name="application_deadline"
-						value={formData.application_deadline}
-						onChange={handleChange}
-						isRequired={true}
-						labelClassname="mt-3"
-					/>
-					<label htmlFor="country" className="mt-3">
-						Country
-					</label>
-					<select
-						id="country"
-						name="location.country"
-						value={selectedCountry}
-						onChange={handleCountryChange}
-						className="border-2 p-2 m-2 rounded-lg focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150 appearance-auto"
-					>
-						<option value="" disabled>
-							Select a country
-						</option>
-						{getNames().map((country, index) => (
-							<option key={index} value={country}>
-								{country}
-							</option>
-						))}
-					</select>
-				</div>
-				<div>
-					<InputComponent
-						label="State"
-						type="text"
-						placeholder="Enter the  state here"
-						name="location.state"
-						value={formData.location.state}
-						onChange={handleChange}
-					></InputComponent>
-				</div>
-				<div>
-					<InputComponent
-						label="City"
-						type="text"
-						placeholder="Enter the city  here"
-						name="location.city"
-						value={formData.location.city}
-						onChange={handleChange}
-					></InputComponent>
-				</div>
-				<div>
-					<InputComponent
-						label="Pincode"
-						type="text"
-						placeholder="Enter the pincode here"
-						name="location.postal_code"
-						value={formData.location.postal_code}
-						onChange={handleChange}
-					></InputComponent>
-				</div>
-
-				<label className="block font-medium text-gray-700">Requirements</label>
-				<ReactQuill
-					value={formData.requirements}
-					onChange={(value) =>
-						setFormData({ ...formData, requirements: value })
-					}
-					placeholder="e.g. 3+ years experience, degree in Culinary Arts..."
-					className="border-2 p-2 m-2 rounded-lg focus:outline-none focus:border-blue-400 focus:bg-blue-100 ease-linear duration-150"
-					required
-				/>
-				<div>
-					<label className="block font-medium mb-1">Assign Recruiter:</label>
-					<select
-						name="assignee"
-						value={formData.assignee}
-						onChange={handleChange}
-						className="w-full border-2 rounded-lg p-2 focus:outline-none focus:border-blue-400 focus:bg-blue-100"
-					>
-						<option value="">Select a recruiter</option>
-						{recruiters.length > 0 &&
-							recruiters.map((recruiter) => (
-								<option
-									key={recruiter.recruiter_id}
-									value={recruiter.recruiter_id}
-								>
-									{recruiter.username}
-								</option>
-							))}
-					</select>
-				</div>
-				<button
-					type="submit"
-					className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
-				>
-					Post Job
-				</button>
-			</form>
-		</div>
-	);
+        {/* Footer */}
+        <SurfaceCard className="flex items-center justify-between gap-4 p-4 sm:p-5">
+          <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
+            The role will be live immediately after publishing.
+          </p>
+          <div className="flex gap-3">
+            <Button type="button" variant="outline" onClick={() => navigate("/home")}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Posting…" : "Publish role"}
+            </Button>
+          </div>
+        </SurfaceCard>
+      </form>
+    </PageShell>
+  );
 }

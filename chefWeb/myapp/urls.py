@@ -5,6 +5,7 @@ from django.conf import settings
 
 urlpatterns = [
     path("auth/setup-profile/", views.ProfileSetupView.as_view(), name="setup-profile"),
+    path("auth/me/", views.MeView.as_view(), name="me"),
     path(
         "recruiters/company/",
         views.RecruitersInCompanyView.as_view(),

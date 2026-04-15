@@ -215,6 +215,16 @@ class ProfileSetupView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class MeView(APIView):
+    """Returns the server-verified profile of the currently authenticated user."""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = CustomUserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class CompanyMembershipView(generics.ListCreateAPIView):
     serializer_class = CompanyMembershipSerializer()
     queryset = CompanyMembership.objects.all()

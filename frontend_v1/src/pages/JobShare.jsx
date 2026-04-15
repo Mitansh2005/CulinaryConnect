@@ -1,37 +1,26 @@
+import { useState } from "react";
 import { DetailJobCard } from "@/components/ui/custom/JobDetailNewDesign";
-import { baseUrl } from "@/constants/constants";
-import { getFreshIdToken } from "@/firebase/authUtils";
-import axios from "axios";
-export const JobShare = ({ jobId }) => {
-	const [job, setJob] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
-	const [isClosing, setIsClosing] = useState(false);
+import { useJobDetails } from "@/api/jobs-data";
+import Spinner from "@/components/ui/custom/spinner";
 
-	const fetchJob = async () => {
-		try {
-			setLoading(true);
-			const token = await getFreshIdToken(true);
-			const res = await axios.get(`${baseUrl}/jobs-detail/${jobId}/`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-			console.log("Job data fetched:", res.data);
-			setJob(res.data);
-		} catch (error) {
-			console.error("Error fetching job details:", error);
-			setError("Failed to load job details.");
-		} finally {
-			setLoading(false);
-		}
-	};
-	useEffect(() => {
-		fetchJob();
-	}, [jobId]);
-	return (
-		<>
-			<DetailJobCard job={job} key={jobId} onClose={() => {}} />
-		</>
-	);
+export const JobShare = ({ jobId }) => {
+	const { data: job, isLoading, isError } = useJobDetails(jobId);
+
+	if (isLoading) {
+		return (
+			<div className="flex h-screen items-center justify-center">
+				<Spinner />
+			</div>
+		);
+	}
+
+	if (isError || !job) {
+		return (
+			<div className="flex h-screen items-center justify-center text-red-500">
+				Failed to load job details.
+			</div>
+		);
+	}
+
+	return <DetailJobCard job={job} key={jobId} onClose={() => {}} />;
 };

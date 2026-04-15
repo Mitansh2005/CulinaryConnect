@@ -28,12 +28,14 @@ function sanitizeRichText(value) {
     ALLOWED_TAGS: ["b", "strong", "i", "em", "p", "br", "ul", "ol", "li"],
   });
 }
+import { useUser } from "@/contexts/UserContext";
 
 export function JobDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const uid = getUid();
-  const userType = localStorage.getItem("userType");
+  const { userData } = useUser();
+  const userType = userData?.user_type;
   const { data, loading, error } = useJobDetails(id);
   const [applyState, setApplyState] = useState("idle");
   const [applyError, setApplyError] = useState("");

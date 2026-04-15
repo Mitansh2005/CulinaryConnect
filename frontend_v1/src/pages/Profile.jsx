@@ -1,160 +1,96 @@
 import { useEffect, useState } from "react";
-import { ProfileOptions } from "@/components/ui/custom/profile_component/profile-options";
-import { ProfileInfo } from "@/components/ui/custom/profile_component/profile_info";
-import { FaArrowLeft } from "react-icons/fa";
-import { MdOutlineArrowForwardIos } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
-import { NormalButtons } from "@/components/ui/ui_buttons";
-import { getFreshIdToken, getUid } from "@/firebase/authUtils";
-import ProfilePictureUploader from "@/components/ui/custom/profile_component/profile_picture_uploader";
-import defaultPic from "../assets/icons/profile.png";
+import { useNavigate } from "react-router-dom";
+import { getUid } from "@/firebase/authUtils";
 import { baseUrl } from "@/constants/constants";
 import DOMpurify from "dompurify";
 import ReactQuill from "react-quill";
-import axios from "axios";
-import { ProfileLayoutSkeleton } from "@/components/ui/custom/skeletons/Skeletons";
 import { Button } from "@/components/ui/button";
-import { ImCross } from "react-icons/im";
 import { getSafeUserData } from "@/utils/localStorage";
+import { useProfile, useUpdateProfile } from "@/api/home-data";
+import {
+  PageShell,
+  SectionHeading,
+  StatusPill,
+  SurfaceCard,
+  Avatar,
+  getInitials,
+} from "@/components/ui/custom/enterprise-shell";
+import ProfilePictureUploader from "@/components/ui/custom/profile_component/profile_picture_uploader";
+import defaultPic from "../assets/icons/profile.png";
+import {
+  Bookmark,
+  Pencil,
+  ChevronRight,
+  User,
+  MapPin,
+  Phone,
+  Trophy,
+} from "lucide-react";
+
+const sanitizedHtml = (html) =>
+  DOMpurify.sanitize(html, { ALLOWED_TAGS: ["b", "i", "em", "strong", "p", "br"] });
+
 export function ProfileTemplate() {
   const savedUserdata = getSafeUserData();
-
   const bio = savedUserdata?.bio;
-  const bioLength = savedUserdata?.bio?.length || 0;
   const username = savedUserdata?.username;
   const userType = savedUserdata?.user_type;
   const uid = getUid();
-  const [status, setStatus] = useState("");
-  const [showprocessPopup, setProcessShowPopup] = useState(false);
   const navigate = useNavigate();
-  const sanitizedHtml = (html) => {
-    return DOMpurify.sanitize(html, {
-      ALLOWED_TAGS: ["b", "i", "em", "strong", "p", "br"],
-    });
-  };
-  const maxLength = 100;
-  const [showPopup, setShowPopup] = useState(false);
-  const [content, setContent] = useState("profile");
+
+  const { data: profileData } = useProfile(uid);
+  const { mutate: updateProfile } = useUpdateProfile(uid);
+
   const [qualifications, setQualifications] = useState("");
-  const closeProcessPopup = () => {
-    setProcessShowPopup(false);
-    setStatus("");
-    setShowPopup(false);
-    setContent("profile");
-  };
-  const fetchAchivements = async (e) => {
-    try {
-      const token = await getFreshIdToken(true);
-      const res = await axios.get(`${baseUrl}/profile-detail/${uid}/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = res.data;
-      setQualifications(data.achievements);
-    } catch (error) {
-      console.error(
-        "Something went wrong when fetching achievements/qualifications: ",
-        error,
-      );
-    }
-  };
+  const [showQualEditor, setShowQualEditor] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(null); // null | "saving" | "done"
+
   useEffect(() => {
-    if (uid) {
-      fetchAchivements();
+    if (profileData?.achievements) {
+      setQualifications(profileData.achievements);
     }
-  }, []);
-  const saveQualifications = async () => {
-    try {
-      setProcessShowPopup(true);
-      setStatus("success");
-      const token = await getFreshIdToken(true);
-      const data = {
-        achievements: qualifications,
-      };
-      const response = await axios.patch(
-        `${baseUrl}/profile-detail/${uid}/`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+  }, [profileData]);
+
+  const handleSaveQualifications = () => {
+    setSaveStatus("saving");
+    updateProfile(
+      { achievements: qualifications },
+      {
+        onSuccess: () => {
+          setSaveStatus("done");
+          setTimeout(() => {
+            setSaveStatus(null);
+            setShowQualEditor(false);
+          }, 1200);
         },
-      );
-    } catch (error) {
-      console.error("Error saving qualifications:", error);
-    }
+        onError: () => setSaveStatus(null),
+      },
+    );
   };
-  const renderContent = () => {
-    if (content === "qualifications") {
-      return (
-        <>
-          {showprocessPopup && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white dark:bg-[#1a2c20] p-6 rounded-lg shadow-lg text-center border border-border-light dark:border-border-dark">
-                <div className="flex justify-end mt-{-4px}">
-                  <ImCross
-                    className="hover:text-red-600 hover:cursor-pointer"
-                    onClick={closeProcessPopup}
-                  ></ImCross>
-                </div>
-                <h2
-                  className={`text-xl font-semibold mb-4 ${
-                    status === "success" ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {status === "success" ? "Success!" : "Failed"}
-                </h2>
-                <p>
-                  {" "}
-                  {status === "success"
-                    ? "The process completed successfully."
-                    : "The process failed. Please try again."}
-                </p>
-                <Button
-                  onClick={closeProcessPopup}
-                  className="mt-4 px-4 py-1 hover:bg-red-600 hover:text-black rounded-md"
-                >
-                  Close
-                </Button>
-              </div>
-            </div>
-          )}
-          <div className="flex flex-col justify-end items-center bg-white dark:bg-[#1a2c20] w-1/2 rounded-2xl mt-8 mb-8 p-4 border border-border-light dark:border-border-dark shadow-sm">
-            <div className="relative w-full">
-              <FaArrowLeft
-                className="mb-5 text-lg hover:cursor-pointer hover:text-red-600 left-0 "
-                onClick={() => {
-                  setContent("profile");
-                  setShowPopup(false);
-                }}
-              />
-            </div>
-            <label className="mb-3 text-left">
-              Talk about your qualifications and achivements in this section in
-              brief
-            </label>
-            <ReactQuill
-              placeholder="Enter your achievements"
-              value={qualifications}
-              onChange={(content) => setQualifications(content)}
-              className="w-full h-auto resize-none outline-none overflow-auto p-2 duration-75 ease-linear rounded-md focus:border-b-4 border-brandPrimary transition-all text-xl"
-            />
-            <NormalButtons onClick={saveQualifications}>Save</NormalButtons>
-          </div>
-        </>
-      );
-    } else {
-      return <p>Invalid !</p>;
-    }
-  };
+
+  const profile = profileData || savedUserdata || {};
+  const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(" ") || username;
+  const location = profile.location;
+  const locationStr = [location?.city, location?.state, location?.country].filter(Boolean).join(", ");
+  const experienceYears = profile.job_seeker?.experience_years ?? profile.experience_years;
+  const speciality = profile.job_seeker?.speciality ?? profile.speciality;
+
   return (
-    <>
-      {/* entire screen  */}
-      <section className="flex flex-col items-center overflow-hidden ">
-        {!showPopup ? (
-          <div className="flex flex-col items-center justify-center bg-white dark:bg-[#1a2c20] w-8/12 rounded-2xl mt-8 mb-8 pb-10 border border-border-light dark:border-border-dark shadow-sm">
+    <PageShell
+      eyebrow="Chef workspace"
+      title="Your profile"
+      description="Review your public identity and update your details to improve recruiter trust."
+      actions={
+        <Button onClick={() => navigate("/edit-profile")} type="button">
+          <Pencil className="mr-2 h-4 w-4" />
+          Edit profile
+        </Button>
+      }
+    >
+      <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+        {/* LEFT: Identity panel */}
+        <div className="grid gap-4 self-start">
+          <SurfaceCard className="flex flex-col items-center gap-4 p-6 text-center">
             <ProfilePictureUploader
               id={uid}
               username={username}
@@ -162,50 +98,184 @@ export function ProfileTemplate() {
               getProfileUrl={`${baseUrl}/profile-detail`}
               uploadUrl={`${baseUrl}/upload/`}
             />
-            <ProfileInfo />
-
-            <div className="w-7/12 mt-6 ml-14 ">
-              <h1 className="text-xl font-bold mb-4">Bio</h1>
-              <div className="flex justify-between items-end m-3">
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      bioLength > maxLength
-                        ? sanitizedHtml(bio.slice(0, maxLength) + "...")
-                        : sanitizedHtml(bio) || "Tell us about yourself here",
-                  }}
-                ></p>
-                <Link to="/bio">
-                  <div className="flex items-center justify-between w-12  hover:cursor-pointer mt-3">
-                    <MdOutlineArrowForwardIos className="hover:text-custom_color1" />
-                  </div>
-                </Link>
-              </div>
+            <div>
+              <h2 className="font-display text-2xl font-semibold tracking-tight text-text-main-light dark:text-text-main-dark">
+                {fullName || "Chef"}
+              </h2>
+              {speciality && (
+                <p className="mt-1 text-sm font-medium text-text-sub-light dark:text-text-sub-dark">
+                  {speciality}
+                </p>
+              )}
+              {experienceYears ? (
+                <StatusPill tone="info" className="mt-3">
+                  {experienceYears} yrs experience
+                </StatusPill>
+              ) : null}
             </div>
-            {userType === "chef" && (
-              <div className="flex flex-col w-7/12 mt-4 ">
-                <ProfileOptions
-                  heading="Qualifications"
-                  subheading="Highlight your skills and experience"
-                  onClickEvent={() => {
-                    setShowPopup(true);
-                    setContent("qualifications");
-                  }}
+
+            <div className="w-full border-t border-border-light/60 pt-4 dark:border-border-dark/60 space-y-2.5 text-left">
+              {locationStr && (
+                <div className="flex items-center gap-2 text-sm text-text-sub-light dark:text-text-sub-dark">
+                  <MapPin className="h-4 w-4 shrink-0 text-primary" />
+                  <span>{locationStr}</span>
+                </div>
+              )}
+              {profile.phone_number && (
+                <div className="flex items-center gap-2 text-sm text-text-sub-light dark:text-text-sub-dark">
+                  <Phone className="h-4 w-4 shrink-0 text-primary" />
+                  <span>{profile.phone_number}</span>
+                </div>
+              )}
+              {profile.email && (
+                <div className="flex items-center gap-2 text-sm text-text-sub-light dark:text-text-sub-dark">
+                  <User className="h-4 w-4 shrink-0 text-primary" />
+                  <span className="truncate">{profile.email}</span>
+                </div>
+              )}
+            </div>
+          </SurfaceCard>
+
+          {/* Quick actions */}
+          <SurfaceCard className="p-4">
+            <p className="section-kicker mb-3">Quick links</p>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => navigate("/contact_form")}
+                className="flex items-center justify-between rounded-xl border border-white/70 bg-white/60 px-4 py-3 text-sm font-medium text-text-main-light transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark"
+              >
+                <span>Contact details</span>
+                <ChevronRight className="h-4 w-4 text-text-sub-light" />
+              </button>
+              {userType === "chef" && (
+                <>
+                  <button
+                    onClick={() => setShowQualEditor(true)}
+                    className="flex items-center justify-between rounded-xl border border-white/70 bg-white/60 px-4 py-3 text-sm font-medium text-text-main-light transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark"
+                  >
+                    <span>Qualifications</span>
+                    <ChevronRight className="h-4 w-4 text-text-sub-light" />
+                  </button>
+                  <button
+                    onClick={() => navigate("/liked-jobs")}
+                    className="flex items-center justify-between rounded-xl border border-white/70 bg-white/60 px-4 py-3 text-sm font-medium text-text-main-light transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark"
+                  >
+                    <span>Saved jobs</span>
+                    <Bookmark className="h-4 w-4 text-text-sub-light" />
+                  </button>
+                </>
+              )}
+            </div>
+          </SurfaceCard>
+        </div>
+
+        {/* RIGHT: Content */}
+        <div className="grid gap-6 self-start">
+          {/* Bio */}
+          <SurfaceCard className="p-6">
+            <SectionHeading
+              eyebrow="About"
+              title="Professional bio"
+              description="This appears prominently on your profile and in recruiter search."
+              action={
+                <Button
+                  onClick={() => navigate("/bio")}
+                  type="button"
+                  variant="ghost"
+                  className="text-sm"
+                >
+                  Edit bio
+                </Button>
+              }
+            />
+            <div className="mt-5 rounded-xl border border-border-light/60 bg-white/50 p-4 dark:border-border-dark/60 dark:bg-white/5">
+              {bio ? (
+                <p
+                  className="text-sm leading-7 text-text-main-light dark:text-text-main-dark/90"
+                  dangerouslySetInnerHTML={{ __html: sanitizedHtml(bio) }}
                 />
-                <ProfileOptions
-                  heading="Liked Jobs"
-                  subheading="View jobs you have liked"
-                  onClickEvent={() => {
-                    navigate("/liked-jobs");
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        ) : (
-          renderContent()
-        )}
-      </section>
-    </>
+              ) : (
+                <p className="text-sm italic text-text-sub-light dark:text-text-sub-dark">
+                  No bio yet — tell recruiters about your culinary journey.
+                </p>
+              )}
+            </div>
+          </SurfaceCard>
+
+          {/* Qualifications (chef only) */}
+          {userType === "chef" && (
+            <SurfaceCard className="p-6">
+              <SectionHeading
+                eyebrow="Credentials"
+                title="Qualifications & achievements"
+                description="Highlights of your culinary training, certifications, and standout accomplishments."
+                action={
+                  !showQualEditor && (
+                    <Button
+                      onClick={() => setShowQualEditor(true)}
+                      type="button"
+                      variant="ghost"
+                      className="text-sm"
+                    >
+                      Edit
+                    </Button>
+                  )
+                }
+              />
+
+              {showQualEditor ? (
+                <div className="mt-5">
+                  <ReactQuill
+                    value={qualifications}
+                    onChange={setQualifications}
+                    placeholder="Describe your certifications, awards, and training..."
+                    className="rounded-xl border border-border-light/60 dark:border-border-dark/60"
+                  />
+                  <div className="mt-4 flex gap-3 justify-end">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setShowQualEditor(false)}
+                      disabled={saveStatus === "saving"}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={handleSaveQualifications}
+                      disabled={saveStatus === "saving"}
+                    >
+                      {saveStatus === "saving"
+                        ? "Saving..."
+                        : saveStatus === "done"
+                          ? "Saved ✓"
+                          : "Save qualifications"}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-5 rounded-xl border border-border-light/60 bg-white/50 p-4 dark:border-border-dark/60 dark:bg-white/5">
+                  {qualifications ? (
+                    <div
+                      className="text-sm leading-7 text-text-main-light dark:text-text-main-dark/90"
+                      dangerouslySetInnerHTML={{ __html: sanitizedHtml(qualifications) }}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center gap-3 py-8 text-center">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary dark:bg-primary/16">
+                        <Trophy className="h-5 w-5" />
+                      </div>
+                      <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
+                        Add your qualifications to build recruiter trust.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </SurfaceCard>
+          )}
+        </div>
+      </div>
+    </PageShell>
   );
 }

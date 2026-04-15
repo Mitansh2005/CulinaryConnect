@@ -47,7 +47,6 @@ export const setUpProfile = async ({
 		);
 
 		console.log("Profile setup successful:", response.data);
-		localStorage.setItem("userType", user_type);
 		return response.data;
 	} catch (error) {
 		console.error(

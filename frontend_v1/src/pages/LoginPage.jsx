@@ -2,18 +2,24 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, BadgeCheck, Clock3, ShieldCheck, Users } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  Clock3,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import { MdErrorOutline } from "react-icons/md";
 import axios from "axios";
-import GoogleIcon from "../../assets/icons/google.png";
+import GoogleIcon from "../assets/icons/google.png";
 import {
   doCreateUserWithEmailPassword,
   doSignInWithEmailPassword,
   doSignInWithGoogle,
-} from "../../firebase/auth";
+} from "../firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { baseUrl } from "@/constants/constants";
-import { useAuth } from "../../contexts/authContext";
+import { useAuth } from "../contexts/authContext";
 import { getFreshIdToken, getUid, setUpProfile } from "@/firebase/authUtils";
 import { BrandMark } from "@/components/ui/custom/enterprise-shell";
 
@@ -21,28 +27,33 @@ const showcasePoints = [
   {
     icon: BadgeCheck,
     title: "Verified marketplace rhythm",
-    description: "Recruiter onboarding captures business details early so hiring conversations start with more trust.",
+    description:
+      "Recruiter onboarding captures business details early so hiring conversations start with more trust.",
   },
   {
     icon: Users,
     title: "Chefs and restaurants in one flow",
-    description: "Switch between chef and restaurant access without jumping into a separate product experience.",
+    description:
+      "Switch between chef and restaurant access without jumping into a separate product experience.",
   },
   {
     icon: Clock3,
     title: "Faster shortlist decisions",
-    description: "Cleaner profiles and clearer role matching reduce back-and-forth before interviews are scheduled.",
+    description:
+      "Cleaner profiles and clearer role matching reduce back-and-forth before interviews are scheduled.",
   },
 ];
 
 const roleCopy = {
   restaurant: {
     title: "Restaurant",
-    description: "Post roles, verify your business, and track applicants from one calmer dashboard.",
+    description:
+      "Post roles, verify your business, and track applicants from one calmer dashboard.",
   },
   chef: {
     title: "Chef",
-    description: "Build your profile, show your experience, and move through openings with less friction.",
+    description:
+      "Build your profile, show your experience, and move through openings with less friction.",
   },
 };
 
@@ -79,7 +90,9 @@ function AuthInput({
           value={value}
         />
         {action ? (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-4">{action}</div>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+            {action}
+          </div>
         ) : null}
       </div>
     </div>
@@ -89,7 +102,9 @@ function AuthInput({
 function LoginTemplate({ initialMode = "signin" }) {
   const navigate = useNavigate();
   const { userLoggedIn } = useAuth();
-  const [userType, setUserType] = useState(initialMode === "signup" ? "chef" : "restaurant");
+  const [userType, setUserType] = useState(
+    initialMode === "signup" ? "chef" : "restaurant",
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
@@ -179,7 +194,9 @@ function LoginTemplate({ initialMode = "signin" }) {
             localStorage.setItem("userType", userType);
           } catch {
             setProfileSetUpComplete(false);
-            setErrorMessage("Something went wrong while creating your profile.");
+            setErrorMessage(
+              "Something went wrong while creating your profile.",
+            );
             const user = auth.currentUser;
             if (user) {
               await user.delete();
@@ -212,7 +229,9 @@ function LoginTemplate({ initialMode = "signin" }) {
         const typeMatch = await checkUserType(userType);
         if (!typeMatch) {
           await auth.signOut();
-          setErrorMessage("User type does not match this account. Please try again.");
+          setErrorMessage(
+            "User type does not match this account. Please try again.",
+          );
           return;
         }
 
@@ -231,7 +250,9 @@ function LoginTemplate({ initialMode = "signin" }) {
     if (mode === "signup") {
       if (!isRegisterIn || !formValid) {
         if (!formValid && userType === "restaurant") {
-          setErrorMessage("Add company name and FSSAI license number to continue.");
+          setErrorMessage(
+            "Add company name and FSSAI license number to continue.",
+          );
         }
       }
       if (!isRegisterIn && formValid) {
@@ -285,7 +306,9 @@ function LoginTemplate({ initialMode = "signin" }) {
         const typeMatch = await checkUserType(userType);
         if (!typeMatch) {
           await auth.signOut();
-          setErrorMessage("User type does not match this account. Please try again.");
+          setErrorMessage(
+            "User type does not match this account. Please try again.",
+          );
           return;
         }
 
@@ -323,13 +346,20 @@ function LoginTemplate({ initialMode = "signin" }) {
 
             <div className="grid gap-5 px-5 py-5 sm:px-7 sm:py-6">
               <div className="space-y-2">
-                <p className="section-kicker">{authMode === "signin" ? "Access portal" : "Create your workspace"}</p>
+                <p className="section-kicker">
+                  {authMode === "signin"
+                    ? "Access portal"
+                    : "Create your workspace"}
+                </p>
                 <h1 className="font-display text-[2rem] font-semibold tracking-[-0.05em] text-text-main-light dark:text-text-main-dark sm:text-[2.35rem]">
-                  {authMode === "signin" ? "Enter the culinary hiring floor." : "Create an account that fits your role."}
+                  {authMode === "signin"
+                    ? "Enter the culinary hiring floor."
+                    : "Create an account that fits your role."}
                 </h1>
                 <p className="max-w-xl text-sm leading-6 text-text-sub-light dark:text-text-sub-dark">
-                  Switch your role first, then continue with email or Google. Restaurant sign-up
-                  captures verification details immediately so the platform stays usable and credible.
+                  Switch your role first, then continue with email or Google.
+                  Restaurant sign-up captures verification details immediately
+                  so the platform stays usable and credible.
                 </p>
               </div>
 
@@ -337,7 +367,9 @@ function LoginTemplate({ initialMode = "signin" }) {
                 <div className="rounded-[1.35rem] border border-rose-200 bg-rose-50/95 p-4 dark:border-rose-500/20 dark:bg-rose-500/10">
                   <div className="flex items-start gap-3">
                     <MdErrorOutline className="mt-0.5 h-5 w-5 shrink-0 text-rose-600 dark:text-rose-300" />
-                    <p className="text-sm font-medium text-rose-800 dark:text-rose-100">{errorMessage}</p>
+                    <p className="text-sm font-medium text-rose-800 dark:text-rose-100">
+                      {errorMessage}
+                    </p>
                   </div>
                 </div>
               ) : null}
@@ -365,7 +397,11 @@ function LoginTemplate({ initialMode = "signin" }) {
                             type="radio"
                             value={role}
                           />
-                          {roleDetail && role === userType ? roleDetail.title : role === "restaurant" ? "Restaurant" : "Chef"}
+                          {roleDetail && role === userType
+                            ? roleDetail.title
+                            : role === "restaurant"
+                              ? "Restaurant"
+                              : "Chef"}
                         </label>
                       );
                     })}
@@ -391,12 +427,22 @@ function LoginTemplate({ initialMode = "signin" }) {
                   icon="mail"
                   label="Email address"
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={userType === "restaurant" ? "name@restaurant.com" : "chef@kitchen.com"}
+                  placeholder={
+                    userType === "restaurant"
+                      ? "name@restaurant.com"
+                      : "chef@kitchen.com"
+                  }
                   type="email"
                   value={email}
                 />
 
-                <div className={authMode === "signup" ? "grid gap-4 md:grid-cols-2" : "grid gap-4"}>
+                <div
+                  className={
+                    authMode === "signup"
+                      ? "grid gap-4 md:grid-cols-2"
+                      : "grid gap-4"
+                  }
+                >
                   <AuthInput
                     id="password"
                     icon="lock"
@@ -408,7 +454,9 @@ function LoginTemplate({ initialMode = "signin" }) {
                     action={
                       <button
                         className="text-text-sub-light transition hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
-                        onClick={() => setPasswordVisible((current) => !current)}
+                        onClick={() =>
+                          setPasswordVisible((current) => !current)
+                        }
                         type="button"
                       >
                         <span className="material-symbols-outlined text-[20px]">
@@ -435,11 +483,15 @@ function LoginTemplate({ initialMode = "signin" }) {
                         action={
                           <button
                             className="text-text-sub-light transition hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
-                            onClick={() => setConfirmPasswordVisible((current) => !current)}
+                            onClick={() =>
+                              setConfirmPasswordVisible((current) => !current)
+                            }
                             type="button"
                           >
                             <span className="material-symbols-outlined text-[20px]">
-                              {confirmPasswordVisible ? "visibility_off" : "visibility"}
+                              {confirmPasswordVisible
+                                ? "visibility_off"
+                                : "visibility"}
                             </span>
                           </button>
                         }
@@ -483,7 +535,13 @@ function LoginTemplate({ initialMode = "signin" }) {
                   disabled={submitLoading || googleLoading}
                   type="submit"
                 >
-                  <span>{submitLoading ? "Working..." : authMode === "signin" ? "Sign in to dashboard" : "Create account"}</span>
+                  <span>
+                    {submitLoading
+                      ? "Working..."
+                      : authMode === "signin"
+                        ? "Sign in to dashboard"
+                        : "Create account"}
+                  </span>
                   {!submitLoading ? <ArrowRight className="h-4 w-4" /> : null}
                 </button>
               </motion.form>
@@ -516,7 +574,9 @@ function LoginTemplate({ initialMode = "signin" }) {
               </button>
 
               <p className="text-center text-sm text-text-sub-light dark:text-text-sub-dark">
-                {authMode === "signin" ? "Need an account?" : "Already registered?"}
+                {authMode === "signin"
+                  ? "Need an account?"
+                  : "Already registered?"}
                 <Link
                   className="ml-1 font-semibold text-text-main-light transition hover:text-primary dark:text-text-main-dark dark:hover:text-primary"
                   to={authMode === "signin" ? "/register" : "/login"}
@@ -555,36 +615,42 @@ function LoginTemplate({ initialMode = "signin" }) {
                   </div>
                 </div>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-text-sub-light dark:text-text-sub-dark">
-                  CulinaryConnect is being reshaped around deliberate spacing, credible onboarding,
-                  and role-specific workflows so the product feels like a hiring studio instead of a
-                  generic listings page.
+                  CulinaryConnect is being reshaped around deliberate spacing,
+                  credible onboarding, and role-specific workflows so the
+                  product feels like a hiring studio instead of a generic
+                  listings page.
                 </p>
               </div>
 
               <div className="grid gap-3">
-                {showcasePoints.slice(0, 2).map(({ icon: Icon, title, description }, index) => (
-                  <motion.article
-                    key={title}
-                    animate={{ opacity: 1, x: 0 }}
-                    initial={{ opacity: 0, x: 18 }}
-                    transition={{ delay: 0.16 + index * 0.08, duration: 0.45 }}
-                    className="rounded-[1.45rem] border border-white/80 bg-white/84 p-4 shadow-sm dark:border-white/10 dark:bg-white/5"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary/12 text-secondary dark:bg-secondary/16">
-                        <Icon className="h-5 w-5" />
+                {showcasePoints
+                  .slice(0, 2)
+                  .map(({ icon: Icon, title, description }, index) => (
+                    <motion.article
+                      key={title}
+                      animate={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, x: 18 }}
+                      transition={{
+                        delay: 0.16 + index * 0.08,
+                        duration: 0.45,
+                      }}
+                      className="rounded-[1.45rem] border border-white/80 bg-white/84 p-4 shadow-sm dark:border-white/10 dark:bg-white/5"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary/12 text-secondary dark:bg-secondary/16">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-text-main-light dark:text-text-main-dark">
+                            {title}
+                          </h3>
+                          <p className="mt-2 text-sm leading-7 text-text-sub-light dark:text-text-sub-dark">
+                            {description}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-text-main-light dark:text-text-main-dark">
-                          {title}
-                        </h3>
-                        <p className="mt-2 text-sm leading-7 text-text-sub-light dark:text-text-sub-dark">
-                          {description}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.article>
-                ))}
+                    </motion.article>
+                  ))}
               </div>
             </div>
           </motion.div>

@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getFreshIdToken } from '@/firebase/authUtils';
-import axios from 'axios';
-import { baseUrl } from '@/constants/constants';
 import Spinner from '@/components/ui/custom/spinner';
+import { useApplicationDetail, useUpdateApplicationStatus } from '@/api/home-data';
 
 const statusStyles = {
     p: 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/12 dark:text-amber-200',
@@ -15,40 +13,9 @@ const statusStyles = {
 export default function ApplicantDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [application, setApplication] = useState(null);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchApplicationDetails();
-    }, [id]);
-
-    const fetchApplicationDetails = async () => {
-        try {
-            const token = await getFreshIdToken();
-            const response = await axios.get(`${baseUrl}/application-detail/${id}/`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setApplication(response.data);
-        } catch (error) {
-            console.error('Failed to fetch application details:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleStatusUpdate = async (newStatus) => {
-        try {
-            const token = await getFreshIdToken();
-            await axios.patch(
-                `${baseUrl}/application-detail/${id}/`,
-                { status: newStatus },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            fetchApplicationDetails();
-        } catch (error) {
-            console.error('Failed to update status:', error);
-        }
-    };
+    const { data: application, isLoading, isError } = useApplicationDetail(id);
+    const { mutate: updateStatus } = useUpdateApplicationStatus(id);
 
     const getStatusBadge = (status) => {
         const badges = {
@@ -65,7 +32,7 @@ export default function ApplicantDetail() {
         );
     };
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex h-screen items-center justify-center">
                 <Spinner />
@@ -73,7 +40,7 @@ export default function ApplicantDetail() {
         );
     }
 
-    if (!application) {
+    if (isError || !application) {
         return (
             <div className="flex h-screen items-center justify-center">
                 <div className="max-w-lg rounded-xl border border-rose-200 bg-rose-50 p-6 text-center dark:border-rose-500/20 dark:bg-rose-500/12">
@@ -127,14 +94,14 @@ export default function ApplicantDetail() {
                             <span>Open Chat</span>
                         </button>
                         <button
-                            onClick={() => handleStatusUpdate('r')}
+                            onClick={() => updateStatus('r')}
                             className="flex h-10 items-center justify-center gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-100 dark:border-rose-500/20 dark:bg-rose-500/12 dark:text-rose-200 dark:hover:bg-rose-500/18"
                         >
                             <span className="material-symbols-outlined text-[18px]">close</span>
                             <span>Reject</span>
                         </button>
                         <button
-                            onClick={() => handleStatusUpdate('a')}
+                            onClick={() => updateStatus('a')}
                             className="flex h-10 items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-primary via-ember-500 to-ember-600 px-6 text-sm font-bold text-primary-foreground shadow-md transition-all active:scale-95 hover:brightness-105"
                         >
                             <span>Accept Applicant</span>
@@ -145,9 +112,8 @@ export default function ApplicantDetail() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-                {/* LEFT SIDEBAR: Candidate Profile */}
+                {/* LEFT SIDEBAR */}
                 <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
-                    {/* Profile Card */}
                     <div className="flex flex-col items-center rounded-xl border border-border-light/80 bg-white/92 p-6 text-center shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
                         <div className="relative mb-4 group">
                             <div
@@ -164,10 +130,7 @@ export default function ApplicantDetail() {
                                     </div>
                                 )}
                             </div>
-                            <div
-                                className="absolute bottom-1 right-1 rounded-full border border-forest-200 bg-forest-50 p-1.5 shadow-sm dark:border-forest-500/20 dark:bg-forest-500/12"
-                                title="Verified Applicant"
-                            >
+                            <div className="absolute bottom-1 right-1 rounded-full border border-forest-200 bg-forest-50 p-1.5 shadow-sm dark:border-forest-500/20 dark:bg-forest-500/12" title="Verified Applicant">
                                 <span className="material-symbols-outlined block text-[20px] text-forest-600 dark:text-forest-200">verified</span>
                             </div>
                         </div>
@@ -177,27 +140,20 @@ export default function ApplicantDetail() {
                         <p className="mb-4 text-sm font-medium text-text-sub-light dark:text-text-sub-dark">{applicant?.speciality || 'Chef'}</p>
                         <div className="mb-6 flex items-center justify-center gap-2 rounded-full bg-forest-50 px-4 py-2 text-sm text-forest-700 dark:bg-forest-500/12 dark:text-forest-200">
                             <span className="material-symbols-outlined text-[16px]">location_on</span>
-                            <span>
-                                {applicant?.location?.city}, {applicant?.location?.state}
-                            </span>
+                            <span>{applicant?.location?.city}, {applicant?.location?.state}</span>
                         </div>
                         <div className="mb-4 grid w-full grid-cols-2 gap-4 border-t border-border-light/80 pt-4 dark:border-border-dark">
                             <div className="text-center">
                                 <p className="text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">Experience</p>
-                                <p className="text-lg font-bold text-text-main-light dark:text-text-main-dark">
-                                    {applicant?.experience_years || 0} Yrs
-                                </p>
+                                <p className="text-lg font-bold text-text-main-light dark:text-text-main-dark">{applicant?.experience_years || 0} Yrs</p>
                             </div>
                             <div className="border-l border-border-light/80 text-center dark:border-border-dark">
                                 <p className="text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">Status</p>
-                                <p className="text-lg font-bold text-text-main-light dark:text-text-main-dark">
-                                    {applicant?.job_search_status || 'Active'}
-                                </p>
+                                <p className="text-lg font-bold text-text-main-light dark:text-text-main-dark">{applicant?.job_search_status || 'Active'}</p>
                             </div>
                         </div>
                     </div>
 
-                    {/* Contact & Info */}
                     <div className="overflow-hidden rounded-xl border border-border-light/80 bg-white/92 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
                         <div className="border-b border-border-light/80 bg-stone-50/90 px-5 py-4 dark:border-border-dark dark:bg-white/6">
                             <h4 className="font-semibold text-text-main-light dark:text-text-main-dark">Contact Info</h4>
@@ -209,9 +165,7 @@ export default function ApplicantDetail() {
                                 </div>
                                 <div className="flex-1 overflow-hidden">
                                     <p className="text-xs font-medium text-text-sub-light dark:text-text-sub-dark">Email Address</p>
-                                    <p className="truncate text-sm font-medium text-text-main-light transition-colors group-hover:text-primary dark:text-text-main-dark">
-                                        {applicant?.email}
-                                    </p>
+                                    <p className="truncate text-sm font-medium text-text-main-light transition-colors group-hover:text-primary dark:text-text-main-dark">{applicant?.email}</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3 group cursor-pointer">
@@ -220,30 +174,22 @@ export default function ApplicantDetail() {
                                 </div>
                                 <div className="flex-1">
                                     <p className="text-xs font-medium text-text-sub-light dark:text-text-sub-dark">Phone Number</p>
-                                    <p className="text-sm font-medium text-text-main-light transition-colors group-hover:text-primary dark:text-text-main-dark">
-                                        {applicant?.phone_number || 'Not provided'}
-                                    </p>
+                                    <p className="text-sm font-medium text-text-main-light transition-colors group-hover:text-primary dark:text-text-main-dark">{applicant?.phone_number || 'Not provided'}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Specialties */}
                     <div className="rounded-xl border border-border-light/80 bg-white/92 p-5 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
-                        <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-text-main-light dark:text-text-main-dark">
-                            Specialties
-                        </h4>
+                        <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-text-main-light dark:text-text-main-dark">Specialties</h4>
                         <div className="flex flex-wrap gap-2">
                             {applicant?.speciality && (
-                                <span className="inline-flex cursor-default items-center rounded-md border border-forest-200 bg-forest-50 px-2.5 py-1 text-xs font-medium text-forest-700 transition-colors hover:border-primary/50 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200">
+                                <span className="inline-flex cursor-default items-center rounded-md border border-forest-200 bg-forest-50 px-2.5 py-1 text-xs font-medium text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200">
                                     {applicant.speciality}
                                 </span>
                             )}
                             {applicant?.preferred_job_roles?.split(',').map((role, index) => (
-                                <span
-                                    key={index}
-                                    className="inline-flex cursor-default items-center rounded-md border border-forest-200 bg-forest-50 px-2.5 py-1 text-xs font-medium text-forest-700 transition-colors hover:border-primary/50 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200"
-                                >
+                                <span key={index} className="inline-flex cursor-default items-center rounded-md border border-forest-200 bg-forest-50 px-2.5 py-1 text-xs font-medium text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200">
                                     {role.trim()}
                                 </span>
                             ))}
@@ -251,9 +197,8 @@ export default function ApplicantDetail() {
                     </div>
                 </aside>
 
-                {/* RIGHT CONTENT AREA */}
+                {/* RIGHT CONTENT */}
                 <div className="lg:col-span-8 xl:col-span-9 flex flex-col gap-6">
-                    {/* Timeline Section */}
                     <section className="rounded-xl border border-border-light/80 bg-white/92 p-6 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-lg font-bold text-text-main-light dark:text-text-main-dark">Application Timeline</h3>
@@ -261,8 +206,6 @@ export default function ApplicantDetail() {
                         </div>
                         <div className="relative pl-4">
                             <div className="absolute bottom-6 left-[27px] top-2 w-0.5 bg-border-light dark:bg-border-dark"></div>
-
-                            {/* Application Received */}
                             <div className="relative flex gap-6 pb-8 group">
                                 <div className="relative z-10 flex size-6 flex-none items-center justify-center rounded-full border-2 border-forest-500 bg-forest-50 dark:border-forest-300 dark:bg-forest-500/14">
                                     <span className="material-symbols-outlined text-[14px] font-bold text-forest-600 dark:text-forest-200">check</span>
@@ -277,8 +220,6 @@ export default function ApplicantDetail() {
                                     </p>
                                 </div>
                             </div>
-
-                            {/* Current Status */}
                             {application.status !== 'p' && (
                                 <div className="relative flex gap-6 group">
                                     <div className="relative z-10 flex size-6 flex-none items-center justify-center rounded-full bg-primary ring-4 ring-primary/20">
@@ -299,7 +240,6 @@ export default function ApplicantDetail() {
                         </div>
                     </section>
 
-                    {/* Bio Section */}
                     {applicant?.bio && (
                         <section className="rounded-xl border border-border-light/80 bg-white/92 p-6 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
                             <h3 className="mb-4 text-lg font-bold text-text-main-light dark:text-text-main-dark">About</h3>
@@ -307,13 +247,10 @@ export default function ApplicantDetail() {
                         </section>
                     )}
 
-                    {/* Achievements */}
                     {applicant?.achievements && (
                         <section className="rounded-xl border border-border-light/80 bg-white/92 p-6 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
                             <h3 className="mb-4 text-lg font-bold text-text-main-light dark:text-text-main-dark">Achievements</h3>
-                            <p className="whitespace-pre-line text-sm leading-relaxed text-text-main-light dark:text-text-main-dark/90">
-                                {applicant.achievements}
-                            </p>
+                            <p className="whitespace-pre-line text-sm leading-relaxed text-text-main-light dark:text-text-main-dark/90">{applicant.achievements}</p>
                         </section>
                     )}
                 </div>
