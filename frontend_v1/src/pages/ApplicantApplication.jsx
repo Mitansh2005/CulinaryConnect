@@ -1,12 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import {
-  PageShell,
-  SectionHeading,
-  SurfaceCard,
   StatusPill,
   EmptyPanel,
-  Avatar,
 } from "@/components/ui/custom/enterprise-shell";
 import { Button } from "@/components/ui/button";
 
@@ -30,7 +27,7 @@ export const ApplicantApplications = ({ applications }) => {
   if (!applications || applications.length === 0) {
     return (
       <EmptyPanel
-        className="min-h-[280px]"
+        className="cc-scroll-in min-h-[280px]"
         title="No applications yet"
         description="Browse the job feed and apply to roles that match your skills."
         action={
@@ -53,7 +50,7 @@ export const ApplicantApplications = ({ applications }) => {
         return (
           <div
             key={app.application_id}
-            className="flex flex-col gap-4 rounded-[1.5rem] border border-white/80 bg-white/90 p-5 shadow-sm dark:border-white/10 dark:bg-white/10"
+            className="cc-scroll-in flex flex-col gap-4 rounded-[1.5rem] border border-white/80 bg-white/90 p-5 shadow-sm dark:border-white/10 dark:bg-white/10"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
@@ -85,7 +82,7 @@ export const ApplicantApplications = ({ applications }) => {
               )}
               {status === "a" && (
                 <span className="text-xs text-forest-600 dark:text-forest-300">
-                  You've been selected
+                  You&apos;ve been selected
                 </span>
               )}
               {status === "p" && (

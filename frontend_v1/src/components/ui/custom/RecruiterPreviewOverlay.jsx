@@ -1,7 +1,16 @@
-import { useState } from 'react';
-import DOMPurify from 'dompurify';
+/* eslint-disable react/prop-types */
+import { useRef } from "react";
+import DOMPurify from "dompurify";
+import { useCulinaryPageMotion } from "@/components/hooks/useCulinaryMotion";
 
 export function RecruiterPreviewOverlay({ profile, onClose }) {
+  const scopeRef = useRef(null);
+
+  useCulinaryPageMotion({
+    scopeRef,
+    dependencies: [Boolean(profile?.uid || profile?.user?.uid)],
+  });
+
   if (!profile) return null;
 
   const sanitizeHtml = (html) => {
@@ -14,18 +23,22 @@ export function RecruiterPreviewOverlay({ profile, onClose }) {
   const profilePicture = profile.profile_picture?.startsWith("http")
     ? profile.profile_picture
     : profile.profile_picture
-    ? `data:image/jpeg;base64,${profile.profile_picture}`
-    : null;
+      ? `data:image/jpeg;base64,${profile.profile_picture}`
+      : null;
 
-  const fullName = `${profile.first_name || ""} ${profile.last_name || ""}`.trim() || "Chef";
+  const fullName =
+    `${profile.first_name || ""} ${profile.last_name || ""}`.trim() || "Chef";
   const position = profile.job_seeker?.speciality || "Culinary Professional";
   const location = profile.location
     ? `${profile.location.city || ""}${profile.location.city && profile.location.state ? ", " : ""}${profile.location.state || ""}`
     : "Location not specified";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-800 rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div
+        ref={scopeRef}
+        className="cc-reveal relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-800 rounded-2xl shadow-2xl"
+      >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 dark:border-gray-700 dark:bg-gray-800">
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -44,7 +57,7 @@ export function RecruiterPreviewOverlay({ profile, onClose }) {
         </div>
 
         <div className="p-6 space-y-6">
-          <div className="flex flex-col sm:flex-row gap-6 items-start">
+          <div className="cc-scroll-in flex flex-col sm:flex-row gap-6 items-start">
             <div className="h-32 w-32 shrink-0 overflow-hidden rounded-xl border-4 border-gray-100 bg-gray-100 shadow-md dark:border-gray-700 dark:bg-gray-700">
               {profilePicture ? (
                 <div
@@ -65,7 +78,9 @@ export function RecruiterPreviewOverlay({ profile, onClose }) {
                 <h3 className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">
                   {fullName}
                 </h3>
-                <p className="text-lg font-medium text-gray-600 dark:text-gray-400">{position}</p>
+                <p className="text-lg font-medium text-gray-600 dark:text-gray-400">
+                  {position}
+                </p>
               </div>
 
               <div className="flex flex-wrap gap-3">
@@ -92,13 +107,17 @@ export function RecruiterPreviewOverlay({ profile, onClose }) {
               <div className="flex flex-col gap-2 pt-2">
                 {profile.email && (
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <span className="material-symbols-outlined text-[18px]">mail</span>
+                    <span className="material-symbols-outlined text-[18px]">
+                      mail
+                    </span>
                     <span>{profile.email}</span>
                   </div>
                 )}
                 {profile.phone_number && (
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <span className="material-symbols-outlined text-[18px]">call</span>
+                    <span className="material-symbols-outlined text-[18px]">
+                      call
+                    </span>
                     <span>{profile.phone_number}</span>
                   </div>
                 )}
@@ -106,7 +125,7 @@ export function RecruiterPreviewOverlay({ profile, onClose }) {
             </div>
           </div>
 
-          <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900/50">
+          <div className="cc-scroll-in rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900/50">
             <h4 className="mb-3 text-lg font-bold text-gray-900 dark:text-white">
               Professional Bio
             </h4>
@@ -116,12 +135,14 @@ export function RecruiterPreviewOverlay({ profile, onClose }) {
                 dangerouslySetInnerHTML={{ __html: sanitizeHtml(profile.bio) }}
               ></div>
             ) : (
-              <p className="text-gray-500 dark:text-gray-500">No bio provided.</p>
+              <p className="text-gray-500 dark:text-gray-500">
+                No bio provided.
+              </p>
             )}
           </div>
 
           {profile.job_seeker?.preferred_job_roles && (
-            <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900/50">
+            <div className="cc-scroll-in rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900/50">
               <h4 className="mb-3 text-lg font-bold text-gray-900 dark:text-white">
                 Preferred Roles
               </h4>
@@ -131,7 +152,7 @@ export function RecruiterPreviewOverlay({ profile, onClose }) {
             </div>
           )}
 
-          <div className="rounded-xl border-2 border-dashed border-green-200 bg-green-50 p-6 dark:border-green-800 dark:bg-green-900/20">
+          <div className="cc-scroll-in rounded-xl border-2 border-dashed border-green-200 bg-green-50 p-6 dark:border-green-800 dark:bg-green-900/20">
             <div className="flex items-start gap-3">
               <span className="material-symbols-outlined text-green-600 dark:text-green-400">
                 visibility
@@ -141,8 +162,9 @@ export function RecruiterPreviewOverlay({ profile, onClose }) {
                   Preview Mode Active
                 </h5>
                 <p className="mt-1 text-sm text-green-700 dark:text-green-400">
-                  This is a read-only view of your profile as seen by recruiters. Contact information
-                  is visible to help recruiters reach out to qualified candidates.
+                  This is a read-only view of your profile as seen by
+                  recruiters. Contact information is visible to help recruiters
+                  reach out to qualified candidates.
                 </p>
               </div>
             </div>

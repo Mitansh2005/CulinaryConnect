@@ -8,7 +8,6 @@ import {
   SectionHeading,
   SurfaceCard,
   StatusPill,
-  Avatar,
 } from "@/components/ui/custom/enterprise-shell";
 import { Button } from "@/components/ui/button";
 import { JobCardSkeleton } from "@/components/ui/custom/skeletons/Skeletons";
@@ -108,9 +107,23 @@ export const CompanyProfileTemplate = () => {
           <SurfaceCard className="p-5">
             <p className="section-kicker mb-3">Company details</p>
             <div className="grid gap-3">
-              <DetailTile icon={MapPin} label="Location" value={locationStr || "Not specified"} />
-              <DetailTile icon={Users} label="Company size" value={sizeMap[company?.size] || company?.size || "Not specified"} />
-              <DetailTile icon={Shield} label="FSSAI License" value={company?.fssai_license_no || "Not provided"} />
+              <DetailTile
+                icon={MapPin}
+                label="Location"
+                value={locationStr || "Not specified"}
+              />
+              <DetailTile
+                icon={Users}
+                label="Company size"
+                value={
+                  sizeMap[company?.size] || company?.size || "Not specified"
+                }
+              />
+              <DetailTile
+                icon={Shield}
+                label="FSSAI License"
+                value={company?.fssai_license_no || "Not provided"}
+              />
               <DetailTile
                 icon={CalendarDays}
                 label="Founded"
@@ -135,7 +148,10 @@ export const CompanyProfileTemplate = () => {
               title="Company overview"
               description="This description appears on every job listing and your public company page."
               action={
-                <Link to="/edit-company-profile" state={{ companyData: company }}>
+                <Link
+                  to="/edit-company-profile"
+                  state={{ companyData: company }}
+                >
                   <Button type="button" variant="ghost" className="text-sm">
                     Edit
                   </Button>
@@ -154,9 +170,13 @@ export const CompanyProfileTemplate = () => {
                     <Building2 className="h-6 w-6" />
                   </div>
                   <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
-                    Add a company description to build candidate trust and improve listing quality.
+                    Add a company description to build candidate trust and
+                    improve listing quality.
                   </p>
-                  <Link to="/edit-company-profile" state={{ companyData: company }}>
+                  <Link
+                    to="/edit-company-profile"
+                    state={{ companyData: company }}
+                  >
                     <Button type="button" variant="outline" className="mt-2">
                       Add description
                     </Button>
@@ -167,12 +187,15 @@ export const CompanyProfileTemplate = () => {
           </SurfaceCard>
 
           <SurfaceCard className="bg-gradient-to-br from-primary via-ember-500 to-secondary p-6 text-primary-foreground dark:border-white/10">
-            <p className="section-kicker text-primary-foreground/70">Hiring signal</p>
+            <p className="section-kicker text-primary-foreground/70">
+              Hiring signal
+            </p>
             <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.05em]">
               A strong profile attracts stronger candidates.
             </h2>
             <p className="mt-4 text-sm leading-7 text-primary-foreground/80">
-              Kitchens with complete profiles, verified licenses, and clear job briefs see up to 3× more qualified applicants.
+              Kitchens with complete profiles, verified licenses, and clear job
+              briefs see up to 3× more qualified applicants.
             </p>
             <Button
               className="mt-6 w-full border-white/20 bg-white/15 text-white hover:bg-white/20"

@@ -46,7 +46,9 @@ export const useUpdateApplicationStatus = (id) => {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.applicationDetail(id) });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.applicationDetail(id),
+      });
     },
   });
 };
@@ -61,15 +63,55 @@ export const useLikedJobs = () =>
     },
   });
 
-// ─── Recommended Jobs ──────────────────────────────────────────────────────────
-export const useRecommendedJobs = () =>
-  useQuery({
-    queryKey: queryKeys.recommendedJobs,
-    queryFn: async () => {
-      const res = await apiClient.get("/jobs/recommended/");
-      return res.data;
+/**
+ * useToggleLikeJob — optimistically toggles the saved state of a job.
+ * If the job is currently saved, it sends DELETE to remove it.
+ * If it is not saved, it sends POST to save it.
+ * The likedJobs cache is directly mutated optimistically so the icon
+ * flips instantly without a full refetch round-trip.
+ */
+export const useToggleLikeJob = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ jobId, isSaved }) => {
+      if (isSaved) {
+        await apiClient.delete(`/jobseeker/liked-jobs/${jobId}/`);
+      } else {
+        await apiClient.post("/jobseeker/save-liked-jobs/", { id: jobId });
+      }
+    },
+    onMutate: async ({ jobId, isSaved, jobData }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.likedJobs });
+      const previous = queryClient.getQueryData(queryKeys.likedJobs);
+      queryClient.setQueryData(queryKeys.likedJobs, (old = []) => {
+        if (isSaved) {
+          return old.filter((j) => j.job_id !== jobId);
+        } else {
+          return jobData ? [...old, jobData] : old;
+        }
+      });
+      return { previous };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previous !== undefined) {
+        queryClient.setQueryData(queryKeys.likedJobs, ctx.previous);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.likedJobs });
     },
   });
+};
+
+// ─── Recommended Jobs ──────────────────────────────────────────────────────────
+// export const useRecommendedJobs = () =>
+//   useQuery({
+//     queryKey: queryKeys.recommendedJobs,
+//     queryFn: async () => {
+//       const res = await apiClient.get("/jobs/recommended/");
+//       return res.data;
+//     },
+//   });
 
 // ─── Profile ───────────────────────────────────────────────────────────────────
 export const useProfile = (uid) =>
@@ -146,7 +188,11 @@ export const calculateProfileCompletion = (profile) => {
   const missingItems = [];
 
   fields.forEach((field) => {
-    if (profile[field.key] && profile[field.key] !== "" && profile[field.key] !== null) {
+    if (
+      profile[field.key] &&
+      profile[field.key] !== "" &&
+      profile[field.key] !== null
+    ) {
       completed++;
     } else {
       missingItems.push(field.label);

@@ -98,13 +98,8 @@ export default function ProfilePictureUploader({
   };
 
   return (
-    <div className={`flex items-center justify-between space-x-2 px-12 py-7 w-full max-w-lg ${className}`}>
-      <div>
-        <h2 className="text-2xl font-heading font-semibold text-beige-100">
-          {username?.toUpperCase() || "USERNAME"}
-        </h2>
-      </div>
-      <div className="relative">
+    <div className={`relative shrink-0 ${className}`}>
+      {/* Intentionally omitting username side of flex layout to center avatar properly */}
         <img
           className="h-16 w-16 p-1 rounded-full object-cover bg-gray-100"
           src={profileImageUrl || defaultImage}
@@ -117,6 +112,5 @@ export default function ProfilePictureUploader({
           className="absolute inset-0 h-full w-full opacity-0 cursor-pointer"
         />
       </div>
-    </div>
   );
 }

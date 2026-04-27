@@ -1,4 +1,6 @@
+/* eslint-disable react/prop-types */
 import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { useJobDetails } from "@/api/jobs-data";
 import DefaultLogo from "../../../assets/icons/restaurant.png";
 import { useState } from "react";
@@ -13,12 +15,9 @@ export const DetailJobCard = ({ job, onClose }) => {
   const userType = userData?.user_type;
   console.log("DetailJobCard received job:", job);
   console.log("Job ID:", job?.id, "Job job_id:", job?.job_id);
-  const { data, loading, error } = useJobDetails(job.job_id);
-  const [jobApplicationData, setJobApplicationData] = useState({
-    job: null,
-    applicant_uid: null,
-    application_date: "",
-  });
+  const { data, isLoading, isFetching, isPending, isError } = useJobDetails(
+    job.job_id,
+  );
   const [isApplicationSuccessful, setIsApplicationSuccessful] = useState(false);
   const [isApplicationFailed, setIsApplicationFailed] = useState(false);
   const [isApplicationLoading, setIsApplicationLoading] = useState(false);
@@ -45,22 +44,30 @@ export const DetailJobCard = ({ job, onClose }) => {
     setIsApplicationFailed(false);
 
     try {
-      const res = await applyForJob(application);
-      setJobApplicationData(application);
+      await applyForJob(application);
       setIsApplicationSuccessful(true);
     } catch (err) {
       console.error("Application failed:", err);
       setIsApplicationFailed(true);
 
-      if (err.response?.status === 400) {
-        setApplicationError("You've already applied to this job.");
+      // DRF validation errors usually come as an array: ["You have already applied..."]
+      if (Array.isArray(err) && err.length > 0) {
+        setApplicationError(err[0]);
+      } else if (err.message) {
+        setApplicationError(err.message);
+      } else if (typeof err === "string") {
+        setApplicationError(err);
       } else {
         setApplicationError("Something went wrong. Please try again.");
       }
 
-      // Optional: Show temporary popup
+      // Show temporary popup
       setShowErrorPopup(true);
-      setTimeout(() => setShowErrorPopup(false), 3000);
+      setTimeout(() => {
+        setShowErrorPopup(false);
+        // Reset the failed state so the user can try again if they want
+        setIsApplicationFailed(false);
+      }, 5000);
     } finally {
       setIsApplicationLoading(false);
     }
@@ -94,11 +101,20 @@ export const DetailJobCard = ({ job, onClose }) => {
 
   return (
     <>
-      {showErrorPopup && (
-        <div className="fixed bottom-6 right-6 z-50 px-4 py-2 bg-red-600 text-white rounded-md shadow-lg animate-fade-in-out">
-          {applicationError}
-        </div>
-      )}
+      <AnimatePresence>
+        {showErrorPopup && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 bg-white/95 dark:bg-card-dark/95 backdrop-blur-md border border-rose-200 dark:border-rose-900/50 text-rose-600 dark:text-rose-400 font-medium text-sm rounded-2xl shadow-xl shadow-rose-900/5"
+          >
+            <XCircle className="w-5 h-5" />
+            {applicationError}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         <motion.div
           className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center overflow-auto "
@@ -125,7 +141,22 @@ export const DetailJobCard = ({ job, onClose }) => {
             >
               ✕
             </button>
-            {data ? (
+            {isLoading || isFetching || isPending ? (
+              <>
+                <div className="flex items-center justify-center h-64 bg-[#FBFEF9] ml-30">
+                  <Spinner />
+                  <p className="ml-4 font-semibold text-2xl text-[#0C6291]">
+                    Loading the job details in a second...
+                  </p>
+                </div>
+              </>
+            ) : isError || !data ? (
+              <div className="flex items-center justify-center h-64">
+                <p className="font-semibold text-lg text-rose-600">
+                  Could not load job details right now.
+                </p>
+              </div>
+            ) : (
               <div className="flex flex-col">
                 <div className="flex items-center">
                   <img
@@ -143,7 +174,7 @@ export const DetailJobCard = ({ job, onClose }) => {
                   </h1>
                 </div>
                 <h1 className="text-2xl font-semibold mt-4">{data.title}</h1>
-                <p className="my-4 text-gray-600">
+                <p className="my-4 text-gray-600 dark:text-gray-300">
                   <span
                     dangerouslySetInnerHTML={{
                       __html: sanitizedHtml(data.description),
@@ -151,23 +182,25 @@ export const DetailJobCard = ({ job, onClose }) => {
                   />
                 </p>
                 <p
-                  className="my-4 font-semibold"
+                  className="my-4 font-semibold text-text-main-light dark:text-text-main-dark"
                   dangerouslySetInnerHTML={{
                     __html: sanitizedHtml(data.requirements),
                   }}
                 ></p>
                 <div>
-                  <span className="font-semibold text-gray-700">
+                  <span className="font-semibold text-gray-700 dark:text-gray-300">
                     Location :{" "}
                   </span>
-                  <span className="font-semibold text-brandBackground	">
+                  <span className="font-semibold text-brandBackground dark:text-primary">
                     {data.location.city}, {data.location.state},{" "}
                     {data.location.country}, {data.location.postal_code}
                   </span>
                 </div>
                 <div>
-                  <span className="font-semibold text-gray-700">Salary : </span>
-                  <span className="text-green-700">
+                  <span className="font-semibold text-gray-700 dark:text-gray-300">
+                    Salary :{" "}
+                  </span>
+                  <span className="text-green-700 dark:text-green-400">
                     {new Intl.NumberFormat("en-IN", {
                       style: "currency",
                       currency: "INR",
@@ -178,10 +211,10 @@ export const DetailJobCard = ({ job, onClose }) => {
                 </div>
                 <div className="flex justify-between">
                   <div>
-                    <span className="font-semibold text-gray-700">
+                    <span className="font-semibold text-gray-700 dark:text-gray-300">
                       Application deadline :{" "}
                     </span>
-                    <span className="font-semibold text-red-700">
+                    <span className="font-semibold text-red-700 dark:text-red-400">
                       {data.application_deadline} ({daysRemaining} days left);
                     </span>
                   </div>
@@ -189,53 +222,73 @@ export const DetailJobCard = ({ job, onClose }) => {
                     <button
                       onClick={() => handleApplySubmit(job.job_id)}
                       disabled={isApplicationLoading || isApplicationSuccessful}
-                      className={`w-40 p-2 rounded-md flex items-center justify-center transition-all duration-500
-    ${isApplicationSuccessful
-                          ? "bg-green-600"
-                          : isApplicationFailed
-                            ? "bg-red-600 hover:bg-red-700"
-                            : "bg-brandBackground hover:bg-brandBackground/90"
-                        } text-white relative`}
+                      className={`w-40 h-10 rounded-xl font-semibold text-sm flex items-center justify-center transition-all duration-300 overflow-hidden
+    ${
+      isApplicationSuccessful
+        ? "bg-forest-600 hover:bg-forest-700"
+        : isApplicationFailed
+          ? "bg-rose-600 hover:bg-rose-700"
+          : "bg-primary hover:bg-primary/90"
+    } text-white relative shadow-sm`}
                     >
-                      {isApplicationLoading ? (
-                        <span className="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></span>
-                      ) : isApplicationSuccessful === true ? (
-                        <span className="flex items-center gap-1">
-                          <svg
-                            className="w-5 h-5 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            viewBox="0 0 24 24"
+                      <AnimatePresence mode="wait" initial={false}>
+                        {isApplicationLoading ? (
+                          <motion.span
+                            key="loading"
+                            initial={{ y: 20, opacity: 0, filter: "blur(4px)" }}
+                            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                            exit={{ y: -20, opacity: 0, filter: "blur(4px)" }}
+                            transition={{ duration: 0.15 }}
+                            className="flex items-center gap-2"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          Applied
-                        </span>
-                      ) : isApplicationFailed === true ? (
-                        <span className="flex items-center gap-1">
-                          <svg
-                            className="w-5 h-5 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            viewBox="0 0 24 24"
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Applying...
+                          </motion.span>
+                        ) : isApplicationSuccessful ? (
+                          <motion.span
+                            key="success"
+                            initial={{ y: 20, opacity: 0, filter: "blur(4px)" }}
+                            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                            exit={{ y: -20, opacity: 0, filter: "blur(4px)" }}
+                            transition={{
+                              type: "spring",
+                              bounce: 0.4,
+                              duration: 0.5,
+                            }}
+                            className="flex items-center gap-1.5"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                          Failed
-                        </span>
-                      ) : (
-                        "Apply Now"
-                      )}
+                            <CheckCircle2 className="w-4 h-4" />
+                            Applied
+                          </motion.span>
+                        ) : isApplicationFailed ? (
+                          <motion.span
+                            key="failed"
+                            initial={{ x: 10, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: -10, opacity: 0 }}
+                            transition={{
+                              type: "spring",
+                              bounce: 0.6,
+                              duration: 0.4,
+                            }}
+                            className="flex items-center gap-1.5"
+                          >
+                            <XCircle className="w-4 h-4" />
+                            Failed
+                          </motion.span>
+                        ) : (
+                          <motion.span
+                            key="apply"
+                            initial={{ y: 20, opacity: 0, filter: "blur(4px)" }}
+                            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                            exit={{ y: -20, opacity: 0, filter: "blur(4px)" }}
+                            transition={{ duration: 0.15 }}
+                            className="flex items-center"
+                          >
+                            Apply
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
                     </button>
                   )}
                 </div>
@@ -249,15 +302,6 @@ export const DetailJobCard = ({ job, onClose }) => {
                   }}
                 ></p>
               </div>
-            ) : (
-              <>
-                <div className="flex items-center justify-center h-64 bg-[#FBFEF9] ml-30">
-                  <Spinner />
-                  <p className="ml-4 font-semibold text-2xl text-[#0C6291]">
-                    Loading the job details in a second...
-                  </p>
-                </div>
-              </>
             )}
           </motion.div>
         </motion.div>

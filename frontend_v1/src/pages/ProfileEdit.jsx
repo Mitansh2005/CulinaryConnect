@@ -26,18 +26,21 @@ function FieldLabel({ htmlFor, children }) {
 }
 
 // Reusable text input styled for the new design system
-function SoftInput({ id, name, type = "text", value, onChange, placeholder, ...props }) {
+function SoftInput({ id, name, type = "text", value, onChange, placeholder, error, ...props }) {
   return (
-    <input
-      id={id}
-      name={name}
-      type={type}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className="soft-input mt-1.5"
-      {...props}
-    />
+    <div>
+      <input
+        id={id}
+        name={name}
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className={`soft-input mt-1.5 ${error ? "border-rose-500 focus:ring-rose-500/30" : ""}`}
+        {...props}
+      />
+      {error && <p className="mt-1 text-xs font-semibold text-rose-500">{error}</p>}
+    </div>
   );
 }
 
@@ -75,6 +78,7 @@ export function ProfileEdit() {
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
   const [formData, setFormData] = useState({
     username: "",
     first_name: "",
@@ -143,6 +147,21 @@ export function ProfileEdit() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate required fields
+    const newErrors = {};
+    if (!formData.first_name?.trim()) newErrors.first_name = "First name is required";
+    if (!formData.last_name?.trim()) newErrors.last_name = "Last name is required";
+    if (!formData.phone_number?.trim()) newErrors.phone_number = "Phone number is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setFormErrors(newErrors);
+      setError("Please fill in all required fields.");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    setFormErrors({});
     setSaving(true);
     setError(null);
     try {
@@ -265,15 +284,15 @@ export function ProfileEdit() {
             </div>
             <div>
               <FieldLabel htmlFor="first_name">First name</FieldLabel>
-              <SoftInput id="first_name" name="first_name" value={formData.first_name} onChange={handleInputChange} />
+              <SoftInput id="first_name" name="first_name" value={formData.first_name} onChange={handleInputChange} error={formErrors.first_name} />
             </div>
             <div>
               <FieldLabel htmlFor="last_name">Last name</FieldLabel>
-              <SoftInput id="last_name" name="last_name" value={formData.last_name} onChange={handleInputChange} />
+              <SoftInput id="last_name" name="last_name" value={formData.last_name} onChange={handleInputChange} error={formErrors.last_name} />
             </div>
             <div>
               <FieldLabel htmlFor="phone_number">Phone number</FieldLabel>
-              <SoftInput id="phone_number" name="phone_number" type="tel" value={formData.phone_number} onChange={handleInputChange} />
+              <SoftInput id="phone_number" name="phone_number" type="tel" value={formData.phone_number} onChange={handleInputChange} error={formErrors.phone_number} />
             </div>
             <div className="flex items-end pb-1">
               <CheckPill

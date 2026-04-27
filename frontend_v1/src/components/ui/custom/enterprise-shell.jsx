@@ -55,7 +55,7 @@ export function PageShell({
   return (
     <div
       className={cn(
-        "mx-auto flex w-full max-w-[1440px] flex-col gap-8 px-4 pb-10 pt-6 sm:px-6 lg:px-10 lg:pb-12 lg:pt-8",
+        "mx-auto flex w-full max-w-[1440px] flex-col gap-8 px-4 pb-8 pt-4 sm:px-6 lg:px-10 lg:pb-10 lg:pt-5",
         className,
       )}
     >
@@ -180,20 +180,20 @@ export function MetricCard({
 export function StatusPill({ children, tone = "neutral", className }) {
   const toneStyles = {
     neutral:
-      "border-white/80 bg-white/88 text-text-sub-light dark:border-white/10 dark:bg-white/10 dark:text-text-sub-dark",
+      "border-stone-200 bg-stone-100 text-stone-700 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300",
     success:
-      "border-forest-200 bg-forest-50 text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200",
+      "border-forest-200 bg-forest-50 text-forest-700 dark:border-forest-500/30 dark:bg-forest-500/20 dark:text-forest-300",
     warning:
-      "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/12 dark:text-amber-200",
+      "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/20 dark:text-amber-300",
     danger:
-      "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-500/20 dark:bg-rose-500/12 dark:text-rose-200",
-    info: "border-ember-200 bg-ember-50 text-ember-700 dark:border-ember-500/20 dark:bg-ember-500/12 dark:text-ember-200",
+      "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/20 dark:text-rose-300",
+    info: "border-ember-200 bg-ember-50 text-ember-700 dark:border-ember-500/30 dark:bg-ember-500/20 dark:text-ember-300",
     salary:
-      "border-ember-200 bg-ember-50 text-ember-700 dark:border-ember-500/20 dark:bg-ember-500/12 dark:text-ember-200",
+      "border-primary/20 bg-primary/5 text-primary-700 dark:border-primary/30 dark:bg-primary/20 dark:text-primary-300",
     location:
-      "border-forest-200 bg-forest-50 text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/12 dark:text-forest-200",
+      "border-forest-200 bg-forest-50 text-forest-700 dark:border-forest-500/30 dark:bg-forest-500/20 dark:text-forest-300",
     deadline:
-      "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/12 dark:text-amber-200",
+      "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/20 dark:text-amber-300",
   };
 
   return (
