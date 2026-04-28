@@ -9,7 +9,7 @@ import {
   SectionHeading,
   SurfaceCard,
 } from "@/components/ui/custom/enterprise-shell";
-import ReactQuill from "react-quill";
+import { RichTextEditor } from "@/components/ui/custom/RichTextEditor";
 import { CheckCircle, ArrowLeft } from "lucide-react";
 
 export function ProfileBio() {
@@ -105,11 +105,10 @@ export function ProfileBio() {
           {loading ? (
             <div className="skeleton-shimmer h-40 rounded-xl" />
           ) : (
-            <ReactQuill
+            <RichTextEditor
               value={bio}
               onChange={setBio}
               placeholder="Share your culinary journey, signature dishes, cooking philosophy, and career highlights..."
-              className="rounded-xl border border-border-light/60 dark:border-border-dark/60"
             />
           )}
         </div>

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { getUid } from "@/firebase/authUtils";
 import { baseUrl } from "@/constants/constants";
 import DOMpurify from "dompurify";
-import ReactQuill from "react-quill";
+import { RichTextEditor } from "@/components/ui/custom/RichTextEditor";
 import { Button } from "@/components/ui/button";
 import { getSafeUserData } from "@/utils/localStorage";
 import { useProfile, useUpdateProfile } from "@/api/home-data";
@@ -16,7 +17,6 @@ import {
   getInitials,
 } from "@/components/ui/custom/enterprise-shell";
 import ProfilePictureUploader from "@/components/ui/custom/profile_component/profile_picture_uploader";
-import defaultPic from "../assets/icons/profile.png";
 import {
   Bookmark,
   Pencil,
@@ -94,7 +94,6 @@ export function ProfileTemplate() {
             <ProfilePictureUploader
               id={uid}
               username={username}
-              defaultImage={defaultPic}
               getProfileUrl={`${baseUrl}/profile-detail`}
               uploadUrl={`${baseUrl}/upload/`}
             />
@@ -223,55 +222,72 @@ export function ProfileTemplate() {
                 }
               />
 
-              {showQualEditor ? (
-                <div className="mt-5">
-                  <ReactQuill
-                    value={qualifications}
-                    onChange={setQualifications}
-                    placeholder="Describe your certifications, awards, and training..."
-                    className="rounded-xl border border-border-light/60 dark:border-border-dark/60"
-                  />
-                  <div className="mt-4 flex gap-3 justify-end">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={() => setShowQualEditor(false)}
-                      disabled={saveStatus === "saving"}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={handleSaveQualifications}
-                      disabled={saveStatus === "saving"}
-                    >
-                      {saveStatus === "saving"
-                        ? "Saving..."
-                        : saveStatus === "done"
-                          ? "Saved ✓"
-                          : "Save qualifications"}
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="mt-5 rounded-xl border border-border-light/60 bg-white/50 p-4 dark:border-border-dark/60 dark:bg-white/5">
-                  {qualifications ? (
-                    <div
-                      className="text-sm leading-7 text-text-main-light dark:text-text-main-dark/90"
-                      dangerouslySetInnerHTML={{ __html: sanitizedHtml(qualifications) }}
+              <AnimatePresence mode="wait" initial={false}>
+                {showQualEditor ? (
+                  <motion.div
+                    key="editor"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
+                    className="mt-5 overflow-hidden"
+                  >
+                    <RichTextEditor
+                      value={qualifications}
+                      onChange={setQualifications}
+                      placeholder="Describe your certifications, awards, and training..."
                     />
-                  ) : (
-                    <div className="flex flex-col items-center gap-3 py-8 text-center">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary dark:bg-primary/16">
-                        <Trophy className="h-5 w-5" />
-                      </div>
-                      <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
-                        Add your qualifications to build recruiter trust.
-                      </p>
+                    <div className="mt-4 flex gap-3 justify-end">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => setShowQualEditor(false)}
+                        disabled={saveStatus === "saving"}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={handleSaveQualifications}
+                        disabled={saveStatus === "saving"}
+                      >
+                        {saveStatus === "saving"
+                          ? "Saving..."
+                          : saveStatus === "done"
+                            ? "Saved ✓"
+                            : "Save qualifications"}
+                      </Button>
                     </div>
-                  )}
-                </div>
-              )}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="viewer"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mt-5 rounded-xl border border-border-light/60 bg-white/50 p-4 dark:border-border-dark/60 dark:bg-white/5">
+                      {qualifications ? (
+                        <div
+                          className="text-sm leading-7 text-text-main-light dark:text-text-main-dark/90"
+                          dangerouslySetInnerHTML={{ __html: sanitizedHtml(qualifications) }}
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center gap-3 py-8 text-center">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary dark:bg-primary/16">
+                            <Trophy className="h-5 w-5" />
+                          </div>
+                          <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
+                            Add your qualifications to build recruiter trust.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </SurfaceCard>
           )}
         </div>

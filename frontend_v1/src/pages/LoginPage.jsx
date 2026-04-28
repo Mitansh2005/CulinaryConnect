@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { MdErrorOutline } from "react-icons/md";
 import axios from "axios";
-import GoogleIcon from "../assets/icons/google.png";
+import { FcGoogle } from "react-icons/fc";
 import {
   doCreateUserWithEmailPassword,
   doSignInWithEmailPassword,
@@ -57,6 +57,22 @@ const roleCopy = {
   },
 };
 
+const itemVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.1,
+    },
+  },
+};
+
 function AuthInput({
   label,
   id,
@@ -81,7 +97,7 @@ function AuthInput({
           <span className="material-symbols-outlined text-[19px]">{icon}</span>
         </span>
         <input
-          className="block w-full rounded-[1.2rem] border border-stone-200 bg-stone-50/95 py-3 pl-12 pr-12 text-sm text-text-main-light shadow-sm outline-none transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10 dark:border-white/10 dark:bg-white/6 dark:text-text-main-dark"
+          className="block w-full rounded-[1.2rem] border border-stone-200 bg-stone-50/95 py-3 pl-12 pr-12 text-sm text-text-main-light shadow-sm outline-none transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10 dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark"
           id={id}
           onChange={onChange}
           placeholder={placeholder}
@@ -335,10 +351,10 @@ function LoginTemplate({ initialMode = "signin" }) {
             transition={{ duration: 0.45, ease: "easeOut" }}
             className="glass-panel w-full max-w-[42rem] overflow-hidden"
           >
-            <div className="border-b border-white/60 bg-white/60 px-5 py-4 dark:border-white/10 dark:bg-white/6 sm:px-7">
+            <div className="border-b border-white/60 bg-white/60 px-5 py-4 dark:border-white/10 dark:bg-white/5 sm:px-7">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <BrandMark compact subtitle="Culinary hiring atelier" />
-                <div className="rounded-full border border-ember-200 bg-ember-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-ember-700 dark:border-ember-500/20 dark:bg-ember-500/12 dark:text-ember-200">
+                <div className="rounded-full border border-ember-200 bg-ember-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-ember-700 dark:border-ember-500/20 dark:bg-ember-500/10 dark:text-ember-200">
                   {authMode === "signin" ? "Welcome back" : "Join the network"}
                 </div>
               </div>
@@ -385,7 +401,7 @@ function LoginTemplate({ initialMode = "signin" }) {
                           key={role}
                           className={`flex h-full grow cursor-pointer items-center justify-center rounded-[0.85rem] px-2 text-sm font-semibold transition ${
                             active
-                              ? "bg-primary text-primary-foreground shadow-sm"
+                              ? "bg-primary text-primary-foreground shadow-sm dark:border-white/10 dark:bg-primary/20"
                               : "text-text-sub-light hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
                           }`}
                         >
@@ -407,34 +423,49 @@ function LoginTemplate({ initialMode = "signin" }) {
                     })}
                   </div>
                 </div>
-                <div className="rounded-[1.1rem] border border-white/80 bg-white/95 p-3.5 dark:border-white/10 dark:bg-white/5">
-                  <p className="text-sm font-semibold text-text-main-light dark:text-text-main-dark">
-                    {roleDetail.title} access
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-text-sub-light dark:text-text-sub-dark">
-                    {roleDetail.description}
-                  </p>
+                <div className="rounded-[1.1rem] border border-white/80 bg-white/95 p-3.5 dark:border-white/10 dark:bg-white/5 overflow-hidden">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={userType}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <p className="text-sm font-semibold text-text-main-light dark:text-text-main-dark">
+                        {roleDetail.title} access
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-text-sub-light dark:text-text-sub-dark">
+                        {roleDetail.description}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
               </div>
 
               <motion.form
                 layout
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
                 className="space-y-4"
                 onSubmit={(e) => onSubmit(e, authMode)}
               >
-                <AuthInput
-                  id="email"
-                  icon="mail"
-                  label="Email address"
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={
-                    userType === "restaurant"
-                      ? "name@restaurant.com"
-                      : "chef@kitchen.com"
-                  }
-                  type="email"
-                  value={email}
-                />
+                <motion.div variants={itemVariants}>
+                  <AuthInput
+                    id="email"
+                    icon="mail"
+                    label="Email address"
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={
+                      userType === "restaurant"
+                        ? "name@restaurant.com"
+                        : "chef@kitchen.com"
+                    }
+                    type="email"
+                    value={email}
+                  />
+                </motion.div>
 
                 <div
                   className={
@@ -443,34 +474,35 @@ function LoginTemplate({ initialMode = "signin" }) {
                       : "grid gap-4"
                   }
                 >
-                  <AuthInput
-                    id="password"
-                    icon="lock"
-                    label="Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    type={passwordVisible ? "text" : "password"}
-                    value={password}
-                    action={
-                      <button
-                        className="text-text-sub-light transition hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
-                        onClick={() =>
-                          setPasswordVisible((current) => !current)
-                        }
-                        type="button"
-                      >
-                        <span className="material-symbols-outlined text-[20px]">
-                          {passwordVisible ? "visibility_off" : "visibility"}
-                        </span>
-                      </button>
-                    }
-                  />
+                  <motion.div variants={itemVariants}>
+                    <AuthInput
+                      id="password"
+                      icon="lock"
+                      label="Password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      type={passwordVisible ? "text" : "password"}
+                      value={password}
+                      action={
+                        <button
+                          className="text-text-sub-light transition hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
+                          onClick={() =>
+                            setPasswordVisible((current) => !current)
+                          }
+                          type="button"
+                        >
+                          <span className="material-symbols-outlined text-[20px]">
+                            {passwordVisible ? "visibility_off" : "visibility"}
+                          </span>
+                        </button>
+                      }
+                    />
+                  </motion.div>
 
                   {authMode === "signup" ? (
                     <motion.div
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 16 }}
-                      initial={{ opacity: 0, x: -16 }}
+                      variants={itemVariants}
+                      layout
                     >
                       <AuthInput
                         id="confirmPassword"
@@ -504,11 +536,11 @@ function LoginTemplate({ initialMode = "signin" }) {
                   {userType === "restaurant" && authMode === "signup" ? (
                     <motion.div
                       key="restaurant-fields"
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      initial={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.25 }}
-                      className="grid gap-4 rounded-[1.45rem] border border-stone-200 bg-stone-50/70 p-3 dark:border-white/10 dark:bg-white/5 md:grid-cols-2"
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit={{ opacity: 0, height: 0, transition: { duration: 0.2 } }}
+                      className="grid gap-4 rounded-[1.45rem] border border-stone-200 bg-stone-50/70 p-3 dark:border-white/10 dark:bg-white/5 md:grid-cols-2 overflow-hidden"
                     >
                       <AuthInput
                         id="companyName"
@@ -530,7 +562,8 @@ function LoginTemplate({ initialMode = "signin" }) {
                   ) : null}
                 </AnimatePresence>
 
-                <button
+                <motion.button
+                  variants={itemVariants}
                   className="flex w-full items-center justify-center gap-2 rounded-[1.2rem] bg-gradient-to-r from-primary via-ember-500 to-ember-600 px-4 py-3 text-sm font-semibold text-primary-foreground shadow-float transition hover:-translate-y-0.5 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
                   disabled={submitLoading || googleLoading}
                   type="submit"
@@ -543,22 +576,22 @@ function LoginTemplate({ initialMode = "signin" }) {
                         : "Create account"}
                   </span>
                   {!submitLoading ? <ArrowRight className="h-4 w-4" /> : null}
-                </button>
+                </motion.button>
               </motion.form>
 
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-border-light/80 dark:border-border-dark/70" />
-                </div>
-                <div className="relative flex justify-center">
-                  <span className="bg-background-light px-4 text-xs font-semibold uppercase tracking-[0.22em] text-text-sub-light dark:bg-background-dark dark:text-text-sub-dark">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
+              <motion.div variants={itemVariants} initial="hidden" animate="visible" className="flex items-center gap-4 py-1">
+                <div className="h-px flex-1 bg-border-light/80 dark:bg-border-dark/70" />
+                <span className="text-xs font-semibold uppercase tracking-[0.22em] text-text-sub-light dark:text-text-sub-dark">
+                  Or continue with
+                </span>
+                <div className="h-px flex-1 bg-border-light/80 dark:bg-border-dark/70" />
+              </motion.div>
 
-              <button
-                className="flex w-full items-center justify-center gap-3 rounded-[1.2rem] border border-stone-200 bg-white/95 px-4 py-3 text-sm font-semibold text-text-main-light shadow-sm transition hover:border-primary/25 hover:bg-white disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark dark:hover:bg-white/10"
+              <motion.button
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                className="flex w-full items-center justify-center gap-3 rounded-[1.2rem] border border-stone-200 bg-white/95 px-4 py-3 text-sm font-semibold text-text-main-light shadow-sm transition hover:border-primary/25 hover:bg-white disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/20 dark:bg-white/10 dark:text-text-main-dark dark:hover:bg-white/15 dark:hover:border-white/30"
                 disabled={googleLoading || submitLoading}
                 onClick={() => onGoogleAuth(authMode)}
                 type="button"
@@ -567,13 +600,13 @@ function LoginTemplate({ initialMode = "signin" }) {
                   <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-primary border-t-transparent" />
                 ) : (
                   <>
-                    <img alt="Google" className="h-5 w-5" src={GoogleIcon} />
+                    <FcGoogle className="h-5 w-5" />
                     <span>Continue with Google</span>
                   </>
                 )}
-              </button>
+              </motion.button>
 
-              <p className="text-center text-sm text-text-sub-light dark:text-text-sub-dark">
+              <motion.p variants={itemVariants} initial="hidden" animate="visible" className="text-center text-sm text-text-sub-light dark:text-text-sub-dark">
                 {authMode === "signin"
                   ? "Need an account?"
                   : "Already registered?"}
@@ -583,7 +616,7 @@ function LoginTemplate({ initialMode = "signin" }) {
                 >
                   {authMode === "signin" ? "Create one now" : "Sign in instead"}
                 </Link>
-              </p>
+              </motion.p>
             </div>
           </motion.div>
         </div>
@@ -637,7 +670,7 @@ function LoginTemplate({ initialMode = "signin" }) {
                       className="rounded-[1.45rem] border border-white/80 bg-white/84 p-4 shadow-sm dark:border-white/10 dark:bg-white/5"
                     >
                       <div className="flex items-start gap-4">
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary/12 text-secondary dark:bg-secondary/16">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary/10 text-secondary dark:bg-secondary/20">
                           <Icon className="h-5 w-5" />
                         </div>
                         <div>

@@ -18,13 +18,11 @@ export default function MainLayout() {
 
   if (isRestaurant) {
     return (
-      <div className="shell-canvas" ref={routeScopeRef}>
-        <div className="relative z-10 flex min-h-screen flex-col lg:flex-row">
+      <div className="shell-canvas">
+        <div className="relative z-10 flex min-h-screen flex-col lg:pl-[300px]">
           <Sidebar />
-          <main className="flex-1 overflow-hidden">
-            <div className="min-h-screen overflow-y-auto">
-              <Outlet />
-            </div>
+          <main className="flex-1 flex flex-col min-w-0" ref={routeScopeRef}>
+            <Outlet />
           </main>
         </div>
       </div>
@@ -32,9 +30,9 @@ export default function MainLayout() {
   }
 
   return (
-    <div className="shell-canvas" ref={routeScopeRef}>
+    <div className="shell-canvas">
       <ChefNavbar />
-      <main className="relative z-10 min-h-[calc(100vh-5rem)]">
+      <main className="relative z-10 min-h-[calc(100vh-5rem)]" ref={routeScopeRef}>
         <Outlet />
       </main>
     </div>

@@ -10,17 +10,17 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-primary-foreground shadow-float hover:-translate-y-0.5 hover:brightness-105",
+          "bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-white shadow-float hover:-translate-y-0.5 hover:brightness-105",
         restaurant:
-          "bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-primary-foreground shadow-float hover:-translate-y-0.5 hover:brightness-105",
+          "bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-white shadow-float hover:-translate-y-0.5 hover:brightness-105",
         chef:
-          "bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-primary-foreground shadow-float hover:-translate-y-0.5 hover:brightness-105",
+          "bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-white shadow-float hover:-translate-y-0.5 hover:brightness-105",
         secondary:
           "border border-secondary/20 bg-secondary/12 text-secondary hover:bg-secondary/18 dark:bg-secondary/10 dark:text-secondary-foreground",
         inactive:
           "bg-muted text-muted-foreground border border-transparent hover:bg-muted/80",
         outline:
-          "border border-stone-200 bg-stone-50/90 text-text-main-light shadow-sm hover:border-primary/30 hover:bg-white dark:border-border-dark dark:bg-transparent dark:text-text-main-dark dark:hover:bg-white/10",
+          "border border-stone-200 bg-stone-50/90 text-text-main-light shadow-sm hover:border-primary/30 hover:bg-white dark:border-white/20 dark:bg-white/5 dark:text-text-main-dark dark:hover:bg-white/10",
         ghost:
           "text-text-main-light hover:bg-stone-50/90 dark:text-text-main-dark dark:hover:bg-white/10",
         destructive:

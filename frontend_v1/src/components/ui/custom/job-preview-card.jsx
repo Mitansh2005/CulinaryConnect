@@ -28,7 +28,7 @@ export function JobPreviewCard({
   saveLoading = false,
   userType,
 }) {
-  const cardRef = useDepthCardMotion();
+  const cardRef = useDepthCardMotion({ disabled: true });
 
   const isNew = job?.posted_date
     ? Date.now() - new Date(job.posted_date).getTime() < 1000 * 60 * 60 * 24 * 3

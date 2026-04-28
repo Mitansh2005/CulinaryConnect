@@ -60,12 +60,26 @@ export default function JobSeekerHome() {
     calculateProfileCompletion(profile);
 
   const filteredJobs = jobs.filter((job) => {
-    const query = debouncedSearchQuery.toLowerCase();
-    return (
-      !query ||
-      job.title?.toLowerCase().includes(query) ||
-      job.company_name?.toLowerCase().includes(query) ||
-      job.location?.city?.toLowerCase().includes(query)
+    const query = debouncedSearchQuery.toLowerCase().trim();
+    if (!query) return true;
+
+    // Build a flat list of every searchable text fragment from the job
+    const searchableFields = [
+      job.title,
+      job.company_name,
+      job.location?.city,
+      job.location?.state,
+      job.location?.country,
+      job.location?.postal_code,
+      job.salary != null ? String(job.salary) : null,
+      job.employment_type,
+      // Strip HTML tags from rich-text fields before matching
+      job.description?.replace(/<[^>]+>/g, " "),
+      job.requirements?.replace(/<[^>]+>/g, " "),
+    ];
+
+    return searchableFields.some(
+      (field) => field && field.toLowerCase().includes(query),
     );
   });
 
@@ -179,7 +193,7 @@ export default function JobSeekerHome() {
           <div className="grid gap-6">
             <SurfaceCard className="cc-reveal p-5 sm:p-6">
               <SectionHeading
-                description="Search by role, restaurant, or city, then switch between the full feed and your saved shortlist."
+                description="Search by role, kitchen, location, salary, employment type — anything on the listing."
                 eyebrow="Discovery"
                 title="Curated role pipeline"
               />
@@ -189,7 +203,7 @@ export default function JobSeekerHome() {
                   <input
                     className="soft-input pl-11"
                     onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder="Search by title, kitchen, or city..."
+                    placeholder="Search jobs by title, city, salary, type..."
                     type="text"
                     value={searchQuery}
                   />

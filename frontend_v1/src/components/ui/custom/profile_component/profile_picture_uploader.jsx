@@ -97,12 +97,14 @@ export default function ProfilePictureUploader({
     }
   };
 
+  const avatarFallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(username || "User")}&background=F3E9DC&color=5E3023`;
+
   return (
     <div className={`relative shrink-0 ${className}`}>
       {/* Intentionally omitting username side of flex layout to center avatar properly */}
         <img
           className="h-16 w-16 p-1 rounded-full object-cover bg-gray-100"
-          src={profileImageUrl || defaultImage}
+          src={profileImageUrl || defaultImage || avatarFallbackUrl}
           alt="Profile"
         />
         <input

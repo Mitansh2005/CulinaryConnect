@@ -209,10 +209,10 @@ export function ProfileEdit() {
   const CheckPill = ({ id, name, checked, label }) => (
     <label
       htmlFor={id}
-      className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition select-none ${
+      className={`flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 select-none ${
         checked
-          ? "border-primary bg-primary/10 text-primary dark:border-primary dark:bg-primary/16 dark:text-primary"
-          : "border-white/70 bg-white/70 text-text-sub-light dark:border-white/10 dark:bg-white/8 dark:text-text-sub-dark"
+          ? "border-primary bg-primary/10 text-primary shadow-sm dark:border-primary/60 dark:bg-primary/20 dark:text-primary-foreground"
+          : "border-border-light bg-surface-light text-text-main-light hover:border-primary/40 hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark dark:hover:border-white/20 dark:hover:bg-white/10"
       }`}
     >
       <input

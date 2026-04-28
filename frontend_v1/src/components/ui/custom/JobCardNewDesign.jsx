@@ -3,7 +3,7 @@ import { IoShareSocial } from "react-icons/io5";
 import { MdBookmark, MdBookmarkBorder } from "react-icons/md";
 import { ImLocation2 } from "react-icons/im";
 import { CalendarDays, Clock3, Wallet } from "lucide-react";
-import DefaultLogo from "../../../assets/icons/restaurant.png";
+
 import { useEffect, useState } from "react";
 import { DetailJobCard } from "./JobDetailNewDesign";
 import { motion, AnimatePresence } from "framer-motion";
@@ -92,7 +92,7 @@ export const JobCardDesign = ({
 					<motion.div
 						layoutId={`job-${item.job_id}`} // 🧠 Unique ID used to "link" animations
 						key={item.job_id}
-						className={`relative group rounded-[1.4rem] border border-white/80 bg-white/92 p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md dark:border-white/10 dark:bg-[#241f1b] ${
+						className={`relative group rounded-[1.4rem] border border-white/80 bg-white/92 p-5 shadow-sm transition-colors duration-300 hover:border-primary/40 hover:bg-white hover:shadow-md dark:border-white/10 dark:bg-[#241f1b] dark:hover:bg-[#2A231F] ${
 							expandedJobId === item.job_id
 								? "opacity-0 pointer-events-none"
 								: "opacity-100"
@@ -104,7 +104,7 @@ export const JobCardDesign = ({
 								src={`data:image/jpeg;base64,${item.company_logo?.replace(/\s/g, "")}`}
 								onError={(e) => {
 									e.target.onerror = null;
-									e.target.src = DefaultLogo;
+									e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.company_name || "Company")}&background=F3E9DC&color=5E3023`;
 								}}
 								alt="Company Logo"
 								className="h-14 w-14 rounded-xl border border-border-light object-cover"

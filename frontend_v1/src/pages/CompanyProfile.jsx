@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { getUid } from "@/firebase/authUtils";
 import { baseUrl } from "@/constants/constants";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,8 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { JobCardSkeleton } from "@/components/ui/custom/skeletons/Skeletons";
 import ProfilePictureUploader from "@/components/ui/custom/profile_component/profile_picture_uploader";
-import CompanyIcon from "../assets/icons/company-icon.png";
 import { Building2, MapPin, Shield, CalendarDays, Users } from "lucide-react";
+import { useCulinaryPageMotion } from "@/components/hooks/useCulinaryMotion";
 
 const sizeMap = {
   small: "1–50 employees",
@@ -25,7 +26,7 @@ const sizeMap = {
 function DetailTile({ icon: Icon, label, value }) {
   if (!value) return null;
   return (
-    <div className="flex items-start gap-3 rounded-xl border border-white/70 bg-white/60 p-4 dark:border-white/10 dark:bg-white/5">
+    <div className="cc-stagger-item flex items-start gap-3 rounded-xl border border-white/70 bg-white/60 p-4 dark:border-white/10 dark:bg-white/5">
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-primary/16">
         <Icon className="h-4 w-4" />
       </div>
@@ -42,6 +43,7 @@ function DetailTile({ icon: Icon, label, value }) {
 }
 
 export const CompanyProfileTemplate = () => {
+  const scopeRef = useRef(null);
   const uid = getUid();
   const navigate = useNavigate();
 
@@ -59,6 +61,8 @@ export const CompanyProfileTemplate = () => {
     .filter(Boolean)
     .join(", ");
 
+  useCulinaryPageMotion({ scopeRef, dependencies: [company?.id] });
+
   if (isLoading) {
     return (
       <PageShell eyebrow="Restaurant" title="Loading company profile...">
@@ -68,24 +72,26 @@ export const CompanyProfileTemplate = () => {
   }
 
   return (
-    <PageShell
-      eyebrow="Restaurant"
-      title={company?.name || "Company profile"}
-      description="Your public-facing company identity shown to all candidates browsing your listings."
-      actions={
-        <Link to="/edit-company-profile" state={{ companyData: company }}>
-          <Button type="button">Edit company profile</Button>
-        </Link>
-      }
-    >
-      <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
-        {/* LEFT: Logo + uploader */}
-        <div className="grid gap-4 self-start">
-          <SurfaceCard className="flex flex-col items-center gap-5 p-6 text-center">
+    <div ref={scopeRef}>
+      <PageShell
+        headerClassName="cc-reveal"
+        eyebrow="Restaurant"
+        title={company?.name || "Company profile"}
+        description="Your public-facing company identity shown to all candidates browsing your listings."
+        actions={
+          <Link to="/edit-company-profile" state={{ companyData: company }}>
+            <Button type="button">Edit company profile</Button>
+          </Link>
+        }
+      >
+        <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+          {/* LEFT: Logo + uploader */}
+          <div className="grid gap-4 self-start">
+            <SurfaceCard className="cc-scroll-in flex flex-col items-center gap-5 p-6 text-center">
             <ProfilePictureUploader
               id={company?.id}
               username={company?.name}
-              defaultImage={company?.logo || CompanyIcon}
+              defaultImage={company?.logo}
               getProfileUrl={`${baseUrl}/company`}
               uploadUrl={`${baseUrl}/company/upload-logo/${company?.id}/`}
             />
@@ -104,7 +110,7 @@ export const CompanyProfileTemplate = () => {
             </div>
           </SurfaceCard>
 
-          <SurfaceCard className="p-5">
+          <SurfaceCard className="cc-scroll-in p-5">
             <p className="section-kicker mb-3">Company details</p>
             <div className="grid gap-3">
               <DetailTile
@@ -142,7 +148,7 @@ export const CompanyProfileTemplate = () => {
 
         {/* RIGHT: About + actions */}
         <div className="grid gap-6 self-start">
-          <SurfaceCard className="p-6">
+          <SurfaceCard className="cc-scroll-in p-6">
             <SectionHeading
               eyebrow="About"
               title="Company overview"
@@ -186,7 +192,7 @@ export const CompanyProfileTemplate = () => {
             </div>
           </SurfaceCard>
 
-          <SurfaceCard className="bg-gradient-to-br from-primary via-ember-500 to-secondary p-6 text-primary-foreground dark:border-white/10">
+          <SurfaceCard className="cc-scroll-in bg-gradient-to-br from-primary via-ember-500 to-secondary p-6 text-primary-foreground dark:border-white/10">
             <p className="section-kicker text-primary-foreground/70">
               Hiring signal
             </p>
@@ -207,7 +213,8 @@ export const CompanyProfileTemplate = () => {
             </Button>
           </SurfaceCard>
         </div>
-      </div>
-    </PageShell>
+        </div>
+      </PageShell>
+    </div>
   );
 };

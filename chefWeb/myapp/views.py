@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.db import IntegrityError
-from django.forms import ValidationError
+from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from .serializers import (
     ApplicationResponseSerializer,
@@ -322,7 +322,6 @@ class ApplicationsCreate(generics.CreateAPIView):
         try:
             serializer.save()
         except IntegrityError:
-            # 👇 this raises a proper DRF validation error, which returns 400
             raise ValidationError("You have already applied to this job.")
 
 class ApplicationsList(generics.ListAPIView):

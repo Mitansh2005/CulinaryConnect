@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getNames } from "country-list";
-import "react-quill/dist/quill.snow.css";
-import ReactQuill from "react-quill";
+import { RichTextEditor } from "@/components/ui/custom/RichTextEditor";
 import { getFreshIdToken } from "@/firebase/authUtils";
 import apiClient from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
@@ -201,12 +200,10 @@ export const CompanyProfileForm = () => {
             description="Tell candidates about your kitchen culture, values, and what makes your team unique."
           />
           <div className="mt-5">
-            <ReactQuill
+            <RichTextEditor
               value={form.description}
               onChange={(value) => setForm((prev) => ({ ...prev, description: value }))}
               placeholder="Write a brief, honest description of your restaurant and working environment..."
-              className="rounded-xl border border-border-light/60 dark:border-border-dark/60"
-              required
             />
           </div>
         </SurfaceCard>

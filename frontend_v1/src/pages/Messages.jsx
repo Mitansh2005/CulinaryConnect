@@ -192,7 +192,7 @@ export function MessageTemplate() {
 	};
 
 	return (
-		<div className="relative flex w-full h-[calc(100vh-80px)] overflow-hidden">
+		<div className="relative flex w-full flex-1 overflow-hidden">
 			{/* Conversation List Pane */}
 			<div className="flex w-96 flex-shrink-0 flex-col border-r border-border-light/80 bg-white/92 dark:border-border-dark dark:bg-[#211c18]">
 				<div className="p-5 pb-0">

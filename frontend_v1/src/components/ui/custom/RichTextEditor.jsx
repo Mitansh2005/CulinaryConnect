@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { Bold, Italic, List, ListOrdered } from 'lucide-react';
 
 export function RichTextEditor({ value, onChange, placeholder = "Write your bio..." }) {
   const [isBold, setIsBold] = useState(false);
@@ -35,20 +36,22 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your bio.
   };
 
   const buttonClass = (isActive) =>
-    `p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-      isActive ? 'bg-gray-200 dark:bg-gray-600 text-primary' : 'text-gray-600 dark:text-gray-400'
+    `flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
+      isActive 
+        ? 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light' 
+        : 'text-text-sub-light hover:bg-stone-200/50 hover:text-text-main-light dark:text-text-sub-dark dark:hover:bg-white/10 dark:hover:text-text-main-dark'
     }`;
 
   return (
-    <div className="rounded-lg border border-gray-300 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
-      <div className="flex items-center gap-1 border-b border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900/50">
+    <div className="overflow-hidden rounded-[1.2rem] border border-stone-200 bg-stone-50/50 shadow-sm transition-colors focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 dark:border-white/10 dark:bg-white/5">
+      <div className="flex items-center gap-1 border-b border-stone-200/80 bg-white/60 p-2 dark:border-white/10 dark:bg-black/20">
         <button
           type="button"
           onClick={() => handleFormat('bold')}
           className={buttonClass(isBold)}
           title="Bold"
         >
-          <span className="material-symbols-outlined text-[20px]">format_bold</span>
+          <Bold className="h-4 w-4" strokeWidth={2.5} />
         </button>
         <button
           type="button"
@@ -56,16 +59,16 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your bio.
           className={buttonClass(isItalic)}
           title="Italic"
         >
-          <span className="material-symbols-outlined text-[20px]">format_italic</span>
+          <Italic className="h-4 w-4" strokeWidth={2.5} />
         </button>
-        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+        <div className="mx-1 h-5 w-px bg-border-light/60 dark:bg-border-dark/60"></div>
         <button
           type="button"
           onClick={() => handleFormat('insertUnorderedList')}
           className={buttonClass(false)}
           title="Bullet List"
         >
-          <span className="material-symbols-outlined text-[20px]">format_list_bulleted</span>
+          <List className="h-4 w-4" strokeWidth={2.5} />
         </button>
         <button
           type="button"
@@ -73,7 +76,7 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your bio.
           className={buttonClass(false)}
           title="Numbered List"
         >
-          <span className="material-symbols-outlined text-[20px]">format_list_numbered</span>
+          <ListOrdered className="h-4 w-4" strokeWidth={2.5} />
         </button>
       </div>
       <div
@@ -83,7 +86,7 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your bio.
         onPaste={handlePaste}
         onMouseUp={updateToolbarState}
         onKeyUp={updateToolbarState}
-        className="min-h-[200px] max-h-[400px] overflow-y-auto p-4 text-gray-900 dark:text-white focus:outline-none prose prose-sm max-w-none dark:prose-invert"
+        className="prose prose-sm max-w-none p-4 min-h-[160px] max-h-[400px] overflow-y-auto outline-none dark:prose-invert text-text-main-light dark:text-text-main-dark selection:bg-primary/20"
         data-placeholder={placeholder}
         style={{
           '--placeholder-text': `"${placeholder}"`,
@@ -92,9 +95,12 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your bio.
       <style>{`
         [contenteditable]:empty:before {
           content: attr(data-placeholder);
-          color: rgb(156, 163, 175);
+          color: rgb(168, 162, 158); /* stone-400 equivalent */
           pointer-events: none;
           position: absolute;
+        }
+        .dark [contenteditable]:empty:before {
+          color: rgba(255, 255, 255, 0.4);
         }
       `}</style>
     </div>

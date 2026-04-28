@@ -1,4 +1,4 @@
-from django.forms import ValidationError
+from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
 from .models import (
     Company,

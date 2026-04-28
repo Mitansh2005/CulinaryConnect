@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { useJobDetails } from "@/api/jobs-data";
-import DefaultLogo from "../../../assets/icons/restaurant.png";
+
 import { useState } from "react";
 import { applyForJob } from "@/api/apply-for-job";
 import Spinner from "./spinner";
@@ -164,7 +164,7 @@ export const DetailJobCard = ({ job, onClose }) => {
                     src={`data:image/jpeg;base64,${job.company_logo?.replace(/\s/g, "")}`}
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = DefaultLogo;
+                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company_name || "Company")}&background=F3E9DC&color=5E3023`;
                     }}
                     alt="Company Logo"
                     className="h-14 w-14 object-cover  rounded-full"

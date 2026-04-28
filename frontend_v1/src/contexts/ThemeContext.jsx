@@ -52,7 +52,30 @@ export function ThemeProvider({ children }) {
   }, []);
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    const nextTheme = theme === "light" ? "dark" : "light";
+    
+    // Feature detection for View Transitions API
+    if (!document.startViewTransition) {
+      setTheme(nextTheme);
+      return;
+    }
+
+    // Trigger native viewport animation
+    document.startViewTransition(() => {
+      // Force synchronous DOM update for the transition snapshot
+      const root = window.document.documentElement;
+      const body = window.document.body;
+      
+      root.classList.remove("light", "dark");
+      body.classList.remove("light", "dark");
+      root.classList.add(nextTheme);
+      body.classList.add(nextTheme);
+      root.dataset.theme = nextTheme;
+      body.dataset.theme = nextTheme;
+      
+      // Update React state seamlessly
+      setTheme(nextTheme);
+    });
   };
 
   return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;

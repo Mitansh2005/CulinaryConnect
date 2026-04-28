@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Spinner from '@/components/ui/custom/spinner';
+import { Skeleton } from "boneyard-js/react";
+import { ApplicantDetailSkeleton } from "@/components/ui/custom/skeletons/ApplicantDetailSkeleton";
 import { useApplicationDetail, useUpdateApplicationStatus } from '@/api/home-data';
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +20,7 @@ import {
   Phone,
   Briefcase
 } from "lucide-react";
+import { useCulinaryPageMotion } from "@/components/hooks/useCulinaryMotion";
 
 const APP_STATUS_LABEL = {
     p: 'In Progress',
@@ -35,11 +37,14 @@ const APP_STATUS_TONE = {
 };
 
 export default function ApplicantDetail() {
+    const scopeRef = useRef(null);
     const { id } = useParams();
     const navigate = useNavigate();
 
     const { data: application, isLoading, isError } = useApplicationDetail(id);
     const { mutate: updateStatus } = useUpdateApplicationStatus(id);
+
+    useCulinaryPageMotion({ scopeRef, dependencies: [application?.application_id] });
 
     if (isLoading) {
         return (
@@ -48,9 +53,9 @@ export default function ApplicantDetail() {
                 title="Loading applicant profile..."
                 description="Retrieving qualifications and history."
             >
-                <div className="flex h-64 items-center justify-center">
-                    <Spinner size="lg" />
-                </div>
+                <Skeleton animate="shimmer" loading={true} fallback={<ApplicantDetailSkeleton />}>
+                    <ApplicantDetailSkeleton />
+                </Skeleton>
             </PageShell>
         );
     }
@@ -76,10 +81,12 @@ export default function ApplicantDetail() {
     const job = application.job;
 
     return (
-        <PageShell
-            eyebrow="Applicant Review"
-            title={`${applicant?.first_name} ${applicant?.last_name}`}
-            description={`Applied for ${job?.title || 'a role'} on ${new Date(application.application_date).toLocaleDateString()}`}
+        <div ref={scopeRef}>
+            <PageShell
+                headerClassName="cc-reveal"
+                eyebrow="Applicant Review"
+                title={`${applicant?.first_name} ${applicant?.last_name}`}
+                description={`Applied for ${job?.title || 'a role'} on ${new Date(application.application_date).toLocaleDateString()}`}
             actions={
                 <>
                     <Button
@@ -131,7 +138,7 @@ export default function ApplicantDetail() {
             <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
                 {/* LEFT SIDEBAR */}
                 <div className="flex flex-col gap-6">
-                    <SurfaceCard className="p-5 sm:p-6 text-center flex flex-col items-center">
+                    <SurfaceCard className="cc-scroll-in p-5 sm:p-6 text-center flex flex-col items-center">
                         <div className="relative mb-4">
                             <div
                                 className="size-32 rounded-full bg-stone-100 bg-cover bg-center bg-no-repeat shadow-sm dark:bg-white/10"
@@ -170,7 +177,7 @@ export default function ApplicantDetail() {
                         </div>
                     </SurfaceCard>
 
-                    <SurfaceCard className="p-5 sm:p-6 space-y-4">
+                    <SurfaceCard className="cc-scroll-in p-5 sm:p-6 space-y-4">
                         <SectionHeading eyebrow="Reach out" title="Contact Info" />
                         <div className="mt-4 flex flex-col gap-4">
                             <div className="flex items-start gap-3">
@@ -194,7 +201,7 @@ export default function ApplicantDetail() {
                         </div>
                     </SurfaceCard>
 
-                    <SurfaceCard className="p-5 sm:p-6">
+                    <SurfaceCard className="cc-scroll-in p-5 sm:p-6">
                         <SectionHeading eyebrow="Expertise" title="Specialties" />
                         <div className="mt-4 flex flex-wrap gap-2">
                             {applicant?.speciality && (
@@ -209,7 +216,7 @@ export default function ApplicantDetail() {
 
                 {/* RIGHT CONTENT */}
                 <div className="flex flex-col gap-6">
-                    <SurfaceCard className="p-5 sm:p-6">
+                    <SurfaceCard className="cc-scroll-in p-5 sm:p-6">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-lg font-bold text-text-main-light dark:text-text-main-dark">Application Status</h3>
                             <StatusPill tone={APP_STATUS_TONE[application.status] || 'warning'}>
@@ -251,14 +258,14 @@ export default function ApplicantDetail() {
                     </SurfaceCard>
 
                     {applicant?.bio && (
-                        <SurfaceCard className="p-5 sm:p-6">
+                        <SurfaceCard className="cc-scroll-in p-5 sm:p-6">
                             <SectionHeading eyebrow="Background" title="About the Candidate" />
                             <p className="mt-4 text-sm leading-relaxed text-text-main-light dark:text-text-main-dark/90">{applicant.bio}</p>
                         </SurfaceCard>
                     )}
 
                     {applicant?.achievements && (
-                        <SurfaceCard className="p-5 sm:p-6">
+                        <SurfaceCard className="cc-scroll-in p-5 sm:p-6">
                             <SectionHeading eyebrow="Highlights" title="Key Achievements" />
                             <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-text-main-light dark:text-text-main-dark/90">{applicant.achievements}</p>
                         </SurfaceCard>
@@ -266,5 +273,6 @@ export default function ApplicantDetail() {
                 </div>
             </div>
         </PageShell>
+        </div>
     );
 }

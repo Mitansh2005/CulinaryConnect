@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Skeleton } from "boneyard-js/react";
 import { ApplicationRowSkeleton } from "@/components/ui/custom/skeletons/Skeletons";
 import { ApplicationGroup } from "./ApplicationGroup";
 import { ApplicantApplications } from "./ApplicantApplication";
@@ -26,22 +27,36 @@ export const Applications = () => {
     return acc;
   }, {});
 
-  if (isLoading)
+  if (isLoading) {
+    const isRest = userType === "restaurant";
     return (
-      <div className="flex flex-col items-center justify-start h-screen py-10 px-4 w-full">
-        <div className="w-full max-w-6xl">
-          <h1 className="text-4xl font-bold mb-8 text-text-main-light dark:text-white tracking-wide">
-            JOB APPLICATIONS
-          </h1>
+      <PageShell
+        eyebrow={isRest ? "Restaurant" : "Profile"}
+        title={isRest ? "Job applications" : "My applications"}
+        description="Loading application data..."
+      >
+        <Skeleton
+          animate="shimmer"
+          loading={true}
+          fallback={
+            <div className="flex flex-col gap-4">
+              <ApplicationRowSkeleton />
+              <ApplicationRowSkeleton />
+              <ApplicationRowSkeleton />
+              <ApplicationRowSkeleton />
+            </div>
+          }
+        >
           <div className="flex flex-col gap-4">
             <ApplicationRowSkeleton />
             <ApplicationRowSkeleton />
             <ApplicationRowSkeleton />
             <ApplicationRowSkeleton />
           </div>
-        </div>
-      </div>
+        </Skeleton>
+      </PageShell>
     );
+  }
 
   if (isError)
     return (
