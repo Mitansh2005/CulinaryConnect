@@ -21,10 +21,10 @@ urlpatterns = [
         "company/<int:pk>/", views.CompanyDetail.as_view(), name="company_detail"
     ),  # get company by id
     path(
-        "company/user/<int:user_id>/",
+        "company/user/<str:uid>/",
         views.CompanyByUserId.as_view(),
         name="company_by_user_id",
-    ),  # get company user by id
+    ),  # get company user by uid
     path("company/upload-logo/<int:pk>/", views.CompanyProfileImageUpload.as_view(), name="company_logo_upload"),
     path("locations/", views.LocationList.as_view(), name="get_locations"),
     path(

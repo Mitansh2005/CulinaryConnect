@@ -2,9 +2,10 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getNames } from "country-list";
 import { RichTextEditor } from "@/components/ui/custom/RichTextEditor";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 import { useRecruiters, usePostJob } from "@/api/home-data";
 import { Button } from "@/components/ui/button";
+import { CustomSelect } from "@/components/ui/custom/CustomSelect";
 import {
   PageShell,
   SectionHeading,
@@ -36,14 +37,6 @@ function SoftInput({ id, name, type = "text", value, onChange, placeholder, ...p
       className="soft-input mt-1.5"
       {...props}
     />
-  );
-}
-
-function SoftSelect({ id, name, value, onChange, children }) {
-  return (
-    <select id={id} name={name} value={value} onChange={onChange} className="soft-input mt-1.5">
-      {children}
-    </select>
   );
 }
 
@@ -184,10 +177,18 @@ export default function PostJobForm() {
             </div>
             <div>
               <FieldLabel htmlFor="employment_type">Employment type</FieldLabel>
-              <SoftSelect id="employment_type" name="employment_type" value={formData.employment_type} onChange={handleChange}>
-                <option value="Full Time">Full Time</option>
-                <option value="Part Time">Part Time</option>
-              </SoftSelect>
+              <CustomSelect
+                id="employment_type"
+                name="employment_type"
+                value={formData.employment_type}
+                onChange={handleChange}
+                options={[
+                  { value: "Full Time", label: "Full Time" },
+                  { value: "Part Time", label: "Part Time" },
+                  { value: "Contract", label: "Contract" },
+                  { value: "Temporary", label: "Temporary" },
+                ]}
+              />
             </div>
             <div>
               <FieldLabel htmlFor="application_deadline" required>Application deadline</FieldLabel>
@@ -202,14 +203,14 @@ export default function PostJobForm() {
             </div>
             <div>
               <FieldLabel htmlFor="assignee">Assign recruiter</FieldLabel>
-              <SoftSelect id="assignee" name="assignee" value={formData.assignee} onChange={handleChange}>
-                <option value="">Select a recruiter</option>
-                {recruiters.map((r) => (
-                  <option key={r.recruiter_id} value={r.recruiter_id}>
-                    {r.username}
-                  </option>
-                ))}
-              </SoftSelect>
+              <CustomSelect
+                id="assignee"
+                name="assignee"
+                value={formData.assignee}
+                onChange={handleChange}
+                placeholder="Select a recruiter"
+                options={recruiters.map((r) => ({ value: r.recruiter_id, label: r.username }))}
+              />
             </div>
           </div>
         </SurfaceCard>
@@ -256,17 +257,14 @@ export default function PostJobForm() {
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             <div>
               <FieldLabel htmlFor="location.country">Country</FieldLabel>
-              <SoftSelect
+              <CustomSelect
                 id="location.country"
                 name="location.country"
                 value={formData.location.country}
                 onChange={handleChange}
-              >
-                <option value="">Select a country</option>
-                {getNames().map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </SoftSelect>
+                placeholder="Select a country"
+                options={getNames().map((c) => ({ value: c, label: c }))}
+              />
             </div>
             <div>
               <FieldLabel htmlFor="location.state">State / Province</FieldLabel>
@@ -292,8 +290,8 @@ export default function PostJobForm() {
             <Button type="button" variant="outline" onClick={() => navigate("/home")}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? "Posting…" : "Publish role"}
+            <Button type="submit" disabled={isPending} className="flex items-center gap-2">
+              {isPending ? <><Loader2 className="h-4 w-4 animate-spin" />Posting…</> : "Publish role"}
             </Button>
           </div>
         </SurfaceCard>

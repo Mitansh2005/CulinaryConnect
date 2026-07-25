@@ -139,6 +139,11 @@ class JobSeekerProfile(models.Model):
 
 class Job(models.Model):
     EMP_TYPES = (("Full Time", "Full-Time"), ("Part Time", "Part-Time"))
+    JOB_STATUS_CHOICES = [
+        ("active", "Active"),
+        ("closed", "Closed"),
+        ("draft", "Draft"),
+    ]
     assignee = models.ForeignKey(
         RecruiterProfile, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -151,6 +156,9 @@ class Job(models.Model):
     )
     salary = models.BigIntegerField()
     employment_type = models.CharField(max_length=20, choices=EMP_TYPES)
+    status = models.CharField(
+        max_length=10, choices=JOB_STATUS_CHOICES, default="active"
+    )
     posted_date = models.DateField()
     application_deadline = models.DateField()
     requirements = models.TextField(max_length=65535)
@@ -172,7 +180,7 @@ class JobView(models.Model):
     view_date = models.DateTimeField(auto_now_add=True)
     
 class Application(models.Model):
-    STATUS = (("p", "pending"), ("a", "accepted"), ("r", "rejected"))
+    STATUS = (("p", "pending"), ("a", "accepted"), ("r", "rejected"), ("h", "hired"))
     application_id = models.AutoField(primary_key=True)
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     applicant = models.ForeignKey(JobSeekerProfile, models.CASCADE)

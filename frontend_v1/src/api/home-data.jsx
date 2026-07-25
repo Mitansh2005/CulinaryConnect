@@ -181,7 +181,7 @@ export const calculateProfileCompletion = (profile) => {
     { key: "phone_number", label: "Add phone number" },
     { key: "bio", label: "Write your bio" },
     { key: "profile_picture", label: "Upload profile picture" },
-    { key: "qualifications", label: "Add qualifications" },
+    { key: "achievements", label: "Add qualifications" },
   ];
 
   let completed = 0;

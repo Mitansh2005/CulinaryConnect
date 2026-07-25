@@ -5,8 +5,9 @@ import { ApplicationGroup } from "./ApplicationGroup";
 import { ApplicantApplications } from "./ApplicantApplication";
 import { useUser } from "@/contexts/UserContext";
 import { useApplications } from "@/api/home-data";
-import { PageShell } from "@/components/ui/custom/enterprise-shell";
+import { PageShell, SurfaceCard } from "@/components/ui/custom/enterprise-shell";
 import { useCulinaryPageMotion } from "@/components/hooks/useCulinaryMotion";
+import { Users } from "lucide-react";
 
 export const Applications = () => {
   const scopeRef = useRef(null);
@@ -32,7 +33,7 @@ export const Applications = () => {
     return (
       <PageShell
         eyebrow={isRest ? "Restaurant" : "Profile"}
-        title={isRest ? "Job applications" : "My applications"}
+        title={isRest ? "Candidates" : "My applications"}
         description="Loading application data..."
       >
         <Skeleton
@@ -70,8 +71,8 @@ export const Applications = () => {
       <div ref={scopeRef}>
         <PageShell
           eyebrow="Restaurant"
-          title="Job applications"
-          description="Manage candidates across all active roles."
+          title="Candidates"
+          description="Review and manage applicants across all your active roles."
           headerClassName="cc-reveal"
         >
           <div className="flex flex-col gap-6">
@@ -83,9 +84,19 @@ export const Applications = () => {
               />
             ))}
             {applications.length === 0 && (
-              <p className="cc-scroll-in text-text-sub-light dark:text-text-sub-dark">
-                No applications yet.
-              </p>
+              <SurfaceCard className="flex flex-col items-center gap-4 py-16 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary dark:bg-primary/15 dark:text-amber-300">
+                  <Users className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="font-semibold text-text-main-light dark:text-text-main-dark">
+                    No applications yet
+                  </p>
+                  <p className="mt-1 text-sm text-text-sub-light dark:text-text-sub-dark">
+                    Candidates who apply to your roles will appear here.
+                  </p>
+                </div>
+              </SurfaceCard>
             )}
           </div>
         </PageShell>

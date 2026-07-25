@@ -92,11 +92,9 @@ class CompanyByUserId(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated, IsRecruiter]
 
     def get_object(self):
-        user_id = self.kwargs.get("user_id")
-        print(user_id)
+        uid = self.kwargs.get("uid")
         try:
-            recruiter = RecruiterProfile.objects.get(user=user_id)
-            print(f"Recruiter found: {recruiter}")
+            recruiter = RecruiterProfile.objects.get(user__uid=uid)
         except RecruiterProfile.DoesNotExist:
             raise ValidationError("Recruiter not found.")
 
@@ -276,7 +274,7 @@ class JobsList(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user  # type hint lets Pylance know it's your model
 
-        if user.user_type == "recruiter" and hasattr(user, "recruiter"):
+        if user.user_type == "restaurant" and hasattr(user, "recruiter"):
             recruiter_company = user.recruiter.company
             return Job.objects.filter(company=recruiter_company)
 
@@ -335,7 +333,7 @@ class ApplicationsList(generics.ListAPIView):
             return Application.objects.filter(applicant__user__user_id=user.user_id).select_related(
                 "job", "applicant", "job__company"
             )
-        elif user.user_type == "recruiter":
+        elif user.user_type == "restaurant":
             company = user.recruiter.company
             job_title = self.request.query_params.get("title")
 
@@ -348,13 +346,21 @@ class ApplicationsList(generics.ListAPIView):
 
 
 class ApplicationsDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Application.objects.all()
-    serializer_class = ApplicationSerializer
+    queryset = Application.objects.select_related(
+        "job", "job__company", "job__location",
+        "applicant", "applicant__user", "applicant__user__location"
+    ).all()
+    serializer_class = ApplicationResponseSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in ["PUT", "PATCH"]:
+            return ApplicationSerializer
+        return ApplicationResponseSerializer
 
     def get_permissions(self):
         if self.request.method in ["DELETE"]:
             # Deny everyone by raising PermissionDenied manually
-            raise PermissionError("Deleteis not allowed.")
+            raise PermissionError("Delete is not allowed.")
         return [IsAuthenticated(), IsRecruiter()]
 
 
@@ -554,7 +560,7 @@ class GetUserProfileForMessage(APIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        if user.user_type == "recruiter":
+        if user.user_type == "restaurant":
             job_seeker_ids = (
                 Application.objects.filter(job__assignee__user=user)
                 .values_list("applicant__user__user_id", flat=True)
@@ -566,12 +572,32 @@ class GetUserProfileForMessage(APIView):
             print(serializer.data)
             return Response(serializer.data, status=status.HTTP_200_OK)
         if user.user_type == "chef":
-            recruiter_ids = (
+            # Recruiters who sent messages to this jobseeker
+            received_from_ids = (
                 Message.objects.filter(receiver=user, sender__user_type="restaurant")
                 .values_list("sender__user_id", flat=True)
                 .distinct()
             )
-            recruiters = CustomUser.objects.filter(user_id__in=recruiter_ids)
+            # Recruiters this jobseeker sent messages to
+            sent_to_ids = (
+                Message.objects.filter(sender=user, receiver__user_type="restaurant")
+                .values_list("receiver__user_id", flat=True)
+                .distinct()
+            )
+            # Recruiters assigned to jobs this jobseeker applied to
+            applied_recruiter_ids = set()
+            try:
+                job_seeker_profile = user.job_seeker
+                applied_recruiter_ids = set(
+                    Application.objects.filter(applicant=job_seeker_profile)
+                    .values_list("job__assignee__user__user_id", flat=True)
+                    .distinct()
+                )
+            except Exception:
+                pass
+
+            all_ids = set(received_from_ids) | set(sent_to_ids) | applied_recruiter_ids
+            recruiters = CustomUser.objects.filter(user_id__in=all_ids)
             serialize = GetProfileForMessageSerializer(recruiters, many=True)
             return Response(serialize.data, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid role."}, status=400)

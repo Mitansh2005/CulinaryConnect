@@ -32,7 +32,14 @@ export default function MainLayout() {
   return (
     <div className="shell-canvas">
       <ChefNavbar />
-      <main className="relative z-10 min-h-[calc(100vh-5rem)]" ref={routeScopeRef}>
+      <main 
+        className={`relative z-10 ${
+          location.pathname.startsWith("/messages")
+            ? "flex flex-col h-[calc(100vh-5rem)]"
+            : "min-h-[calc(100vh-5rem)]"
+        }`} 
+        ref={routeScopeRef}
+      >
         <Outlet />
       </main>
     </div>

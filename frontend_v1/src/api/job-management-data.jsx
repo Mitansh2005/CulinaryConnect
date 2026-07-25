@@ -33,7 +33,7 @@ export const useDeleteJob = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (jobId) => {
-      const res = await apiClient.delete(`/jobs/${jobId}/`);
+      const res = await apiClient.delete(`/jobs-detail/${jobId}/`);
       return res.data;
     },
     onSuccess: () => {
@@ -47,7 +47,7 @@ export const useUpdateJobStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ jobId, status }) => {
-      const res = await apiClient.patch(`/jobs/${jobId}/`, { status });
+      const res = await apiClient.patch(`/jobs-detail/${jobId}/`, { status });
       return res.data;
     },
     onSuccess: () => {

@@ -278,13 +278,6 @@ export default function JobManagement() {
 
                   <div className="flex flex-wrap gap-2 lg:justify-end">
                     <Button
-                      onClick={() => navigate(`/job/${job.job_id}`)}
-                      type="button"
-                      variant="outline"
-                    >
-                      Open role
-                    </Button>
-                    <Button
                       onClick={() => navigate("/applications")}
                       type="button"
                       variant="outline"

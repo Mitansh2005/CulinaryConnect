@@ -212,7 +212,7 @@ export default function RecruiterHome() {
                   />
                 ) : (
                   recentApplicants.map((application) => {
-                    const applicant = application.applicant || {};
+                    const applicant = application.applicant?.user || application.applicant || {};
                     const appId = application.application_id || application.id;
 
                     return (
@@ -313,11 +313,11 @@ export default function RecruiterHome() {
                         </div>
                         <div className="flex flex-wrap gap-2">
                           <Button
-                            onClick={() => navigate(`/job/${job.job_id}`)}
+                            onClick={() => navigate("/jobs/manage")}
                             type="button"
                             variant="outline"
                           >
-                            Review role
+                            Manage role
                           </Button>
                           <Button
                             onClick={() => navigate("/applications")}

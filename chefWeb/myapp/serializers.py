@@ -455,6 +455,7 @@ class JobsSerializer(serializers.ModelSerializer):
     company_description = serializers.CharField(
         source="company.description", read_only=True
     )
+    applicant_count = serializers.SerializerMethodField()
     read_only_fields = ["created_at", "updated_at"]
 
     class Meta:
@@ -471,12 +472,17 @@ class JobsSerializer(serializers.ModelSerializer):
             "location",
             "salary",
             "employment_type",
+            "status",
             "posted_date",
             "application_deadline",
             "requirements",
+            "applicant_count",
             "created_at",
             "updated_at",
         ]
+
+    def get_applicant_count(self, obj):
+        return Application.objects.filter(job=obj).count()
 
     def create(self, validated_data):
         location_data = validated_data.pop("location")
@@ -609,7 +615,7 @@ class GetProfileForMessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["uid", "username", "profile_picture", "applications"]
+        fields = ["uid", "username", "user_type", "profile_picture", "applications"]
 
     def get_applications(self, obj):
         try:

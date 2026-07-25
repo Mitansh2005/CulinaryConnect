@@ -6,6 +6,8 @@ import { getNames } from "country-list";
 import { RichTextEditor } from "@/components/ui/custom/RichTextEditor";
 import { ExperienceTimelineEditor } from "@/components/ui/custom/ExperienceTimelineEditor";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { CustomSelect } from "@/components/ui/custom/CustomSelect";
 import {
   PageShell,
   SectionHeading,
@@ -44,7 +46,7 @@ function SoftInput({ id, name, type = "text", value, onChange, placeholder, erro
   );
 }
 
-// Reusable select styled for the new design system
+// Reusable select styled for the new design system (fallback wrapper kept for compat)
 function SoftSelect({ id, name, value, onChange, children, ...props }) {
   return (
     <select
@@ -101,7 +103,8 @@ export function ProfileEdit() {
 
   useEffect(() => {
     if (initialProfile) {
-      const jobTypePreference = initialProfile.job_seeker?.job_type_preference || "";
+      // The backend serializer flattens job_seeker fields to the top-level of the profile object
+      const jobTypePreference = initialProfile.job_type_preference || initialProfile.job_seeker?.job_type_preference || "";
       setFormData({
         username: initialProfile.username || "",
         first_name: initialProfile.first_name || "",
@@ -110,21 +113,21 @@ export function ProfileEdit() {
         phone_privacy: false,
         bio: initialProfile.bio || "",
         experiences: initialProfile.experiences || [],
-        speciality: initialProfile.job_seeker?.speciality || "",
-        experience_years: initialProfile.job_seeker?.experience_years || "",
-        preferred_job_roles: initialProfile.job_seeker?.preferred_job_roles || "",
-        job_search_status: initialProfile.job_seeker?.job_search_status || "looking",
+        speciality: initialProfile.speciality || initialProfile.job_seeker?.speciality || "",
+        experience_years: initialProfile.experience_years ?? initialProfile.job_seeker?.experience_years ?? "",
+        preferred_job_roles: initialProfile.preferred_job_roles || initialProfile.job_seeker?.preferred_job_roles || "",
+        job_search_status: initialProfile.job_search_status || initialProfile.job_seeker?.job_search_status || "looking",
         job_type_full_time: jobTypePreference.includes("Full Time"),
         job_type_part_time: jobTypePreference.includes("Part Time"),
-        job_type_contract: false,
-        job_type_temporary: false,
+        job_type_contract: jobTypePreference.includes("Contract"),
+        job_type_temporary: jobTypePreference.includes("Temporary"),
         location: {
           country: initialProfile.location?.country || "",
           city: initialProfile.location?.city || "",
           state: initialProfile.location?.state || "",
           postal_code: initialProfile.location?.postal_code || "",
         },
-        relocate_confirmation: initialProfile.job_seeker?.relocate_confirmation || false,
+        relocate_confirmation: initialProfile.relocate_confirmation ?? initialProfile.job_seeker?.relocate_confirmation ?? false,
       });
     }
   }, [initialProfile]);
@@ -359,16 +362,17 @@ export function ProfileEdit() {
             </div>
             <div>
               <FieldLabel htmlFor="job_search_status">Job search status</FieldLabel>
-              <SoftSelect
+              <CustomSelect
                 id="job_search_status"
                 name="job_search_status"
                 value={formData.job_search_status}
                 onChange={handleInputChange}
-              >
-                <option value="available">Actively looking</option>
-                <option value="looking">Open to offers</option>
-                <option value="not_looking">Not looking</option>
-              </SoftSelect>
+                options={[
+                  { value: "available", label: "Actively looking" },
+                  { value: "looking", label: "Open to offers" },
+                  { value: "not_looking", label: "Not looking" },
+                ]}
+              />
             </div>
             <div className="sm:col-span-2">
               <FieldLabel>Job type preference</FieldLabel>
@@ -403,17 +407,14 @@ export function ProfileEdit() {
           <div className="grid gap-5 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <FieldLabel htmlFor="location.country">Country</FieldLabel>
-              <SoftSelect
+              <CustomSelect
                 id="location.country"
                 name="location.country"
                 value={formData.location.country}
                 onChange={handleInputChange}
-              >
-                <option value="">Select a country</option>
-                {getNames().map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </SoftSelect>
+                placeholder="Select a country"
+                options={getNames().map((c) => ({ value: c, label: c }))}
+              />
             </div>
             <div className="flex items-end sm:col-span-3">
               <CheckPill
@@ -452,8 +453,15 @@ export function ProfileEdit() {
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={saving}>
-              {saving ? "Saving..." : "Save changes"}
+            <Button type="submit" disabled={saving} className="flex items-center gap-2">
+              {saving ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Saving…
+                </>
+              ) : (
+                "Save changes"
+              )}
             </Button>
           </div>
         </SurfaceCard>

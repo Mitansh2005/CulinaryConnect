@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Bell, MoonStar, SunMedium, LogOut } from "lucide-react";
 import { getUid } from "@/firebase/authUtils";
+import { doSignOut } from "@/firebase/auth";
 import { useProfile } from "@/api/home-data";
 import { useAuth } from "@/contexts/authContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -15,7 +16,6 @@ export function ChefNavbar() {
   const navigate = useNavigate();
   const uid = getUid();
   const { profile: userProfile } = useProfile(uid);
-  const { logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [profileOpen, setProfileOpen] = useState(false);
 
@@ -23,7 +23,7 @@ export function ChefNavbar() {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await doSignOut();
       navigate("/login");
     } catch (error) {
       console.error(error);

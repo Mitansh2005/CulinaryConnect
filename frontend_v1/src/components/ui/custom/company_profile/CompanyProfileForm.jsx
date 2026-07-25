@@ -5,12 +5,13 @@ import { RichTextEditor } from "@/components/ui/custom/RichTextEditor";
 import { getFreshIdToken } from "@/firebase/authUtils";
 import apiClient from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
+import { CustomSelect } from "@/components/ui/custom/CustomSelect";
 import {
   PageShell,
   SectionHeading,
   SurfaceCard,
 } from "@/components/ui/custom/enterprise-shell";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Loader2 } from "lucide-react";
 
 const companySizeChoices = {
   small: "1–50 employees",
@@ -182,12 +183,14 @@ export const CompanyProfileForm = () => {
             </div>
             <div className="sm:col-span-2">
               <FieldLabel htmlFor="size">Company size</FieldLabel>
-              <SoftSelect id="size" name="size" value={form.size} onChange={handleChange}>
-                <option value="" disabled>Select company size</option>
-                {Object.entries(companySizeChoices).map(([key, label]) => (
-                  <option key={key} value={key}>{label}</option>
-                ))}
-              </SoftSelect>
+              <CustomSelect
+                id="size"
+                name="size"
+                value={form.size}
+                onChange={handleChange}
+                placeholder="Select company size"
+                options={Object.entries(companySizeChoices).map(([key, label]) => ({ value: key, label }))}
+              />
             </div>
           </div>
         </SurfaceCard>
@@ -218,17 +221,14 @@ export const CompanyProfileForm = () => {
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <FieldLabel htmlFor="country">Country</FieldLabel>
-              <SoftSelect
+              <CustomSelect
                 id="country"
                 name="location.country"
                 value={selectedCountry}
                 onChange={handleCountryChange}
-              >
-                <option value="" disabled>Select a country</option>
-                {getNames().map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </SoftSelect>
+                placeholder="Select a country"
+                options={getNames().map((c) => ({ value: c, label: c }))}
+              />
             </div>
             <div>
               <FieldLabel htmlFor="location.state">State / Province</FieldLabel>
