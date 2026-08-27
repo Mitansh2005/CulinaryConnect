@@ -353,7 +353,7 @@ export default function JobSeekerHome() {
               />
               <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted dark:bg-white/10">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-500"
+                  className="h-full rounded-full bg-primary dark:bg-secondary transition-all duration-500"
                   style={{ width: `${profileCompletion}%` }}
                 />
               </div>

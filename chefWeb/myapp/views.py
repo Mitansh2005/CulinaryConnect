@@ -26,6 +26,7 @@ from .models import (
     CustomUser,
     RecruiterProfile,
     CompanyMembership,
+    Notification,
 )
 from django.db.models import Q
 from django.utils import timezone
@@ -112,7 +113,22 @@ class ProfileList(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.user_type == "restaurant":
-            return CustomUser.objects.filter(user_type="chef")
+            queryset = CustomUser.objects.filter(user_type="chef")
+            q = self.request.query_params.get("q")
+            speciality = self.request.query_params.get("speciality")
+            city = self.request.query_params.get("city")
+            if q:
+                queryset = queryset.filter(
+                    Q(username__icontains=q) |
+                    Q(first_name__icontains=q) |
+                    Q(last_name__icontains=q) |
+                    Q(job_seeker__preferred_job_roles__icontains=q)
+                )
+            if speciality:
+                queryset = queryset.filter(job_seeker__speciality__icontains=speciality)
+            if city:
+                queryset = queryset.filter(location__city__iexact=city)
+            return queryset
         elif user.user_type == "chef":
             return CustomUser.objects.filter(user_type="restaurant")
         else:
@@ -385,7 +401,28 @@ class UpdateJobSeekerApplicationStatus(generics.UpdateAPIView):
         if application.status == status:
             raise ValidationError("Application is already in this status.")
 
-        serializer.save(status=status)
+        updated_application = serializer.save(status=status)
+        
+        # Create user notification
+        status_label = dict(Application.STATUS).get(status, status)
+        try:
+            Notification.objects.create(
+                user=updated_application.applicant.user,
+                notification_type="application_status",
+                message=f"Your application for '{updated_application.job.title}' has been {status_label}."
+            )
+        except Exception as e:
+            print(f"Error creating notification: {e}")
+            
+        # Create system chat message
+        try:
+            Message.objects.create(
+                sender=self.request.user,
+                receiver=updated_application.applicant.user,
+                content=f"System Alert: I have updated your application status for '{updated_application.job.title}' to '{status_label.capitalize()}'."
+            )
+        except Exception as e:
+            print(f"Error creating system message: {e}")
 class StoreLikedJobs(APIView):
     permission_classes = [IsAuthenticated, IsJobSeeker]
     def post(self,request, *args, **kwargs):

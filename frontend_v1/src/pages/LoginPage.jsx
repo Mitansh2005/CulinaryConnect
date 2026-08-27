@@ -97,7 +97,7 @@ function AuthInput({
           <span className="material-symbols-outlined text-[19px]">{icon}</span>
         </span>
         <input
-          className="block w-full rounded-[1.2rem] border border-stone-200 bg-stone-50/95 py-3 pl-12 pr-12 text-sm text-text-main-light shadow-sm outline-none transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10 dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark"
+          className="soft-input block pl-12 pr-12"
           id={id}
           onChange={onChange}
           placeholder={placeholder}
@@ -393,15 +393,15 @@ function LoginTemplate({ initialMode = "signin" }) {
               <div className="grid gap-3 rounded-[1.45rem] border border-stone-200 bg-stone-50/70 p-3 dark:border-white/10 dark:bg-white/5 sm:grid-cols-[1.2fr_0.8fr]">
                 <div>
                   <p className="section-kicker">Choose your role</p>
-                  <div className="mt-2 flex h-11 w-full items-center rounded-[1rem] bg-stone-100 p-1 dark:bg-white/5">
+                  <div className="mt-2 flex h-11 w-full relative items-center rounded-[1rem] bg-stone-100 p-1 dark:bg-white/5">
                     {["restaurant", "chef"].map((role) => {
                       const active = userType === role;
                       return (
                         <label
                           key={role}
-                          className={`flex h-full grow cursor-pointer items-center justify-center rounded-[0.85rem] px-2 text-sm font-semibold transition ${
+                          className={`relative flex h-full grow cursor-pointer items-center justify-center rounded-[0.85rem] px-2 text-sm font-semibold transition-colors duration-200 z-10 ${
                             active
-                              ? "bg-primary text-primary-foreground shadow-sm dark:border-white/10 dark:bg-primary/20"
+                              ? "text-primary-foreground"
                               : "text-text-sub-light hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
                           }`}
                         >
@@ -413,11 +413,20 @@ function LoginTemplate({ initialMode = "signin" }) {
                             type="radio"
                             value={role}
                           />
-                          {roleDetail && role === userType
-                            ? roleDetail.title
-                            : role === "restaurant"
-                              ? "Restaurant"
-                              : "Chef"}
+                          {active && (
+                            <motion.div
+                              layoutId="role-pill-bg"
+                              className="absolute inset-0 z-[-1] rounded-[0.85rem] bg-primary shadow-sm"
+                              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                            />
+                          )}
+                          <span className="relative z-10">
+                            {roleDetail && role === userType
+                              ? roleDetail.title
+                              : role === "restaurant"
+                                ? "Restaurant"
+                                : "Chef"}
+                          </span>
                         </label>
                       );
                     })}
@@ -564,7 +573,7 @@ function LoginTemplate({ initialMode = "signin" }) {
 
                 <motion.button
                   variants={itemVariants}
-                  className="flex w-full items-center justify-center gap-2 rounded-[1.2rem] bg-gradient-to-r from-primary via-ember-500 to-ember-600 px-4 py-3 text-sm font-semibold text-primary-foreground shadow-float transition hover:-translate-y-0.5 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex w-full items-center justify-center gap-2 rounded-[1.2rem] bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
                   disabled={submitLoading || googleLoading}
                   type="submit"
                 >
@@ -621,18 +630,15 @@ function LoginTemplate({ initialMode = "signin" }) {
           </motion.div>
         </div>
 
-        <div className="hidden lg:flex lg:min-h-screen lg:w-[52%] lg:items-center lg:justify-center lg:px-6 lg:py-4">
+        <div className="hidden lg:flex lg:min-h-screen lg:w-[52%] bg-stone-100 dark:bg-surface-dark border-l border-stone-200 dark:border-white/5 items-center justify-center lg:px-12 lg:py-10">
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             initial={{ opacity: 0, y: 24 }}
             transition={{ duration: 0.5, delay: 0.08, ease: "easeOut" }}
-            className="relative w-full max-w-[42rem] overflow-hidden rounded-[2rem] border border-white/70 bg-[linear-gradient(180deg,rgba(255,251,246,0.94),rgba(246,235,221,0.92))] p-6 shadow-atelier backdrop-blur-xl dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(40,33,28,0.92),rgba(24,20,18,0.9))]"
+            className="w-full max-w-[38rem]"
           >
-            <div className="absolute -left-12 top-10 h-32 w-32 rounded-full bg-primary/15 blur-3xl" />
-            <div className="absolute bottom-0 right-0 h-44 w-44 rounded-full bg-secondary/20 blur-3xl" />
-
-            <div className="relative grid gap-5">
-              <div className="rounded-[1.6rem] border border-white/80 bg-white/82 p-5 dark:border-white/10 dark:bg-white/5">
+            <div className="relative grid gap-6">
+              <div className="p-2">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="section-kicker">Platform snapshot</p>
@@ -667,7 +673,7 @@ function LoginTemplate({ initialMode = "signin" }) {
                         delay: 0.16 + index * 0.08,
                         duration: 0.45,
                       }}
-                      className="rounded-[1.45rem] border border-white/80 bg-white/84 p-4 shadow-sm dark:border-white/10 dark:bg-white/5"
+                      className="rounded-xl border border-stone-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5"
                     >
                       <div className="flex items-start gap-4">
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary/10 text-secondary dark:bg-secondary/20">

@@ -373,14 +373,14 @@ export default function RecruiterHome() {
               </Button>
             </SurfaceCard>
 
-            <SurfaceCard className="cc-scroll-in bg-gradient-to-br from-primary via-ember-500 to-secondary p-6 text-primary-foreground dark:border-white/10">
-              <p className="section-kicker text-primary-foreground/70">
+            <SurfaceCard className="cc-scroll-in bg-primary p-6 text-primary-foreground dark:bg-secondary dark:text-secondary-foreground dark:border-none">
+              <p className="section-kicker text-primary-foreground/70 dark:text-white/90">
                 Operating note
               </p>
               <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.05em]">
                 Verified work history is your advantage.
               </h2>
-              <p className="mt-4 text-sm leading-7 text-primary-foreground/80">
+              <p className="mt-4 text-sm leading-7 text-primary-foreground/80 dark:text-white">
                 Every clear job brief, every quick response, and every
                 consistent review strengthens trust in the marketplace.
               </p>

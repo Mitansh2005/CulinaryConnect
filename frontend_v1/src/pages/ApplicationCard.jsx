@@ -99,7 +99,7 @@ export const ApplicationCard = ({ application }) => {
       <motion.div
         layout
         className="
-          group flex flex-col gap-4 rounded-2xl border border-stone-200/70
+          docket-card group flex flex-col gap-4 rounded-2xl border border-stone-200/70
           bg-[#fdf8f3] p-4 shadow-sm transition-all duration-200
           hover:border-primary/25 hover:shadow-md
           dark:border-white/[0.07] dark:bg-[#221d18]

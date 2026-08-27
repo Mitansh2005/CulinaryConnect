@@ -192,7 +192,7 @@ export const CompanyProfileTemplate = () => {
             </div>
           </SurfaceCard>
 
-          <SurfaceCard className="cc-scroll-in bg-gradient-to-br from-primary via-ember-500 to-secondary p-6 text-primary-foreground dark:border-white/10">
+          <SurfaceCard className="cc-scroll-in bg-primary p-6 text-primary-foreground dark:bg-secondary dark:text-secondary-foreground dark:border-none">
             <p className="section-kicker text-primary-foreground/70">
               Hiring signal
             </p>

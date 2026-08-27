@@ -45,9 +45,16 @@ export function ProfileTemplate() {
   const [showQualEditor, setShowQualEditor] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null); // null | "saving" | "done"
 
+  const [bioText, setBioText] = useState("");
+  const [showBioEditor, setShowBioEditor] = useState(false);
+  const [saveBioStatus, setSaveBioStatus] = useState(null);
+
   useEffect(() => {
     if (profileData?.achievements) {
       setQualifications(profileData.achievements);
+    }
+    if (profileData?.bio) {
+      setBioText(profileData.bio);
     }
   }, [profileData]);
 
@@ -64,6 +71,23 @@ export function ProfileTemplate() {
           }, 1200);
         },
         onError: () => setSaveStatus(null),
+      },
+    );
+  };
+
+  const handleSaveBio = () => {
+    setSaveBioStatus("saving");
+    updateProfile(
+      { bio: bioText },
+      {
+        onSuccess: () => {
+          setSaveBioStatus("done");
+          setTimeout(() => {
+            setSaveBioStatus(null);
+            setShowBioEditor(false);
+          }, 1200);
+        },
+        onError: () => setSaveBioStatus(null),
       },
     );
   };
@@ -177,28 +201,85 @@ export function ProfileTemplate() {
               title="Professional bio"
               description="This appears prominently on your profile and in recruiter search."
               action={
-                <Button
-                  onClick={() => navigate("/bio")}
-                  type="button"
-                  variant="ghost"
-                  className="text-sm"
-                >
-                  Edit bio
-                </Button>
+                !showBioEditor && (
+                  <Button
+                    onClick={() => setShowBioEditor(true)}
+                    type="button"
+                    variant="ghost"
+                    className="text-sm"
+                  >
+                    Edit
+                  </Button>
+                )
               }
             />
-            <div className="mt-5 rounded-xl border border-border-light/60 bg-white/50 p-4 dark:border-border-dark/60 dark:bg-white/5">
-              {bio ? (
-                <p
-                  className="text-sm leading-7 text-text-main-light dark:text-text-main-dark/90"
-                  dangerouslySetInnerHTML={{ __html: sanitizedHtml(bio) }}
-                />
+
+            <AnimatePresence mode="wait" initial={false}>
+              {showBioEditor ? (
+                <motion.div
+                  key="editor"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  className="mt-5 overflow-hidden"
+                >
+                  <RichTextEditor
+                    value={bioText}
+                    onChange={setBioText}
+                    placeholder="Tell recruiters about your culinary journey..."
+                  />
+                  <div className="mt-4 flex gap-3 justify-end">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setShowBioEditor(false)}
+                      disabled={saveBioStatus === "saving"}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={handleSaveBio}
+                      disabled={saveBioStatus === "saving"}
+                    >
+                      {saveBioStatus === "saving"
+                        ? "Saving..."
+                        : saveBioStatus === "done"
+                          ? "Saved ✓"
+                          : "Save bio"}
+                    </Button>
+                  </div>
+                </motion.div>
               ) : (
-                <p className="text-sm italic text-text-sub-light dark:text-text-sub-dark">
-                  No bio yet — tell recruiters about your culinary journey.
-                </p>
+                <motion.div
+                  key="viewer"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <div className="mt-5 rounded-xl border border-border-light/60 bg-white/50 p-4 dark:border-border-dark/60 dark:bg-white/5">
+                    {bioText ? (
+                      <div
+                        className="text-sm leading-7 text-text-main-light dark:text-text-main-dark/90"
+                        dangerouslySetInnerHTML={{ __html: sanitizedHtml(bioText) }}
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center gap-3 py-8 text-center">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary dark:bg-primary/16">
+                          <User className="h-5 w-5" />
+                        </div>
+                        <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
+                          No bio yet — tell recruiters about your culinary journey.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
               )}
-            </div>
+            </AnimatePresence>
           </SurfaceCard>
 
           {/* Qualifications (chef only) */}

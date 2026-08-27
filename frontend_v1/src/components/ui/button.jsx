@@ -10,11 +10,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-white shadow-float hover:-translate-y-0.5 hover:brightness-105",
+          "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
         restaurant:
-          "bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-white shadow-float hover:-translate-y-0.5 hover:brightness-105",
+          "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
         chef:
-          "bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-white shadow-float hover:-translate-y-0.5 hover:brightness-105",
+          "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
         secondary:
           "border border-secondary/20 bg-secondary/12 text-secondary hover:bg-secondary/18 dark:bg-secondary/10 dark:text-secondary-foreground",
         inactive:
