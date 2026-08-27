@@ -1,25 +1,31 @@
 import { useState } from "react";
-export default function FiltersDropdown({jobData,handleFilter}) {
-  const [employmentType, setEmploymentType] = useState('');
-  const [location, setLocation] = useState('');
-  const [salaryRange, setSalaryRange] = useState('');
-  const [postedDate, setPostedDate] = useState('');
-  const uniqueLocations = [...new Set(jobData.map(job => job.location.city))];
-  const employmentTypes = ["full", "part"];
-  const getFilters = () => {
-    const filters = {
-      employmentType,
-      location,
-      salaryRange,
-      postedDate,
-    };
-    handleFilter(filters); // Call the parent function to filter the job data
-  };
+import { motion } from "framer-motion";
+export default function FiltersDropdown({ jobs, handleFilter }) {
+	const [employmentType, setEmploymentType] = useState("");
+	const [location, setLocation] = useState("");
+	const [salaryRange, setSalaryRange] = useState("");
+	const [postedDate, setPostedDate] = useState("");
+	const [showText, setShowText] = useState(false);
+
+	const uniqueLocations = [...new Set(jobs.map((job) => job.location.city))];
+	const employmentTypes = ["Full Time", "Part Time"];
+	const getFilters = () => {
+		const filters = {
+			employmentType,
+			location,
+			salaryRange,
+			postedDate,
+		};
+		handleFilter(filters); // Call the parent function to filter the job data
+	};
 	return (
 		<>
-			<div className="font-custom text-lg">
-        <h1 className="font-bold text-red-600">Filter works with only one title in job field</h1>
-				<div className="mb-4">
+			<div className=" text-base flex flex-col gap-1">
+				<h1 className="font-semibold  mb-2 rounded-lg shadow-md p-3">
+					Filter works with <span className="text-red-600"> only one </span>{" "}
+					title in job field or empty field
+				</h1>
+				<div>
 					<label
 						htmlFor="employmentType"
 						className="block text-md font-medium text-gray-700"
@@ -42,7 +48,7 @@ export default function FiltersDropdown({jobData,handleFilter}) {
 				</div>
 
 				{/* Location Dropdown */}
-				<div className="mb-4">
+				<div>
 					<label
 						htmlFor="location"
 						className="block text-md font-medium text-gray-700"
@@ -65,7 +71,7 @@ export default function FiltersDropdown({jobData,handleFilter}) {
 				</div>
 
 				{/* Salary Range Input */}
-				<div className="mb-4">
+				<div>
 					<label
 						htmlFor="salaryRange"
 						className="block text-md font-medium text-gray-700"
@@ -83,7 +89,7 @@ export default function FiltersDropdown({jobData,handleFilter}) {
 				</div>
 
 				{/* Posted Date Input */}
-				<div className="mb-4">
+				<div>
 					<label
 						htmlFor="postedDate"
 						className="block text-md font-medium text-gray-700"
@@ -98,13 +104,23 @@ export default function FiltersDropdown({jobData,handleFilter}) {
 						className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
 					/>
 				</div>
-         {/* Apply Filter Button */}
-      <button
-      onClick={getFilters}
-        className="bg-custom_bg text-white py-2 px-4 rounded hover:bg-custom_color1 hover:text-black animate-swipeIn"
-      >
-        Apply Filters
-      </button>
+				{/* Apply Filter Button */}
+				<motion.button
+					onClick={getFilters}
+					className="bg-black text-white py-2 px-4 rounded mt-3 hover:bg-[#000000c0] overflow-hidden min-w-[140px]" // Ensure width doesn't change
+					initial={{ x: -100, opacity: 0 }}
+					animate={{ x: 0, opacity: 1 }}
+					transition={{ type: "spring", stiffness: 100, duration: 0.1 }}
+					onAnimationComplete={() => setShowText(true)}
+				>
+					<motion.span
+						initial={{ opacity: 0 }}
+						animate={{ opacity: showText ? 1 : 0 }}
+						transition={{ duration: 0.1 }} // slight delay for polish
+					>
+						Apply Filters
+					</motion.span>
+				</motion.button>
 			</div>
 		</>
 	);

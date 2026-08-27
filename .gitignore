@@ -10,6 +10,7 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media
+.vscode
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
@@ -185,5 +186,12 @@ bower_components
 psd
 thumb
 sketch
-
+service_account.json
+docs/
+uploads/
+chefWeb/fake_jobs_dataset.csv
+.vscode/PythonImportHelper-v2-Completion.json
+chefWeb/.python-version
+chefWeb/.vscode/settings.json
+chefWeb/myapp/migrations/
 # End of https://www.toptal.com/developers/gitignore/api/react,django

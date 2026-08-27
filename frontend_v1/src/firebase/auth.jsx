@@ -1,23 +1,55 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updatePassword } from "firebase/auth";
+import {
+	createUserWithEmailAndPassword,
+	GoogleAuthProvider,
+	sendPasswordResetEmail,
+	signInWithEmailAndPassword,
+	signInWithPopup,
+	updatePassword,
+} from "firebase/auth";
 import { auth } from "./firebase";
 
-export const doCreateUserWithEmailPassword= async ( email , password ) => {
-  return createUserWithEmailAndPassword(auth,email,password)
-}
+export const doCreateUserWithEmailPassword = async (email, password) => {
+	try {
+		const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+		const user = userCredential.user;
+		const idToken = await user.getIdToken(); // 🔑 Fix is here
+		return idToken;
+	} catch (error) {
+		console.error("Sign up Error:", error.code, error.message);
+		throw new Error(error.message);
+	}
+};
 
-export const doSignInWithEmailPassword = ( email , password ) => {
-  return signInWithEmailAndPassword(auth,email,password)
-}
+
+export const doSignInWithEmailPassword = async (email, password) => {
+	try {
+		const userCredential = await signInWithEmailAndPassword(auth, email, password);
+		const user = userCredential.user;
+		const idToken = await user.getIdToken(); // 🔑 Fix is here
+		return idToken;
+	} catch (error) {
+		console.error("Sign in error:", error.code, error.message);
+		throw new Error(error.message);
+	}
+};
 
 export const doSignInWithGoogle = async () => {
-  const provider=new GoogleAuthProvider()
-  const result=await signInWithPopup(auth,provider)
-  return result
-}
+	try {
+		const provider = new GoogleAuthProvider();
+		const result = await signInWithPopup(auth, provider);
+		const user = result.user;
+		const idToken = await user.getIdToken(); // 🔑 Fix is here
+		return idToken;
+	} catch (error) {
+		console.error("Google sign-in error:", error.code, error.message);
+		throw new Error(error.message);
+	}
+};
+
 
 export const doSignOut = () => {
-  return auth.signOut()
-}
+	return auth.signOut();
+};
 
 // export const doPasswordReset = (event,email) => {
 //   event.preventDefault()
@@ -25,5 +57,5 @@ export const doSignOut = () => {
 // }
 
 export const doPasswordChange = (password) => {
-  return updatePassword(auth.currentUser , password)
-}
+	return updatePassword(auth.currentUser, password);
+};

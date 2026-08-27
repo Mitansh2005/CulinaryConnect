@@ -1,9 +1,12 @@
-const Spinner = () => {
+const Spinner = ({ className = "", label = "Loading workspace" }) => {
   return (
-    <div className="flex items-center justify-center">
-        <div className="w-6 h-6 border-t-4 border-transparent rounded-full border-[1px] border-gradient-animated bg-gradient-to-r from-blue-950 via-blue-500 to-white animate-spin"></div>
+    <div className="inline-flex items-center gap-3 text-sm font-semibold text-text-sub-light dark:text-text-sub-dark">
+      <span
+        className={`h-5 w-5 rounded-full border-2 border-primary/25 border-t-primary animate-spin ${className}`}
+      />
+      <span>{label}</span>
     </div>
   );
 };
 
-export default Spinner
+export default Spinner;

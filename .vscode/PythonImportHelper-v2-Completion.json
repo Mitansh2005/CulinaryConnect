@@ -60,6 +60,39 @@
         "documentation": {}
     },
     {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "firebase_admin",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "firebase_admin",
+        "description": "firebase_admin",
+        "detail": "firebase_admin",
+        "documentation": {}
+    },
+    {
+        "label": "credentials",
+        "importPath": "firebase_admin",
+        "description": "firebase_admin",
+        "isExtraImport": true,
+        "detail": "firebase_admin",
+        "documentation": {}
+    },
+    {
+        "label": "auth",
+        "importPath": "firebase_admin",
+        "description": "firebase_admin",
+        "isExtraImport": true,
+        "detail": "firebase_admin",
+        "documentation": {}
+    },
+    {
         "label": "admin",
         "importPath": "django.contrib",
         "description": "django.contrib",
@@ -108,6 +141,128 @@
         "documentation": {}
     },
     {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "BaseCommand",
+        "importPath": "django.core.management.base",
+        "description": "django.core.management.base",
+        "isExtraImport": true,
+        "detail": "django.core.management.base",
+        "documentation": {}
+    },
+    {
+        "label": "BaseCommand",
+        "importPath": "django.core.management.base",
+        "description": "django.core.management.base",
+        "isExtraImport": true,
+        "detail": "django.core.management.base",
+        "documentation": {}
+    },
+    {
+        "label": "Faker",
+        "importPath": "faker",
+        "description": "faker",
+        "isExtraImport": true,
+        "detail": "faker",
+        "documentation": {}
+    },
+    {
+        "label": "Faker",
+        "importPath": "faker",
+        "description": "faker",
+        "isExtraImport": true,
+        "detail": "faker",
+        "documentation": {}
+    },
+    {
+        "label": "Countries",
+        "importPath": "myapp.models",
+        "description": "myapp.models",
+        "isExtraImport": true,
+        "detail": "myapp.models",
+        "documentation": {}
+    },
+    {
+        "label": "JobsTable",
+        "importPath": "myapp.models",
+        "description": "myapp.models",
+        "isExtraImport": true,
+        "detail": "myapp.models",
+        "documentation": {}
+    },
+    {
+        "label": "CustomUser",
+        "importPath": "myapp.models",
+        "description": "myapp.models",
+        "isExtraImport": true,
+        "detail": "myapp.models",
+        "documentation": {}
+    },
+    {
+        "label": "Countries",
+        "importPath": "myapp.models",
+        "description": "myapp.models",
+        "isExtraImport": true,
+        "detail": "myapp.models",
+        "documentation": {}
+    },
+    {
+        "label": "CustomUser",
+        "importPath": "myapp.models",
+        "description": "myapp.models",
+        "isExtraImport": true,
+        "detail": "myapp.models",
+        "documentation": {}
+    },
+    {
+        "label": "countries",
+        "importPath": "django_countries",
+        "description": "django_countries",
+        "isExtraImport": true,
+        "detail": "django_countries",
+        "documentation": {}
+    },
+    {
+        "label": "countries",
+        "importPath": "django_countries",
+        "description": "django_countries",
+        "isExtraImport": true,
+        "detail": "django_countries",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "django.contrib.auth.models",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
+        "label": "AbstractUser",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
         "label": "django.db.models.deletion",
         "kind": 6,
         "isExtraImport": true,
@@ -149,11 +304,228 @@
         "documentation": {}
     },
     {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
         "label": "models",
         "importPath": "django.db",
         "description": "django.db",
         "isExtraImport": true,
         "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "django.utils.timezone",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "django.utils.timezone",
+        "description": "django.utils.timezone",
+        "detail": "django.utils.timezone",
+        "documentation": {}
+    },
+    {
+        "label": "NULL",
+        "importPath": "asyncio.windows_events",
+        "description": "asyncio.windows_events",
+        "isExtraImport": true,
+        "detail": "asyncio.windows_events",
         "documentation": {}
     },
     {
@@ -165,14 +537,6 @@
         "documentation": {}
     },
     {
-        "label": "format_html",
-        "importPath": "django.utils.html",
-        "description": "django.utils.html",
-        "isExtraImport": true,
-        "detail": "django.utils.html",
-        "documentation": {}
-    },
-    {
         "label": "AppConfig",
         "importPath": "django.apps",
         "description": "django.apps",
@@ -181,135 +545,35 @@
         "documentation": {}
     },
     {
-        "label": "pyrebase",
-        "kind": 6,
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
         "isExtraImport": true,
-        "importPath": "pyrebase",
-        "description": "pyrebase",
-        "detail": "pyrebase",
+        "detail": "rest_framework.response",
         "documentation": {}
     },
     {
-        "label": "HttpResponse",
-        "importPath": "django.http.response",
-        "description": "django.http.response",
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
         "isExtraImport": true,
-        "detail": "django.http.response",
+        "detail": "rest_framework.response",
         "documentation": {}
     },
     {
-        "label": "JsonResponse",
-        "importPath": "django.http.response",
-        "description": "django.http.response",
+        "label": "api_view",
+        "importPath": "rest_framework.decorators",
+        "description": "rest_framework.decorators",
         "isExtraImport": true,
-        "detail": "django.http.response",
+        "detail": "rest_framework.decorators",
         "documentation": {}
     },
     {
-        "label": "Faker",
-        "importPath": "faker",
-        "description": "faker",
+        "label": "status",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
         "isExtraImport": true,
-        "detail": "faker",
-        "documentation": {}
-    },
-    {
-        "label": "pandas",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "pandas",
-        "description": "pandas",
-        "detail": "pandas",
-        "documentation": {}
-    },
-    {
-        "label": "random",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "random",
-        "description": "random",
-        "detail": "random",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "timedelta",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "countries_for_language",
-        "importPath": "country_list",
-        "description": "country_list",
-        "isExtraImport": true,
-        "detail": "country_list",
-        "documentation": {}
-    },
-    {
-        "label": "AbstractUser",
-        "importPath": "django.contrib.auth.models",
-        "description": "django.contrib.auth.models",
-        "isExtraImport": true,
-        "detail": "django.contrib.auth.models",
-        "documentation": {}
-    },
-    {
-        "label": "User",
-        "importPath": "django.contrib.auth.models",
-        "description": "django.contrib.auth.models",
-        "isExtraImport": true,
-        "detail": "django.contrib.auth.models",
-        "documentation": {}
-    },
-    {
-        "label": "BaseUserManager",
-        "importPath": "django.contrib.auth.base_user",
-        "description": "django.contrib.auth.base_user",
-        "isExtraImport": true,
-        "detail": "django.contrib.auth.base_user",
-        "documentation": {}
-    },
-    {
-        "label": "graphene",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "graphene",
-        "description": "graphene",
-        "detail": "graphene",
-        "documentation": {}
-    },
-    {
-        "label": "DjangoObjectType",
-        "importPath": "graphene_django",
-        "description": "graphene_django",
-        "isExtraImport": true,
-        "detail": "graphene_django",
-        "documentation": {}
-    },
-    {
-        "label": "jobsfakeData",
-        "importPath": "myapp.views",
-        "description": "myapp.views",
-        "isExtraImport": true,
-        "detail": "myapp.views",
+        "detail": "rest_framework",
         "documentation": {}
     },
     {
@@ -337,6 +601,71 @@
         "documentation": {}
     },
     {
+        "label": "csrf_exempt",
+        "importPath": "django.views.decorators.csrf",
+        "description": "django.views.decorators.csrf",
+        "isExtraImport": true,
+        "detail": "django.views.decorators.csrf",
+        "documentation": {}
+    },
+    {
+        "label": "csrf_exempt",
+        "importPath": "django.views.decorators.csrf",
+        "description": "django.views.decorators.csrf",
+        "isExtraImport": true,
+        "detail": "django.views.decorators.csrf",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "WebSocket",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "WebSocketDisconnect",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "graphene",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "graphene",
+        "description": "graphene",
+        "detail": "graphene",
+        "documentation": {}
+    },
+    {
+        "label": "DjangoObjectType",
+        "importPath": "graphene_django",
+        "description": "graphene_django",
+        "isExtraImport": true,
+        "detail": "graphene_django",
+        "documentation": {}
+    },
+    {
         "label": "pycountry",
         "kind": 6,
         "isExtraImport": true,
@@ -351,22 +680,6 @@
         "description": "django.test",
         "isExtraImport": true,
         "detail": "django.test",
-        "documentation": {}
-    },
-    {
-        "label": "csrf_exempt",
-        "importPath": "django.views.decorators.csrf",
-        "description": "django.views.decorators.csrf",
-        "isExtraImport": true,
-        "detail": "django.views.decorators.csrf",
-        "documentation": {}
-    },
-    {
-        "label": "csrf_exempt",
-        "importPath": "django.views.decorators.csrf",
-        "description": "django.views.decorators.csrf",
-        "isExtraImport": true,
-        "detail": "django.views.decorators.csrf",
         "documentation": {}
     },
     {
@@ -386,20 +699,11 @@
         "documentation": {}
     },
     {
-        "label": "render",
+        "label": "get_object_or_404",
         "importPath": "django.shortcuts",
         "description": "django.shortcuts",
         "isExtraImport": true,
         "detail": "django.shortcuts",
-        "documentation": {}
-    },
-    {
-        "label": "json",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
         "documentation": {}
     },
     {
@@ -427,14 +731,6 @@
         "documentation": {}
     },
     {
-        "label": "Response",
-        "importPath": "rest_framework.response",
-        "description": "rest_framework.response",
-        "isExtraImport": true,
-        "detail": "rest_framework.response",
-        "documentation": {}
-    },
-    {
         "label": "IsAuthenticated",
         "importPath": "rest_framework.permissions",
         "description": "rest_framework.permissions",
@@ -443,12 +739,11 @@
         "documentation": {}
     },
     {
-        "label": "csv",
-        "kind": 6,
+        "label": "APIView",
+        "importPath": "rest_framework.views",
+        "description": "rest_framework.views",
         "isExtraImport": true,
-        "importPath": "csv",
-        "description": "csv",
-        "detail": "csv",
+        "detail": "rest_framework.views",
         "documentation": {}
     },
     {
@@ -461,19 +756,12 @@
         "documentation": {}
     },
     {
-        "label": "stringify",
-        "importPath": "flatted",
-        "description": "flatted",
+        "label": "json",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "flatted",
-        "documentation": {}
-    },
-    {
-        "label": "parse",
-        "importPath": "flatted",
-        "description": "flatted",
-        "isExtraImport": true,
-        "detail": "flatted",
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
         "documentation": {}
     },
     {
@@ -490,7 +778,34 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "BASE_DIR = Path(__file__).resolve().parent.parent\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = 'django-insecure-31us55w_!rm2e80a1rh=b50+@_5q^_=#yt7ji+m3a9gvu@^!o-'\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\nALLOWED_HOSTS = []\n# Application definition\nINSTALLED_APPS = [",
+        "peekOfCode": "BASE_DIR = Path(__file__).resolve().parent.parent\n# Load environment variables from the .env file\nload_dotenv()\nFIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')\nFIREBASE_CREDENTIALS_FILE_PATH = os.getenv('FIREBASE_CREDENTIALS_FILE_PATH')\n# Path to the Firebase service account key JSON file\ncred = credentials.Certificate(FIREBASE_CREDENTIALS_FILE_PATH)\nfirebase_admin.initialize_app(cred)\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/",
+        "detail": "chefWeb.chefWeb.settings",
+        "documentation": {}
+    },
+    {
+        "label": "FIREBASE_API_KEY",
+        "kind": 5,
+        "importPath": "chefWeb.chefWeb.settings",
+        "description": "chefWeb.chefWeb.settings",
+        "peekOfCode": "FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')\nFIREBASE_CREDENTIALS_FILE_PATH = os.getenv('FIREBASE_CREDENTIALS_FILE_PATH')\n# Path to the Firebase service account key JSON file\ncred = credentials.Certificate(FIREBASE_CREDENTIALS_FILE_PATH)\nfirebase_admin.initialize_app(cred)\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = 'django-insecure-31us55w_!rm2e80a1rh=b50+@_5q^_=#yt7ji+m3a9gvu@^!o-'\n# SECURITY WARNING: don't run with debug turned on in production!",
+        "detail": "chefWeb.chefWeb.settings",
+        "documentation": {}
+    },
+    {
+        "label": "FIREBASE_CREDENTIALS_FILE_PATH",
+        "kind": 5,
+        "importPath": "chefWeb.chefWeb.settings",
+        "description": "chefWeb.chefWeb.settings",
+        "peekOfCode": "FIREBASE_CREDENTIALS_FILE_PATH = os.getenv('FIREBASE_CREDENTIALS_FILE_PATH')\n# Path to the Firebase service account key JSON file\ncred = credentials.Certificate(FIREBASE_CREDENTIALS_FILE_PATH)\nfirebase_admin.initialize_app(cred)\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = 'django-insecure-31us55w_!rm2e80a1rh=b50+@_5q^_=#yt7ji+m3a9gvu@^!o-'\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True",
+        "detail": "chefWeb.chefWeb.settings",
+        "documentation": {}
+    },
+    {
+        "label": "cred",
+        "kind": 5,
+        "importPath": "chefWeb.chefWeb.settings",
+        "description": "chefWeb.chefWeb.settings",
+        "peekOfCode": "cred = credentials.Certificate(FIREBASE_CREDENTIALS_FILE_PATH)\nfirebase_admin.initialize_app(cred)\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = 'django-insecure-31us55w_!rm2e80a1rh=b50+@_5q^_=#yt7ji+m3a9gvu@^!o-'\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\nALLOWED_HOSTS = []\n# Application definition",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -499,7 +814,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "SECRET_KEY = 'django-insecure-31us55w_!rm2e80a1rh=b50+@_5q^_=#yt7ji+m3a9gvu@^!o-'\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\nALLOWED_HOSTS = []\n# Application definition\nINSTALLED_APPS = [\n    'myapp',\n    'corsheaders',\n    'graphene_django',\n    'rest_framework',",
+        "peekOfCode": "SECRET_KEY = 'django-insecure-31us55w_!rm2e80a1rh=b50+@_5q^_=#yt7ji+m3a9gvu@^!o-'\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\nALLOWED_HOSTS = []\n# Application definition\nINSTALLED_APPS = [\n    'myapp',\n    'corsheaders',\n    'dotenv',\n    'graphene_django',",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -508,7 +823,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "DEBUG = True\nALLOWED_HOSTS = []\n# Application definition\nINSTALLED_APPS = [\n    'myapp',\n    'corsheaders',\n    'graphene_django',\n    'rest_framework',\n    'django.contrib.admin',\n    'django.contrib.auth',",
+        "peekOfCode": "DEBUG = True\nALLOWED_HOSTS = []\n# Application definition\nINSTALLED_APPS = [\n    'myapp',\n    'corsheaders',\n    'dotenv',\n    'graphene_django',\n    'rest_framework',\n    'django.contrib.admin',",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -517,7 +832,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "ALLOWED_HOSTS = []\n# Application definition\nINSTALLED_APPS = [\n    'myapp',\n    'corsheaders',\n    'graphene_django',\n    'rest_framework',\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',",
+        "peekOfCode": "ALLOWED_HOSTS = []\n# Application definition\nINSTALLED_APPS = [\n    'myapp',\n    'corsheaders',\n    'dotenv',\n    'graphene_django',\n    'rest_framework',\n    'django.contrib.admin',\n    'django.contrib.auth',",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -526,7 +841,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "INSTALLED_APPS = [\n    'myapp',\n    'corsheaders',\n    'graphene_django',\n    'rest_framework',\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',",
+        "peekOfCode": "INSTALLED_APPS = [\n    'myapp',\n    'corsheaders',\n    'dotenv',\n    'graphene_django',\n    'rest_framework',\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -598,7 +913,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "LANGUAGE_CODE = 'en-us'\nTIME_ZONE = 'UTC'\nUSE_I18N = True\nUSE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\nAUTH_USER_MODEL='myapp.CustomUser'\nSTATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nimport os",
+        "peekOfCode": "LANGUAGE_CODE = 'en-us'\nTIME_ZONE = 'UTC'\nUSE_I18N = True\nUSE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\nAUTH_USER_MODEL='myapp.CustomUser'\nSTATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -607,7 +922,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "TIME_ZONE = 'UTC'\nUSE_I18N = True\nUSE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\nAUTH_USER_MODEL='myapp.CustomUser'\nSTATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nimport os\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')",
+        "peekOfCode": "TIME_ZONE = 'UTC'\nUSE_I18N = True\nUSE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\nAUTH_USER_MODEL='myapp.CustomUser'\nSTATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')\nSTATIC_ROOT=os.path.join(BASE_DIR,'static')",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -616,7 +931,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "USE_I18N = True\nUSE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\nAUTH_USER_MODEL='myapp.CustomUser'\nSTATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nimport os\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')\nSTATIC_ROOT=os.path.join(BASE_DIR,'static')",
+        "peekOfCode": "USE_I18N = True\nUSE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\nAUTH_USER_MODEL='myapp.CustomUser'\nSTATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')\nSTATIC_ROOT=os.path.join(BASE_DIR,'static')\nSTATIC_DIRS=[",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -625,7 +940,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "USE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\nAUTH_USER_MODEL='myapp.CustomUser'\nSTATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nimport os\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')\nSTATIC_ROOT=os.path.join(BASE_DIR,'static')\nSTATIC_DIRS=[",
+        "peekOfCode": "USE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\nAUTH_USER_MODEL='myapp.CustomUser'\nSTATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')\nSTATIC_ROOT=os.path.join(BASE_DIR,'static')\nSTATIC_DIRS=[\n    BASE_DIR,\"static\",",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -634,7 +949,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "STATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nimport os\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')\nSTATIC_ROOT=os.path.join(BASE_DIR,'static')\nSTATIC_DIRS=[\n    BASE_DIR,\"static\",\n]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field",
+        "peekOfCode": "STATIC_URL = 'static/'\nMEDIA_URL = 'uploads/'\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')\nSTATIC_ROOT=os.path.join(BASE_DIR,'static')\nSTATIC_DIRS=[\n    BASE_DIR,\"static\",\n]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -643,7 +958,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "MEDIA_URL = 'uploads/'\nimport os\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')\nSTATIC_ROOT=os.path.join(BASE_DIR,'static')\nSTATIC_DIRS=[\n    BASE_DIR,\"static\",\n]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'",
+        "peekOfCode": "MEDIA_URL = 'uploads/'\nMEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')\nSTATIC_ROOT=os.path.join(BASE_DIR,'static')\nSTATIC_DIRS=[\n    BASE_DIR,\"static\",\n]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nCORS_ALLOWED_ORIGINS = [",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -661,7 +976,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nCORS_ALLOWED_ORIGINS = [\n    \"http://localhost:5173\",\n]\nCSRF_TRUSTED_ORIGINS = [\n    \"http://localhost:5173\",  # Your React app's URL\n]",
+        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nCORS_ALLOWED_ORIGINS = [\n    \"http://localhost:5173\",\n]\nCSRF_TRUSTED_ORIGINS = [\n    \"http://localhost:5173\",  # Your React app's URL\n]\n# REST_FRAMEWORK = {\n#     'DEFAULT_AUTHENTICATION_CLASSES': [\n#         'rest_framework.authentication.SessionAuthentication',",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -670,7 +985,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "CORS_ALLOWED_ORIGINS = [\n    \"http://localhost:5173\",\n]\nCSRF_TRUSTED_ORIGINS = [\n    \"http://localhost:5173\",  # Your React app's URL\n]",
+        "peekOfCode": "CORS_ALLOWED_ORIGINS = [\n    \"http://localhost:5173\",\n]\nCSRF_TRUSTED_ORIGINS = [\n    \"http://localhost:5173\",  # Your React app's URL\n]\n# REST_FRAMEWORK = {\n#     'DEFAULT_AUTHENTICATION_CLASSES': [\n#         'rest_framework.authentication.SessionAuthentication',\n#     ]",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -679,7 +994,7 @@
         "kind": 5,
         "importPath": "chefWeb.chefWeb.settings",
         "description": "chefWeb.chefWeb.settings",
-        "peekOfCode": "CSRF_TRUSTED_ORIGINS = [\n    \"http://localhost:5173\",  # Your React app's URL\n]",
+        "peekOfCode": "CSRF_TRUSTED_ORIGINS = [\n    \"http://localhost:5173\",  # Your React app's URL\n]\n# REST_FRAMEWORK = {\n#     'DEFAULT_AUTHENTICATION_CLASSES': [\n#         'rest_framework.authentication.SessionAuthentication',\n#     ]\n# }",
         "detail": "chefWeb.chefWeb.settings",
         "documentation": {}
     },
@@ -702,6 +1017,51 @@
         "documentation": {}
     },
     {
+        "label": "Command",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.management.commands.populate_countries",
+        "description": "chefWeb.myapp.management.commands.populate_countries",
+        "peekOfCode": "class Command(BaseCommand):\n    help = 'Populate Countries table with fake data'\n    def handle(self, *args, **kwargs):\n        fake = Faker()\n        # Get a dictionary of ISO country codes mapped to their full names\n        country_choices = dict(countries)\n        country_codes = list(country_choices.keys())\n        for _ in range(100):  # You can modify this number to generate more/less records\n            country_code = random.choice(country_codes)  # Randomly choose a country code\n            state = fake.state()",
+        "detail": "chefWeb.myapp.management.commands.populate_countries",
+        "documentation": {}
+    },
+    {
+        "label": "Command",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.management.commands.populate_jobs",
+        "description": "chefWeb.myapp.management.commands.populate_jobs",
+        "peekOfCode": "class Command(BaseCommand):\n    help = 'Populate Jobs table with fake data'\n    def handle(self, *args, **kwargs):\n        num_jobs = 100  # You can adjust this value\n        fake_jobs = generate_fake_job_data(num_jobs)\n        # Bulk create fake jobs in the database\n        JobsTable.objects.bulk_create(fake_jobs)\n        self.stdout.write(self.style.SUCCESS(f'Successfully populated {num_jobs} fake jobs into the database!'))",
+        "detail": "chefWeb.myapp.management.commands.populate_jobs",
+        "documentation": {}
+    },
+    {
+        "label": "generate_fake_job_data",
+        "kind": 2,
+        "importPath": "chefWeb.myapp.management.commands.populate_jobs",
+        "description": "chefWeb.myapp.management.commands.populate_jobs",
+        "peekOfCode": "def generate_fake_job_data(num_jobs):\n    jobs = []\n    # Fetch only users who are employers\n    employer_users = CustomUser.objects.filter(user_type=\"employer\")\n    locations_choices=Countries.objects.all()\n    if not employer_users.exists():\n        raise ValueError(\"No employer users found in the CustomUser table. Please create employers first.\")\n    for _ in range(num_jobs):\n        userid =random.choice(employer_users)\n        title = fake.job()",
+        "detail": "chefWeb.myapp.management.commands.populate_jobs",
+        "documentation": {}
+    },
+    {
+        "label": "fake",
+        "kind": 5,
+        "importPath": "chefWeb.myapp.management.commands.populate_jobs",
+        "description": "chefWeb.myapp.management.commands.populate_jobs",
+        "peekOfCode": "fake = Faker()\n# Define possible employment types\nemployment_types = [\"Full Time\", \"Part Time\"]\n# Function to generate fake job data\ndef generate_fake_job_data(num_jobs):\n    jobs = []\n    # Fetch only users who are employers\n    employer_users = CustomUser.objects.filter(user_type=\"employer\")\n    locations_choices=Countries.objects.all()\n    if not employer_users.exists():",
+        "detail": "chefWeb.myapp.management.commands.populate_jobs",
+        "documentation": {}
+    },
+    {
+        "label": "employment_types",
+        "kind": 5,
+        "importPath": "chefWeb.myapp.management.commands.populate_jobs",
+        "description": "chefWeb.myapp.management.commands.populate_jobs",
+        "peekOfCode": "employment_types = [\"Full Time\", \"Part Time\"]\n# Function to generate fake job data\ndef generate_fake_job_data(num_jobs):\n    jobs = []\n    # Fetch only users who are employers\n    employer_users = CustomUser.objects.filter(user_type=\"employer\")\n    locations_choices=Countries.objects.all()\n    if not employer_users.exists():\n        raise ValueError(\"No employer users found in the CustomUser table. Please create employers first.\")\n    for _ in range(num_jobs):",
+        "detail": "chefWeb.myapp.management.commands.populate_jobs",
+        "documentation": {}
+    },
+    {
         "label": "Migration",
         "kind": 6,
         "importPath": "chefWeb.myapp.migrations.0001_initial",
@@ -711,20 +1071,128 @@
         "documentation": {}
     },
     {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0002_alter_countries_country",
+        "description": "chefWeb.myapp.migrations.0002_alter_countries_country",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0001_initial'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='countries',\n            name='country',\n            field=models.CharField(choices=[('AF', 'Afghanistan'), ('AX', 'Åland Islands'), ('AL', 'Albania'), ('DZ', 'Algeria'), ('AS', 'American Samoa'), ('AD', 'Andorra'), ('AO', 'Angola'), ('AI', 'Anguilla'), ('AQ', 'Antarctica'), ('AG', 'Antigua and Barbuda'), ('AR', 'Argentina'), ('AM', 'Armenia'), ('AW', 'Aruba'), ('AU', 'Australia'), ('AT', 'Austria'), ('AZ', 'Azerbaijan'), ('BS', 'Bahamas'), ('BH', 'Bahrain'), ('BD', 'Bangladesh'), ('BB', 'Barbados'), ('BY', 'Belarus'), ('BE', 'Belgium'), ('BZ', 'Belize'), ('BJ', 'Benin'), ('BM', 'Bermuda'), ('BT', 'Bhutan'), ('BO', 'Bolivia'), ('BQ', 'Bonaire, Sint Eustatius and Saba'), ('BA', 'Bosnia and Herzegovina'), ('BW', 'Botswana'), ('BV', 'Bouvet Island'), ('BR', 'Brazil'), ('IO', 'British Indian Ocean Territory'), ('BN', 'Brunei'), ('BG', 'Bulgaria'), ('BF', 'Burkina Faso'), ('BI', 'Burundi'), ('CV', 'Cabo Verde'), ('KH', 'Cambodia'), ('CM', 'Cameroon'), ('CA', 'Canada'), ('KY', 'Cayman Islands'), ('CF', 'Central African Republic'), ('TD', 'Chad'), ('CL', 'Chile'), ('CN', 'China'), ('CX', 'Christmas Island'), ('CC', 'Cocos (Keeling) Islands'), ('CO', 'Colombia'), ('KM', 'Comoros'), ('CG', 'Congo'), ('CD', 'Congo (the Democratic Republic of the)'), ('CK', 'Cook Islands'), ('CR', 'Costa Rica'), ('CI', \"Côte d'Ivoire\"), ('HR', 'Croatia'), ('CU', 'Cuba'), ('CW', 'Curaçao'), ('CY', 'Cyprus'), ('CZ', 'Czechia'), ('DK', 'Denmark'), ('DJ', 'Djibouti'), ('DM', 'Dominica'), ('DO', 'Dominican Republic'), ('EC', 'Ecuador'), ('EG', 'Egypt'), ('SV', 'El Salvador'), ('GQ', 'Equatorial Guinea'), ('ER', 'Eritrea'), ('EE', 'Estonia'), ('SZ', 'Eswatini'), ('ET', 'Ethiopia'), ('FK', 'Falkland Islands (Malvinas)'), ('FO', 'Faroe Islands'), ('FJ', 'Fiji'), ('FI', 'Finland'), ('FR', 'France'), ('GF', 'French Guiana'), ('PF', 'French Polynesia'), ('TF', 'French Southern Territories'), ('GA', 'Gabon'), ('GM', 'Gambia'), ('GE', 'Georgia'), ('DE', 'Germany'), ('GH', 'Ghana'), ('GI', 'Gibraltar'), ('GR', 'Greece'), ('GL', 'Greenland'), ('GD', 'Grenada'), ('GP', 'Guadeloupe'), ('GU', 'Guam'), ('GT', 'Guatemala'), ('GG', 'Guernsey'), ('GN', 'Guinea'), ('GW', 'Guinea-Bissau'), ('GY', 'Guyana'), ('HT', 'Haiti'), ('HM', 'Heard Island and McDonald Islands'), ('VA', 'Holy See'), ('HN', 'Honduras'), ('HK', 'Hong Kong'), ('HU', 'Hungary'), ('IS', 'Iceland'), ('IN', 'India'), ('ID', 'Indonesia'), ('IR', 'Iran'), ('IQ', 'Iraq'), ('IE', 'Ireland'), ('IM', 'Isle of Man'), ('IL', 'Israel'), ('IT', 'Italy'), ('JM', 'Jamaica'), ('JP', 'Japan'), ('JE', 'Jersey'), ('JO', 'Jordan'), ('KZ', 'Kazakhstan'), ('KE', 'Kenya'), ('KI', 'Kiribati'), ('KW', 'Kuwait'), ('KG', 'Kyrgyzstan'), ('LA', 'Laos'), ('LV', 'Latvia'), ('LB', 'Lebanon'), ('LS', 'Lesotho'), ('LR', 'Liberia'), ('LY', 'Libya'), ('LI', 'Liechtenstein'), ('LT', 'Lithuania'), ('LU', 'Luxembourg'), ('MO', 'Macao'), ('MG', 'Madagascar'), ('MW', 'Malawi'), ('MY', 'Malaysia'), ('MV', 'Maldives'), ('ML', 'Mali'), ('MT', 'Malta'), ('MH', 'Marshall Islands'), ('MQ', 'Martinique'), ('MR', 'Mauritania'), ('MU', 'Mauritius'), ('YT', 'Mayotte'), ('MX', 'Mexico'), ('FM', 'Micronesia'), ('MD', 'Moldova'), ('MC', 'Monaco'), ('MN', 'Mongolia'), ('ME', 'Montenegro'), ('MS', 'Montserrat'), ('MA', 'Morocco'), ('MZ', 'Mozambique'), ('MM', 'Myanmar'), ('NA', 'Namibia'), ('NR', 'Nauru'), ('NP', 'Nepal'), ('NL', 'Netherlands'), ('NC', 'New Caledonia'), ('NZ', 'New Zealand'), ('NI', 'Nicaragua'), ('NE', 'Niger'), ('NG', 'Nigeria'), ('NU', 'Niue'), ('NF', 'Norfolk Island'), ('KP', 'North Korea'), ('MK', 'North Macedonia'), ('MP', 'Northern Mariana Islands'), ('NO', 'Norway'), ('OM', 'Oman'), ('PK', 'Pakistan'), ('PW', 'Palau'), ('PS', 'Palestine, State of'), ('PA', 'Panama'), ('PG', 'Papua New Guinea'), ('PY', 'Paraguay'), ('PE', 'Peru'), ('PH', 'Philippines'), ('PN', 'Pitcairn'), ('PL', 'Poland'), ('PT', 'Portugal'), ('PR', 'Puerto Rico'), ('QA', 'Qatar'), ('RE', 'Réunion'), ('RO', 'Romania'), ('RU', 'Russia'), ('RW', 'Rwanda'), ('BL', 'Saint Barthélemy'), ('SH', 'Saint Helena, Ascension and Tristan da Cunha'), ('KN', 'Saint Kitts and Nevis'), ('LC', 'Saint Lucia'), ('MF', 'Saint Martin (French part)'), ('PM', 'Saint Pierre and Miquelon'), ('VC', 'Saint Vincent and the Grenadines'), ('WS', 'Samoa'), ('SM', 'San Marino'), ('ST', 'Sao Tome and Principe'), ('SA', 'Saudi Arabia'), ('SN', 'Senegal'), ('RS', 'Serbia'), ('SC', 'Seychelles'), ('SL', 'Sierra Leone'), ('SG', 'Singapore'), ('SX', 'Sint Maarten (Dutch part)'), ('SK', 'Slovakia'), ('SI', 'Slovenia'), ('SB', 'Solomon Islands'), ('SO', 'Somalia'), ('ZA', 'South Africa'), ('GS', 'South Georgia and the South Sandwich Islands'), ('KR', 'South Korea'), ('SS', 'South Sudan'), ('ES', 'Spain'), ('LK', 'Sri Lanka'), ('SD', 'Sudan'), ('SR', 'Suriname'), ('SJ', 'Svalbard and Jan Mayen'), ('SE', 'Sweden'), ('CH', 'Switzerland'), ('SY', 'Syria'), ('TW', 'Taiwan'), ('TJ', 'Tajikistan'), ('TZ', 'Tanzania'), ('TH', 'Thailand'), ('TL', 'Timor-Leste'), ('TG', 'Togo'), ('TK', 'Tokelau'), ('TO', 'Tonga'), ('TT', 'Trinidad and Tobago'), ('TN', 'Tunisia'), ('TR', 'Türkiye'), ('TM', 'Turkmenistan'), ('TC', 'Turks and Caicos Islands'), ('TV', 'Tuvalu'), ('UG', 'Uganda'), ('UA', 'Ukraine'), ('AE', 'United Arab Emirates'), ('GB', 'United Kingdom'), ('UM', 'United States Minor Outlying Islands'), ('US', 'United States of America'), ('UY', 'Uruguay'), ('UZ', 'Uzbekistan'), ('VU', 'Vanuatu'), ('VE', 'Venezuela'), ('VN', 'Vietnam'), ('VG', 'Virgin Islands (British)'), ('VI', 'Virgin Islands (U.S.)'), ('WF', 'Wallis and Futuna'), ('EH', 'Western Sahara'), ('YE', 'Yemen'), ('ZM', 'Zambia'), ('ZW', 'Zimbabwe')], max_length=2),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0002_alter_countries_country",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0003_alter_customuser_username",
+        "description": "chefWeb.myapp.migrations.0003_alter_customuser_username",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0002_alter_countries_country'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='customuser',\n            name='username',\n            field=models.CharField(blank=True, max_length=250, unique=True),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0003_alter_customuser_username",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0004_alter_customuser_phone_number_and_more",
+        "description": "chefWeb.myapp.migrations.0004_alter_customuser_phone_number_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0003_alter_customuser_username'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='customuser',\n            name='phone_number',\n            field=models.CharField(blank=True, max_length=15, null=True),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0004_alter_customuser_phone_number_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0005_customuser_bio_customuser_experience_years_and_more",
+        "description": "chefWeb.myapp.migrations.0005_customuser_bio_customuser_experience_years_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0004_alter_customuser_phone_number_and_more'),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name='customuser',\n            name='bio',\n            field=models.TextField(max_length=1000, null=True),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0005_customuser_bio_customuser_experience_years_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0006_customuser_consent_box_and_more",
+        "description": "chefWeb.myapp.migrations.0006_customuser_consent_box_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0005_customuser_bio_customuser_experience_years_and_more'),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name='customuser',\n            name='consent_box',\n            field=models.BooleanField(default=False),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0006_customuser_consent_box_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0007_alter_customuser_profile_picture",
+        "description": "chefWeb.myapp.migrations.0007_alter_customuser_profile_picture",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0006_customuser_consent_box_and_more'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='customuser',\n            name='profile_picture',\n            field=models.CharField(blank=True, max_length=65000, null=True),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0007_alter_customuser_profile_picture",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0008_alter_customuser_profile_picture",
+        "description": "chefWeb.myapp.migrations.0008_alter_customuser_profile_picture",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0007_alter_customuser_profile_picture'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='customuser',\n            name='profile_picture',\n            field=models.CharField(blank=True, max_length=8000000, null=True),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0008_alter_customuser_profile_picture",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0009_remove_messagetable_user",
+        "description": "chefWeb.myapp.migrations.0009_remove_messagetable_user",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0008_alter_customuser_profile_picture'),\n    ]\n    operations = [\n        migrations.RemoveField(\n            model_name='messagetable',\n            name='user',\n        ),\n    ]",
+        "detail": "chefWeb.myapp.migrations.0009_remove_messagetable_user",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0010_messagetable_time_stamp",
+        "description": "chefWeb.myapp.migrations.0010_messagetable_time_stamp",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0009_remove_messagetable_user'),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name='messagetable',\n            name='time_stamp',\n            field=models.TimeField(auto_now_add=True, default=django.utils.timezone.now),\n            preserve_default=False,",
+        "detail": "chefWeb.myapp.migrations.0010_messagetable_time_stamp",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0011_alter_customuser_uid",
+        "description": "chefWeb.myapp.migrations.0011_alter_customuser_uid",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0010_messagetable_time_stamp'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='customuser',\n            name='uid',\n            field=models.CharField(max_length=128, null=True),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0011_alter_customuser_uid",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0012_alter_customuser_uid",
+        "description": "chefWeb.myapp.migrations.0012_alter_customuser_uid",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0011_alter_customuser_uid'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='customuser',\n            name='uid',\n            field=models.CharField(default=0, max_length=128, unique=True),\n            preserve_default=False,",
+        "detail": "chefWeb.myapp.migrations.0012_alter_customuser_uid",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0013_alter_jobstable_employment_type",
+        "description": "chefWeb.myapp.migrations.0013_alter_jobstable_employment_type",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0012_alter_customuser_uid'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='jobstable',\n            name='employment_type',\n            field=models.CharField(choices=[('Full-Time', 'Full-Time'), ('Part-Time', 'Part-Time')], max_length=20),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0013_alter_jobstable_employment_type",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.migrations.0014_alter_jobstable_employment_type",
+        "description": "chefWeb.myapp.migrations.0014_alter_jobstable_employment_type",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('myapp', '0013_alter_jobstable_employment_type'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='jobstable',\n            name='employment_type',\n            field=models.CharField(choices=[('Full Time', 'Full-Time'), ('Part Time', 'Part-Time')], max_length=20),\n        ),",
+        "detail": "chefWeb.myapp.migrations.0014_alter_jobstable_employment_type",
+        "documentation": {}
+    },
+    {
         "label": "UserAdmin",
         "kind": 6,
         "importPath": "chefWeb.myapp.admin",
         "description": "chefWeb.myapp.admin",
-        "peekOfCode": "class UserAdmin(BaseUserAdmin):\n  model = CustomUser\n  list_display=[\"user_id\",\"username\",\"email\",\"phone_number\",\"profile_picture\",\"user_type\",\"date_joined\"]\n  fieldsets = (\n        (None, {'fields': ('email', 'password')}),\n        ('Personal info', {'fields': ('first_name', 'last_name')}),\n        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),\n        ('Important dates', {'fields': ('last_login', 'date_joined')}),\n    )\n  add_fieldsets = (",
-        "detail": "chefWeb.myapp.admin",
-        "documentation": {}
-    },
-    {
-        "label": "ProfileAdmin",
-        "kind": 6,
-        "importPath": "chefWeb.myapp.admin",
-        "description": "chefWeb.myapp.admin",
-        "peekOfCode": "class ProfileAdmin(admin.ModelAdmin):\n  list_display=[\"profile_id\",\"user_id\",\"first_name\",\"last_name\",\"location\",\"bio\",\"experience_years\",\"speciality\"]\nclass LocationAdmin(admin.ModelAdmin):\n  list_display=[\"country\",\"state\",\"city\",\"postal_code\"]\nclass JobAdmin(admin.ModelAdmin):\n  list_display=[\"user_id\",\"job_id\",\"title\",\"description\",\"location\",\"salary\",\"employement_type\",\"posted_date\",\"application_deadline\",\"short_description\"]\n  def short_description(self, obj):\n        length = 100  # Adjust this value to your desired length\n        return (obj.description[:length] + '...') if len(obj.description) > length else obj.description\n  short_description.short_description = 'requirements'",
+        "peekOfCode": "class UserAdmin(BaseUserAdmin):\n    model = CustomUser\n    list_display=[\"user_id\",\"uid\",\"username\",\"first_name\",\"last_name\",\"email\",\"phone_number\",\"user_type\",\"location\",\"short_bio\",\"experience_years\",\"speciality\",\"consent_box\",\"relocate_confirmation\",\"is_staff\",\"date_joined\"]\n    fieldsets = (\n    ('Personal info', {'fields': ('username',\"first_name\",\"last_name\",\"email\",'phone_number', 'user_type',\"location\",\"bio\",\"experience_years\",\"speciality\")}),\n    ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),\n    ('Important dates', {'fields': ('last_login',)}),\n    )\n    add_fieldsets = (\n    (None, {",
         "detail": "chefWeb.myapp.admin",
         "documentation": {}
     },
@@ -733,7 +1201,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.admin",
         "description": "chefWeb.myapp.admin",
-        "peekOfCode": "class LocationAdmin(admin.ModelAdmin):\n  list_display=[\"country\",\"state\",\"city\",\"postal_code\"]\nclass JobAdmin(admin.ModelAdmin):\n  list_display=[\"user_id\",\"job_id\",\"title\",\"description\",\"location\",\"salary\",\"employement_type\",\"posted_date\",\"application_deadline\",\"short_description\"]\n  def short_description(self, obj):\n        length = 100  # Adjust this value to your desired length\n        return (obj.description[:length] + '...') if len(obj.description) > length else obj.description\n  short_description.short_description = 'requirements'\nclass ApplicationAdmin(admin.ModelAdmin):\n  list_display=[\"application_id\",\"job_id\",\"applicant_id\",\"application_date\",\"status\"]",
+        "peekOfCode": "class LocationAdmin(admin.ModelAdmin):\n  list_display=[\"country\",\"state\",\"city\",\"postal_code\"]\nclass JobAdmin(admin.ModelAdmin):\n  list_display=[\"user_id\",\"job_id\",\"title\",\"description\",\"location\",\"salary\",\"employment_type\",\"posted_date\",\"application_deadline\",\"short_description\"]\n  def short_description(self, obj):\n        length = 100  # Adjust this value to your desired length\n        return (obj.description[:length] + '...') if len(obj.description) > length else obj.description\n  short_description.short_description = 'requirements'\nclass ApplicationAdmin(admin.ModelAdmin):\n  list_display=[\"application_id\",\"job_id\",\"applicant_id\",\"application_date\",\"status\"]",
         "detail": "chefWeb.myapp.admin",
         "documentation": {}
     },
@@ -742,7 +1210,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.admin",
         "description": "chefWeb.myapp.admin",
-        "peekOfCode": "class JobAdmin(admin.ModelAdmin):\n  list_display=[\"user_id\",\"job_id\",\"title\",\"description\",\"location\",\"salary\",\"employement_type\",\"posted_date\",\"application_deadline\",\"short_description\"]\n  def short_description(self, obj):\n        length = 100  # Adjust this value to your desired length\n        return (obj.description[:length] + '...') if len(obj.description) > length else obj.description\n  short_description.short_description = 'requirements'\nclass ApplicationAdmin(admin.ModelAdmin):\n  list_display=[\"application_id\",\"job_id\",\"applicant_id\",\"application_date\",\"status\"]\nclass MessageAdmin(admin.ModelAdmin):\n  list_display=[\"user\",\"sender\",\"receiver\",\"message_content\",\"sent_date\",\"read_status\"]",
+        "peekOfCode": "class JobAdmin(admin.ModelAdmin):\n  list_display=[\"user_id\",\"job_id\",\"title\",\"description\",\"location\",\"salary\",\"employment_type\",\"posted_date\",\"application_deadline\",\"short_description\"]\n  def short_description(self, obj):\n        length = 100  # Adjust this value to your desired length\n        return (obj.description[:length] + '...') if len(obj.description) > length else obj.description\n  short_description.short_description = 'requirements'\nclass ApplicationAdmin(admin.ModelAdmin):\n  list_display=[\"application_id\",\"job_id\",\"applicant_id\",\"application_date\",\"status\"]\nclass MessageAdmin(admin.ModelAdmin):\n  list_display=[\"sender\",\"receiver\",\"message_content\",\"sent_date\",\"time_stamp\",\"read_status\"]",
         "detail": "chefWeb.myapp.admin",
         "documentation": {}
     },
@@ -751,7 +1219,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.admin",
         "description": "chefWeb.myapp.admin",
-        "peekOfCode": "class ApplicationAdmin(admin.ModelAdmin):\n  list_display=[\"application_id\",\"job_id\",\"applicant_id\",\"application_date\",\"status\"]\nclass MessageAdmin(admin.ModelAdmin):\n  list_display=[\"user\",\"sender\",\"receiver\",\"message_content\",\"sent_date\",\"read_status\"]\nclass NotificationAdmin(admin.ModelAdmin):\n  list_display=[\"notification_id\",\"user_id\",\"notification_type\",\"message\",\"sent_date\",\"read_status\"]\nadmin.site.register(ProfileTable,ProfileAdmin)\nadmin.site.register(CustomUser,UserAdmin)\nadmin.site.register(Countries,LocationAdmin)\nadmin.site.register(JobsTable,JobAdmin)",
+        "peekOfCode": "class ApplicationAdmin(admin.ModelAdmin):\n  list_display=[\"application_id\",\"job_id\",\"applicant_id\",\"application_date\",\"status\"]\nclass MessageAdmin(admin.ModelAdmin):\n  list_display=[\"sender\",\"receiver\",\"message_content\",\"sent_date\",\"time_stamp\",\"read_status\"]\nclass NotificationAdmin(admin.ModelAdmin):\n  list_display=[\"notification_id\",\"user_id\",\"notification_type\",\"message\",\"sent_date\",\"read_status\"]\nadmin.site.register(CustomUser,UserAdmin)\nadmin.site.register(Countries,LocationAdmin)\nadmin.site.register(JobsTable,JobAdmin)\nadmin.site.register(ApplicationTable,ApplicationAdmin)",
         "detail": "chefWeb.myapp.admin",
         "documentation": {}
     },
@@ -760,7 +1228,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.admin",
         "description": "chefWeb.myapp.admin",
-        "peekOfCode": "class MessageAdmin(admin.ModelAdmin):\n  list_display=[\"user\",\"sender\",\"receiver\",\"message_content\",\"sent_date\",\"read_status\"]\nclass NotificationAdmin(admin.ModelAdmin):\n  list_display=[\"notification_id\",\"user_id\",\"notification_type\",\"message\",\"sent_date\",\"read_status\"]\nadmin.site.register(ProfileTable,ProfileAdmin)\nadmin.site.register(CustomUser,UserAdmin)\nadmin.site.register(Countries,LocationAdmin)\nadmin.site.register(JobsTable,JobAdmin)\nadmin.site.register(ApplicationTable,ApplicationAdmin)\nadmin.site.register(MessageTable,MessageAdmin)",
+        "peekOfCode": "class MessageAdmin(admin.ModelAdmin):\n  list_display=[\"sender\",\"receiver\",\"message_content\",\"sent_date\",\"time_stamp\",\"read_status\"]\nclass NotificationAdmin(admin.ModelAdmin):\n  list_display=[\"notification_id\",\"user_id\",\"notification_type\",\"message\",\"sent_date\",\"read_status\"]\nadmin.site.register(CustomUser,UserAdmin)\nadmin.site.register(Countries,LocationAdmin)\nadmin.site.register(JobsTable,JobAdmin)\nadmin.site.register(ApplicationTable,ApplicationAdmin)\nadmin.site.register(MessageTable,MessageAdmin)\nadmin.site.register(NotificationTable,NotificationAdmin)",
         "detail": "chefWeb.myapp.admin",
         "documentation": {}
     },
@@ -769,7 +1237,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.admin",
         "description": "chefWeb.myapp.admin",
-        "peekOfCode": "class NotificationAdmin(admin.ModelAdmin):\n  list_display=[\"notification_id\",\"user_id\",\"notification_type\",\"message\",\"sent_date\",\"read_status\"]\nadmin.site.register(ProfileTable,ProfileAdmin)\nadmin.site.register(CustomUser,UserAdmin)\nadmin.site.register(Countries,LocationAdmin)\nadmin.site.register(JobsTable,JobAdmin)\nadmin.site.register(ApplicationTable,ApplicationAdmin)\nadmin.site.register(MessageTable,MessageAdmin)\nadmin.site.register(NotificationTable,NotificationAdmin)",
+        "peekOfCode": "class NotificationAdmin(admin.ModelAdmin):\n  list_display=[\"notification_id\",\"user_id\",\"notification_type\",\"message\",\"sent_date\",\"read_status\"]\nadmin.site.register(CustomUser,UserAdmin)\nadmin.site.register(Countries,LocationAdmin)\nadmin.site.register(JobsTable,JobAdmin)\nadmin.site.register(ApplicationTable,ApplicationAdmin)\nadmin.site.register(MessageTable,MessageAdmin)\nadmin.site.register(NotificationTable,NotificationAdmin)",
         "detail": "chefWeb.myapp.admin",
         "documentation": {}
     },
@@ -783,110 +1251,56 @@
         "documentation": {}
     },
     {
-        "label": "SignInWithEmailAndPassword",
+        "label": "verify_token",
         "kind": 2,
         "importPath": "chefWeb.myapp.authentication",
         "description": "chefWeb.myapp.authentication",
-        "peekOfCode": "def SignInWithEmailAndPassword(email,password):\n  user=auth.sign_in_with_email_and_password(email,password)\n  db=firebase.database()\n  # Pass the user's idToken to the push method\n  results = db.child(\"users\").push(user['idToken'])\n  return HttpResponse(status=200)",
+        "peekOfCode": "def verify_token(request):\n    token = request.data.get(\"token\")\n    try:\n        if not token:\n            return Response(\n                {\"error\": \"Token not provided\"}, status=status.HTTP_400_BAD_REQUEST\n            )\n        # Verify the ID token\n        decoded_token = auth.verify_id_token(token)\n        uid = decoded_token[\"uid\"]  # Firebase User",
         "detail": "chefWeb.myapp.authentication",
         "documentation": {}
     },
     {
-        "label": "config",
+        "label": "ConnectionManager",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.chat_server",
+        "description": "chefWeb.myapp.chat_server",
+        "peekOfCode": "class ConnectionManager:\n    def __init__(self):\n        self.active_connections: List[WebSocket] = []\n    async def connect(self, websocket: WebSocket):\n        await websocket.accept()\n        self.active_connections.append(websocket)\n    def disconnect(self, websocket: WebSocket):\n        self.active_connections.remove(websocket)\n    async def broadcast(self, message: str):\n        for connection in self.active_connections:",
+        "detail": "chefWeb.myapp.chat_server",
+        "documentation": {}
+    },
+    {
+        "label": "app",
         "kind": 5,
-        "importPath": "chefWeb.myapp.authentication",
-        "description": "chefWeb.myapp.authentication",
-        "peekOfCode": "config = {\n  \"apiKey\": \"AIzaSyD7WJcDRrOVKEfoe2hvfGwjTljhjS_JW4o\",\n  \"authDomain\": \"chef-web-8a2f2.firebaseapp.com\",\n  \"projectId\": \"chef-web-8a2f2\",\n  \"storageBucket\": \"chef-web-8a2f2.appspot.com\",\n  \"messagingSenderId\": \"909916564111\",\n  \"appId\": \"1:909916564111:web:6a929f1d0b21f846e35efa\"\n}\nfirebase = pyrebase.initialize_app(config)\nauth=firebase.auth()",
-        "detail": "chefWeb.myapp.authentication",
+        "importPath": "chefWeb.myapp.chat_server",
+        "description": "chefWeb.myapp.chat_server",
+        "peekOfCode": "app = FastAPI()\nclass ConnectionManager:\n    def __init__(self):\n        self.active_connections: List[WebSocket] = []\n    async def connect(self, websocket: WebSocket):\n        await websocket.accept()\n        self.active_connections.append(websocket)\n    def disconnect(self, websocket: WebSocket):\n        self.active_connections.remove(websocket)\n    async def broadcast(self, message: str):",
+        "detail": "chefWeb.myapp.chat_server",
         "documentation": {}
     },
     {
-        "label": "firebase",
+        "label": "manager",
         "kind": 5,
-        "importPath": "chefWeb.myapp.authentication",
-        "description": "chefWeb.myapp.authentication",
-        "peekOfCode": "firebase = pyrebase.initialize_app(config)\nauth=firebase.auth()\ndef SignInWithEmailAndPassword(email,password):\n  user=auth.sign_in_with_email_and_password(email,password)\n  db=firebase.database()\n  # Pass the user's idToken to the push method\n  results = db.child(\"users\").push(user['idToken'])\n  return HttpResponse(status=200)",
-        "detail": "chefWeb.myapp.authentication",
+        "importPath": "chefWeb.myapp.chat_server",
+        "description": "chefWeb.myapp.chat_server",
+        "peekOfCode": "manager = ConnectionManager()\nrouter = APIRouter()\n@router.websocket(\"/ws/chat\")\nasync def websocket_endpoint(websocket: WebSocket):\n    await websocket.accept()\n    while True:\n        data = await websocket.receive_text()\n        await websocket.send_text(f\"You said: {data}\")\napp.include_router(router, prefix=\"/api\")",
+        "detail": "chefWeb.myapp.chat_server",
         "documentation": {}
     },
     {
-        "label": "get_next_user_id",
-        "kind": 2,
-        "importPath": "chefWeb.myapp.faker_data",
-        "description": "chefWeb.myapp.faker_data",
-        "peekOfCode": "def get_next_user_id():\n    global user_id_counter\n    current_id = user_id_counter\n    user_id_counter += 1\n    return current_id\n# Function to generate fake job data\ndef generate_fake_job_data(num_jobs):\n    jobs = []\n    for _ in range(num_jobs):\n        userid = 5",
-        "detail": "chefWeb.myapp.faker_data",
-        "documentation": {}
-    },
-    {
-        "label": "generate_fake_job_data",
-        "kind": 2,
-        "importPath": "chefWeb.myapp.faker_data",
-        "description": "chefWeb.myapp.faker_data",
-        "peekOfCode": "def generate_fake_job_data(num_jobs):\n    jobs = []\n    for _ in range(num_jobs):\n        userid = 5\n        job_id=get_next_user_id()\n        title = fake.job()\n        description = fake.paragraph(nb_sentences=5)\n        location = 1\n        salary = f\"${random.randint(300000, 4000000)}\"\n        employment_type = random.choice(employment_types)",
-        "detail": "chefWeb.myapp.faker_data",
-        "documentation": {}
-    },
-    {
-        "label": "fake",
+        "label": "router",
         "kind": 5,
-        "importPath": "chefWeb.myapp.faker_data",
-        "description": "chefWeb.myapp.faker_data",
-        "peekOfCode": "fake = Faker()\n# Define parameters\nnum_jobs = 50  # Number of fake jobs to generate\n# Define possible employment types\nemployment_types = [\"full\",\"part\"]\nuser_id_counter = 2\ndef get_next_user_id():\n    global user_id_counter\n    current_id = user_id_counter\n    user_id_counter += 1",
-        "detail": "chefWeb.myapp.faker_data",
+        "importPath": "chefWeb.myapp.chat_server",
+        "description": "chefWeb.myapp.chat_server",
+        "peekOfCode": "router = APIRouter()\n@router.websocket(\"/ws/chat\")\nasync def websocket_endpoint(websocket: WebSocket):\n    await websocket.accept()\n    while True:\n        data = await websocket.receive_text()\n        await websocket.send_text(f\"You said: {data}\")\napp.include_router(router, prefix=\"/api\")",
+        "detail": "chefWeb.myapp.chat_server",
         "documentation": {}
     },
     {
-        "label": "num_jobs",
-        "kind": 5,
-        "importPath": "chefWeb.myapp.faker_data",
-        "description": "chefWeb.myapp.faker_data",
-        "peekOfCode": "num_jobs = 50  # Number of fake jobs to generate\n# Define possible employment types\nemployment_types = [\"full\",\"part\"]\nuser_id_counter = 2\ndef get_next_user_id():\n    global user_id_counter\n    current_id = user_id_counter\n    user_id_counter += 1\n    return current_id\n# Function to generate fake job data",
-        "detail": "chefWeb.myapp.faker_data",
-        "documentation": {}
-    },
-    {
-        "label": "employment_types",
-        "kind": 5,
-        "importPath": "chefWeb.myapp.faker_data",
-        "description": "chefWeb.myapp.faker_data",
-        "peekOfCode": "employment_types = [\"full\",\"part\"]\nuser_id_counter = 2\ndef get_next_user_id():\n    global user_id_counter\n    current_id = user_id_counter\n    user_id_counter += 1\n    return current_id\n# Function to generate fake job data\ndef generate_fake_job_data(num_jobs):\n    jobs = []",
-        "detail": "chefWeb.myapp.faker_data",
-        "documentation": {}
-    },
-    {
-        "label": "user_id_counter",
-        "kind": 5,
-        "importPath": "chefWeb.myapp.faker_data",
-        "description": "chefWeb.myapp.faker_data",
-        "peekOfCode": "user_id_counter = 2\ndef get_next_user_id():\n    global user_id_counter\n    current_id = user_id_counter\n    user_id_counter += 1\n    return current_id\n# Function to generate fake job data\ndef generate_fake_job_data(num_jobs):\n    jobs = []\n    for _ in range(num_jobs):",
-        "detail": "chefWeb.myapp.faker_data",
-        "documentation": {}
-    },
-    {
-        "label": "fake_jobs",
-        "kind": 5,
-        "importPath": "chefWeb.myapp.faker_data",
-        "description": "chefWeb.myapp.faker_data",
-        "peekOfCode": "fake_jobs = generate_fake_job_data(num_jobs)\n# Create DataFrame\ndf = pd.DataFrame(fake_jobs)\n# Show the first 5 rows of the DataFrame\nprint(df.head())\n# Save to CSV\ndf.to_csv('fake_jobs_dataset.csv', index=False)",
-        "detail": "chefWeb.myapp.faker_data",
-        "documentation": {}
-    },
-    {
-        "label": "df",
-        "kind": 5,
-        "importPath": "chefWeb.myapp.faker_data",
-        "description": "chefWeb.myapp.faker_data",
-        "peekOfCode": "df = pd.DataFrame(fake_jobs)\n# Show the first 5 rows of the DataFrame\nprint(df.head())\n# Save to CSV\ndf.to_csv('fake_jobs_dataset.csv', index=False)",
-        "detail": "chefWeb.myapp.faker_data",
-        "documentation": {}
-    },
-    {
-        "label": "UserManager",
+        "label": "Countries",
         "kind": 6,
         "importPath": "chefWeb.myapp.models",
         "description": "chefWeb.myapp.models",
-        "peekOfCode": "class UserManager(BaseUserManager):\n  def create_user(self,email,password=None,**extra_fields):\n    if not email:\n      raise ValueError(\"Email is required\")\n    email=self.normalize_email(email)\n    user=self.model(email=email,**extra_fields)\n    user.set_password(password)\n    user.save(using=self.db)\n    return user\n  def create_superuser(self,email,password=None,**extra_fields):",
+        "peekOfCode": "class Countries(models.Model):\n    country = models.CharField(max_length=2, choices=[(code, name) for code, name in countries])  # Convert to list of tuples\n    state = models.CharField(max_length=150)\n    city = models.CharField(max_length=150)\n    postal_code = models.CharField(max_length=10)\n    def __str__(self):\n        return f\"{self.country}\\t{self.state}\\t{self.city}\\t{self.postal_code}\"\nclass CustomUser(AbstractUser):\n    EMPLOYER = 'employer'\n    EMPLOYEE = 'employee'",
         "detail": "chefWeb.myapp.models",
         "documentation": {}
     },
@@ -895,25 +1309,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.models",
         "description": "chefWeb.myapp.models",
-        "peekOfCode": "class CustomUser(AbstractUser):\n  USER_TYPES=(\n    (\"s\",\"seeker\"),\n    (\"e\",\"employer\")\n  )\n  user_id=models.AutoField(primary_key=True)\n  username=models.CharField(max_length=500)\n  password=models.CharField(max_length=128)\n  email=models.EmailField(max_length=254,unique=True)\n  phone_number=models.CharField(max_length=15)",
-        "detail": "chefWeb.myapp.models",
-        "documentation": {}
-    },
-    {
-        "label": "Countries",
-        "kind": 6,
-        "importPath": "chefWeb.myapp.models",
-        "description": "chefWeb.myapp.models",
-        "peekOfCode": "class Countries(models.Model):\n  countries = dict(countries_for_language('en'))\n  country=models.CharField(max_length=2,choices=countries)\n  state=models.CharField(max_length=150)\n  city=models.CharField(max_length=150)\n  postal_code=models.CharField(max_length=10)\n  def __str__(self) -> str:\n    return f\"{self.country}\\t{self.state}\\t{self.city}\\t{self.postal_code}\"\nclass ProfileTable(models.Model):\n  profile_id=models.AutoField(primary_key=True)",
-        "detail": "chefWeb.myapp.models",
-        "documentation": {}
-    },
-    {
-        "label": "ProfileTable",
-        "kind": 6,
-        "importPath": "chefWeb.myapp.models",
-        "description": "chefWeb.myapp.models",
-        "peekOfCode": "class ProfileTable(models.Model):\n  profile_id=models.AutoField(primary_key=True)\n  user_id=models.OneToOneField(CustomUser,on_delete=models.CASCADE)\n  first_name=models.CharField(max_length=150)\n  last_name=models.CharField(max_length=150)\n  location=models.ForeignKey(Countries,on_delete=models.SET_NULL,null=True)\n  bio=models.TextField(max_length=500)\n  experience_years=models.CharField(max_length=2)\n  speciality=models.CharField(max_length=250)\nclass JobsTable(models.Model):",
+        "peekOfCode": "class CustomUser(AbstractUser):\n    EMPLOYER = 'employer'\n    EMPLOYEE = 'employee'\n    USER_TYPE_CHOICES = [\n        (EMPLOYER, 'Employer'),\n        (EMPLOYEE, 'Employee'),\n    ]\n    user_id = models.AutoField(primary_key=True)\n    uid = models.CharField(max_length=128, unique=True)  # Store Firebase UID\n    username = models.CharField(max_length=250, unique=True,blank=True,null=True)  # From Firebase",
         "detail": "chefWeb.myapp.models",
         "documentation": {}
     },
@@ -922,7 +1318,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.models",
         "description": "chefWeb.myapp.models",
-        "peekOfCode": "class JobsTable(models.Model):\n  EMP_TYPES=(\n    (\"full\",\"full_time\"),\n    (\"part\",\"part_time\")\n  )\n  user_id=models.ForeignKey(CustomUser,on_delete=models.CASCADE)\n  job_id=models.AutoField(primary_key=True)\n  title=models.CharField(max_length=200)\n  description=models.TextField(max_length=250)\n  location=models.ForeignKey(Countries,on_delete=models.CASCADE)",
+        "peekOfCode": "class JobsTable(models.Model):\n  EMP_TYPES = (\n    (\"Full Time\", \"Full-Time\"),\n    (\"Part Time\", \"Part-Time\")\n)\n  user_id=models.ForeignKey(CustomUser,on_delete=models.CASCADE)\n  job_id=models.AutoField(primary_key=True)\n  title=models.CharField(max_length=200)\n  description=models.TextField(max_length=250)\n  location=models.ForeignKey(Countries,on_delete=models.CASCADE)",
         "detail": "chefWeb.myapp.models",
         "documentation": {}
     },
@@ -940,7 +1336,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.models",
         "description": "chefWeb.myapp.models",
-        "peekOfCode": "class MessageTable(models.Model):\n  user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name=\"user\")\n  sender = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name=\"sender\")\n  receiver = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name=\"receiver\")\n  message_content=models.TextField(max_length=65535)\n  sent_date=models.DateField(auto_now_add=True)\n  read_status=models.BooleanField(default=False)\n  class Meta:\n    ordering=['sent_date']\n  def __str__(self):",
+        "peekOfCode": "class MessageTable(models.Model):\n  sender = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name=\"sender\")\n  receiver = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name=\"receiver\")\n  message_content=models.TextField(max_length=65535)\n  sent_date=models.DateField(auto_now_add=True)\n  time_stamp=models.TimeField(auto_now_add=True)\n  read_status=models.BooleanField(default=False)\n  class Meta:\n    ordering=['sent_date']\n  def __str__(self):",
         "detail": "chefWeb.myapp.models",
         "documentation": {}
     },
@@ -951,6 +1347,15 @@
         "description": "chefWeb.myapp.models",
         "peekOfCode": "class NotificationTable(models.Model):\n  NOTIFICATION_TYPE=(\n    (\"new_job\",\"new job\"),\n    (\"application_status\",\"application status\")\n  )\n  notification_id=models.AutoField(primary_key=True)\n  user_id=models.ForeignKey(CustomUser,on_delete=models.CASCADE)\n  notification_type=models.CharField(max_length=50,choices=NOTIFICATION_TYPE)\n  message=models.TextField(max_length=1500)\n  sent_date=models.DateField()",
         "detail": "chefWeb.myapp.models",
+        "documentation": {}
+    },
+    {
+        "label": "LocationType",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.schema",
+        "description": "chefWeb.myapp.schema",
+        "peekOfCode": "class LocationType(DjangoObjectType):\n    class Meta:\n        model = Countries\n        fields = ('country', 'state', 'city', 'postal_code')\nclass JobsTableType(DjangoObjectType):\n    class Meta:\n        model = JobsTable\n        fields=\"__all__\"\nclass Query(graphene.ObjectType):\n    all_jobs = graphene.List(JobsTableType)",
+        "detail": "chefWeb.myapp.schema",
         "documentation": {}
     },
     {
@@ -981,20 +1386,20 @@
         "documentation": {}
     },
     {
-        "label": "ProfileSerializer",
-        "kind": 6,
-        "importPath": "chefWeb.myapp.serializers",
-        "description": "chefWeb.myapp.serializers",
-        "peekOfCode": "class ProfileSerializer(serializers.ModelSerializer):\n  class Meta:\n    model=ProfileTable\n    fields=\"__all__\"  \nclass CountriesSerializer(serializers.ModelSerializer):\n  country_name = serializers.SerializerMethodField()  # Add custom field for country name\n  class Meta:\n      model = Countries\n      fields = ['country','country_name', 'state', 'city', 'postal_code']\n  def get_country_name(self, obj):",
-        "detail": "chefWeb.myapp.serializers",
-        "documentation": {}
-    },
-    {
         "label": "CountriesSerializer",
         "kind": 6,
         "importPath": "chefWeb.myapp.serializers",
         "description": "chefWeb.myapp.serializers",
-        "peekOfCode": "class CountriesSerializer(serializers.ModelSerializer):\n  country_name = serializers.SerializerMethodField()  # Add custom field for country name\n  class Meta:\n      model = Countries\n      fields = ['country','country_name', 'state', 'city', 'postal_code']\n  def get_country_name(self, obj):\n    try:\n       # Convert country code to country name\n      country_name_id= pycountry.countries.get(alpha_2=obj.country).name\n      return country_name_id",
+        "peekOfCode": "class CountriesSerializer(serializers.ModelSerializer):\n    country_name = serializers.CharField(\n        write_only=True\n    )  # Allow user to input country name\n    class Meta:\n        model = Countries\n        fields = [\"country\", \"country_name\", \"state\", \"city\", \"postal_code\"]\n    # def validate_country_name(self, value):\n    #     # Attempt to convert country name to country code\n    #     try:",
+        "detail": "chefWeb.myapp.serializers",
+        "documentation": {}
+    },
+    {
+        "label": "CustomUserSerializer",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.serializers",
+        "description": "chefWeb.myapp.serializers",
+        "peekOfCode": "class CustomUserSerializer(serializers.ModelSerializer):\n    location = CountriesSerializer()\n    class Meta:\n        model = CustomUser\n        fields = [\n            \"uid\",\n            \"username\",\n            \"first_name\",\n            \"last_name\",\n            \"email\",",
         "detail": "chefWeb.myapp.serializers",
         "documentation": {}
     },
@@ -1003,7 +1408,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.serializers",
         "description": "chefWeb.myapp.serializers",
-        "peekOfCode": "class JobsTitleSerializer(serializers.ModelSerializer):\n  class Meta:\n    model=JobsTable\n    fields=[\"title\"]\nclass JobsSerializer(serializers.ModelSerializer):\n  location=CountriesSerializer()\n  class Meta:\n    model=JobsTable\n    fields=['user_id','job_id', 'title', 'description', 'location', 'salary', 'employement_type', 'posted_date', 'application_deadline', 'requirements']\nclass ApplicationSerializer(serializers.ModelSerializer):",
+        "peekOfCode": "class JobsTitleSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = JobsTable\n        fields = [\"title\"]\nclass JobsSerializer(serializers.ModelSerializer):\n    location = CountriesSerializer()\n    class Meta:\n        model = JobsTable\n        fields = [\n            \"user_id\",",
         "detail": "chefWeb.myapp.serializers",
         "documentation": {}
     },
@@ -1012,7 +1417,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.serializers",
         "description": "chefWeb.myapp.serializers",
-        "peekOfCode": "class JobsSerializer(serializers.ModelSerializer):\n  location=CountriesSerializer()\n  class Meta:\n    model=JobsTable\n    fields=['user_id','job_id', 'title', 'description', 'location', 'salary', 'employement_type', 'posted_date', 'application_deadline', 'requirements']\nclass ApplicationSerializer(serializers.ModelSerializer):\n  class Meta:\n    model=ApplicationTable\n    fields=\"__all__\"\nclass MessageSerializer(serializers.ModelSerializer):",
+        "peekOfCode": "class JobsSerializer(serializers.ModelSerializer):\n    location = CountriesSerializer()\n    class Meta:\n        model = JobsTable\n        fields = [\n            \"user_id\",\n            \"job_id\",\n            \"title\",\n            \"description\",\n            \"location\",",
         "detail": "chefWeb.myapp.serializers",
         "documentation": {}
     },
@@ -1021,7 +1426,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.serializers",
         "description": "chefWeb.myapp.serializers",
-        "peekOfCode": "class ApplicationSerializer(serializers.ModelSerializer):\n  class Meta:\n    model=ApplicationTable\n    fields=\"__all__\"\nclass MessageSerializer(serializers.ModelSerializer):\n  sender_profile=ProfileSerializer(read_only=True)\n  receiver_profile=ProfileSerializer(read_only=True)\n  class Meta:\n    model=MessageTable\n    fields=[\"id\",\"user\",\"sender\",\"sender_profile\",\"receiver\",\"receiver_profile\",\"message_content\",\"sent_date\",\"read_status\"]",
+        "peekOfCode": "class ApplicationSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = ApplicationTable\n        fields = \"__all__\"\nclass MessageSerializer(serializers.ModelSerializer):\n    # sender_profile = CustomUserSerializer(read_only=True)\n    # receiver_profile = CustomUserSerializer(read_only=True)\n    read_only_fields = [\"read_status\"]\n    class Meta:\n        model = MessageTable",
         "detail": "chefWeb.myapp.serializers",
         "documentation": {}
     },
@@ -1030,7 +1435,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.serializers",
         "description": "chefWeb.myapp.serializers",
-        "peekOfCode": "class MessageSerializer(serializers.ModelSerializer):\n  sender_profile=ProfileSerializer(read_only=True)\n  receiver_profile=ProfileSerializer(read_only=True)\n  class Meta:\n    model=MessageTable\n    fields=[\"id\",\"user\",\"sender\",\"sender_profile\",\"receiver\",\"receiver_profile\",\"message_content\",\"sent_date\",\"read_status\"]",
+        "peekOfCode": "class MessageSerializer(serializers.ModelSerializer):\n    # sender_profile = CustomUserSerializer(read_only=True)\n    # receiver_profile = CustomUserSerializer(read_only=True)\n    read_only_fields = [\"read_status\"]\n    class Meta:\n        model = MessageTable\n        fields=\"__all__\"\n        # fields = [\n        #     \"sender\",\n        #     \"sender_profile\",",
         "detail": "chefWeb.myapp.serializers",
         "documentation": {}
     },
@@ -1039,7 +1444,7 @@
         "kind": 5,
         "importPath": "chefWeb.myapp.urls",
         "description": "chefWeb.myapp.urls",
-        "peekOfCode": "urlpatterns = [\n  path(\"jobs\",views.JobsList.as_view(),name=\"all_jobs\"),\n  # path(\"jobs_titles\",views.JobsTitle,name=\"job-titles\"),\n  path(\"jobs_detail\",views.JobsDetail.as_view(),name=\"job_details_update\"),\n  path(\"application\",views.ApplicationsList.as_view(),name=\"all_applications\"),\n  path(\"application_detail\",views.ApplicationsDetail.as_view(),name=\"application_details_update\"),\n  path(\"messages/<user_id>/\",views.Message.as_view(),name=\"messages_operations\"),\n  path(\"get_messages/<sender_id>/<receiver_id>/\",views.GetMessages.as_view(),name=\"get_messages_user\"),\n  path(\"send_messages\",views.SendMessage.as_view(),name=\"send_message\"),\n  path(\"profile_detail/<int:pk>/\",views.ProfileDetail.as_view(),name=\"get_profile\"),",
+        "peekOfCode": "urlpatterns = [\n    path(\"jobs\", views.JobsList.as_view(), name=\"all_jobs\"),\n    # path(\"jobs_titles\",views.JobsTitle,name=\"job-titles\"),\n    path(\"jobs_detail\", views.JobsDetail.as_view(), name=\"job_details_update\"),\n    path(\"application\", views.ApplicationsList.as_view(), name=\"all_applications\"),\n    path(\n        \"application_detail\",\n        views.ApplicationsDetail.as_view(),\n        name=\"application_details_update\",\n    ),",
         "detail": "chefWeb.myapp.urls",
         "documentation": {}
     },
@@ -1048,7 +1453,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.views",
         "description": "chefWeb.myapp.views",
-        "peekOfCode": "class JobsList(generics.ListCreateAPIView):\n    queryset=JobsTable.objects.all()\n    serializer_class=JobsSerializer\n    # permission_classes=[IsAuthenticated]\nclass JobsDetail(generics.RetrieveUpdateDestroyAPIView):\n    queryset=JobsTable.objects.all()\n    serializer_class=JobsSerializer\n    permission_classes=[IsAuthenticated]\ndef JobsTitle(request):\n    queryset=JobsTable.objects.values('title')",
+        "peekOfCode": "class JobsList(generics.ListCreateAPIView):\n    queryset = JobsTable.objects.all()\n    serializer_class = JobsSerializer\n    permission_classes = [IsAuthenticated]\nclass JobsDetail(generics.RetrieveUpdateDestroyAPIView):\n    queryset = JobsTable.objects.all()\n    serializer_class = JobsSerializer\n    permission_classes = [IsAuthenticated]\n# This view does the CRUD operations on the ApplicationsTable\nclass ApplicationsList(generics.ListCreateAPIView):",
         "detail": "chefWeb.myapp.views",
         "documentation": {}
     },
@@ -1057,7 +1462,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.views",
         "description": "chefWeb.myapp.views",
-        "peekOfCode": "class JobsDetail(generics.RetrieveUpdateDestroyAPIView):\n    queryset=JobsTable.objects.all()\n    serializer_class=JobsSerializer\n    permission_classes=[IsAuthenticated]\ndef JobsTitle(request):\n    queryset=JobsTable.objects.values('title')\n    print(queryset)\n    serializer=JobsTitleSerializer(queryset,many=True)\n    return serializer.data\n        # json_data=json.dumps(queryset)",
+        "peekOfCode": "class JobsDetail(generics.RetrieveUpdateDestroyAPIView):\n    queryset = JobsTable.objects.all()\n    serializer_class = JobsSerializer\n    permission_classes = [IsAuthenticated]\n# This view does the CRUD operations on the ApplicationsTable\nclass ApplicationsList(generics.ListCreateAPIView):\n    queryset = ApplicationTable.objects.all()\n    serializer_class = ApplicationSerializer\n    permission_classes = [IsAuthenticated]\nclass ApplicationsDetail(generics.RetrieveUpdateDestroyAPIView):",
         "detail": "chefWeb.myapp.views",
         "documentation": {}
     },
@@ -1066,7 +1471,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.views",
         "description": "chefWeb.myapp.views",
-        "peekOfCode": "class ApplicationsList(generics.ListCreateAPIView):\n    queryset=ApplicationTable.objects.all()\n    serializer_class=ApplicationSerializer\n    permission_classes=[IsAuthenticated]\nclass ApplicationsDetail(generics.RetrieveUpdateDestroyAPIView):\n    queryset=ApplicationTable.objects.all()\n    serializer_class=ApplicationSerializer\n    permission_classes=[IsAuthenticated]\n# This view deals with retrieve messages, sending messages, getting messages\nclass Message(generics.ListAPIView):",
+        "peekOfCode": "class ApplicationsList(generics.ListCreateAPIView):\n    queryset = ApplicationTable.objects.all()\n    serializer_class = ApplicationSerializer\n    permission_classes = [IsAuthenticated]\nclass ApplicationsDetail(generics.RetrieveUpdateDestroyAPIView):\n    queryset = ApplicationTable.objects.all()\n    serializer_class = ApplicationSerializer\n    permission_classes = [IsAuthenticated]\n# This view deals with retrieve messages, sending messages, getting messages\nclass Message(generics.ListAPIView):",
         "detail": "chefWeb.myapp.views",
         "documentation": {}
     },
@@ -1075,7 +1480,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.views",
         "description": "chefWeb.myapp.views",
-        "peekOfCode": "class ApplicationsDetail(generics.RetrieveUpdateDestroyAPIView):\n    queryset=ApplicationTable.objects.all()\n    serializer_class=ApplicationSerializer\n    permission_classes=[IsAuthenticated]\n# This view deals with retrieve messages, sending messages, getting messages\nclass Message(generics.ListAPIView):\n    serializer_class=MessageSerializer\n    permission_classes=[IsAuthenticated]\n    def get_queryset(self):\n        user_id=self.kwargs[\"user_id\"]  ",
+        "peekOfCode": "class ApplicationsDetail(generics.RetrieveUpdateDestroyAPIView):\n    queryset = ApplicationTable.objects.all()\n    serializer_class = ApplicationSerializer\n    permission_classes = [IsAuthenticated]\n# This view deals with retrieve messages, sending messages, getting messages\nclass Message(generics.ListAPIView):\n    serializer_class = MessageSerializer\n    permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        user_id = self.kwargs[\"user_id\"]",
         "detail": "chefWeb.myapp.views",
         "documentation": {}
     },
@@ -1084,7 +1489,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.views",
         "description": "chefWeb.myapp.views",
-        "peekOfCode": "class Message(generics.ListAPIView):\n    serializer_class=MessageSerializer\n    permission_classes=[IsAuthenticated]\n    def get_queryset(self):\n        user_id=self.kwargs[\"user_id\"]  \n        messages=MessageTable.objects.filter(\n            id__in=Subquery(\n                User.objects.filter(\n                    Q(sender__receiver=user_id)|\n                    Q(receiver__sender=user_id)",
+        "peekOfCode": "class Message(generics.ListAPIView):\n    serializer_class = MessageSerializer\n    permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        user_id = self.kwargs[\"user_id\"]\n        messages = MessageTable.objects.filter(\n            id__in=Subquery(\n                CustomUser.objects.filter(\n                    Q(sender__receiver=user_id) | Q(receiver__sender=user_id)\n                )",
         "detail": "chefWeb.myapp.views",
         "documentation": {}
     },
@@ -1093,7 +1498,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.views",
         "description": "chefWeb.myapp.views",
-        "peekOfCode": "class GetMessages(generics.ListAPIView):\n    serializer_class=MessageSerializer\n    permission_classes=[IsAuthenticated]\n    def get_queryset(self):\n        sender_id=self.kwargs[\"sender_id\"]\n        receiver_id=self.kwargs[\"receiver_id\"]\n        message=MessageTable.objects.filter(\n            sender__in=[sender_id,receiver_id],\n            receiver__in=[sender_id,receiver_id]\n        ).order_by('-sent_date')",
+        "peekOfCode": "class GetMessages(generics.ListAPIView):\n    serializer_class = MessageSerializer\n    # permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        sender = self.kwargs[\"sender\"]\n        receiver = self.kwargs[\"receiver\"]\n        sender_object=get_object_or_404(CustomUser,uid=sender)\n        receiver_object=get_object_or_404(CustomUser,uid=receiver)\n        message = MessageTable.objects.filter(\n            sender__in=[sender_object.user_id, receiver_object.user_id], receiver__in=[sender_object.user_id, receiver_object.user_id]",
         "detail": "chefWeb.myapp.views",
         "documentation": {}
     },
@@ -1102,7 +1507,25 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.views",
         "description": "chefWeb.myapp.views",
-        "peekOfCode": "class SendMessage(generics.CreateAPIView):\n    serializer_class=MessageSerializer\n    permission_classes=[IsAuthenticated]\n# This view helps in retrieving details of a particular profile\nclass ProfileDetail(generics.RetrieveUpdateAPIView):\n    serializer_class=ProfileSerializer\n    queryset=ProfileTable.objects.all()\n    permission_classes=[IsAuthenticated]\nclass SearchUser(generics.ListAPIView):\n    serializer_class=ProfileSerializer",
+        "peekOfCode": "class SendMessage(generics.CreateAPIView):\n    serializer_class = MessageSerializer\n    # permission_classes = [IsAuthenticated]\n    def post(self, request, *args, **kwargs):\n        sender_email=request.data.get(\"sender\")\n        receiver_email=request.data.get(\"receiver\")\n        message_content=request.data.get(\"message_content\")\n        print(sender_email,receiver_email,message_content)\n        #Validate required fields\n        if not sender_email or not receiver_email or not message_content:",
+        "detail": "chefWeb.myapp.views",
+        "documentation": {}
+    },
+    {
+        "label": "MarkMessageAsRead",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.views",
+        "description": "chefWeb.myapp.views",
+        "peekOfCode": "class MarkMessageAsRead(generics.UpdateAPIView):\n    queryset = MessageTable.objects.all()\n    serializer_class = MessageSerializer\n    permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        # Ensure the logged-in user can only mark messages they received\n        return self.queryset.filter(receiver=self.request.user)\n    def partial_update(self, request, *args, **kwargs):\n        instance = self.get_object()\n        instance.read_status = True  # Mark as read",
+        "detail": "chefWeb.myapp.views",
+        "documentation": {}
+    },
+    {
+        "label": "ProfileList",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.views",
+        "description": "chefWeb.myapp.views",
+        "peekOfCode": "class ProfileList(generics.ListCreateAPIView):\n    serializer_class = CustomUserSerializer\n    # permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        uid = self.kwargs.get(\"uid\")\n        if uid:\n            return CustomUser.objects.filter(uid=uid)\n        return CustomUser.objects.all()\nclass ProfileDetail(generics.RetrieveUpdateAPIView):\n    serializer_class = CustomUserSerializer",
         "detail": "chefWeb.myapp.views",
         "documentation": {}
     },
@@ -1111,7 +1534,25 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.views",
         "description": "chefWeb.myapp.views",
-        "peekOfCode": "class ProfileDetail(generics.RetrieveUpdateAPIView):\n    serializer_class=ProfileSerializer\n    queryset=ProfileTable.objects.all()\n    permission_classes=[IsAuthenticated]\nclass SearchUser(generics.ListAPIView):\n    serializer_class=ProfileSerializer\n    queryset=ProfileTable.objects.all()\n    permission_classes=[IsAuthenticated]\n    def list(self, request, *args, **kwargs):\n        username=self.kwargs['username']",
+        "peekOfCode": "class ProfileDetail(generics.RetrieveUpdateAPIView):\n    serializer_class = CustomUserSerializer\n    # permission_classes=[IsAuthenticated]\n    lookup_field = \"uid\"\n    def get_queryset(self):\n        uid = self.kwargs.get(\"uid\")\n        if uid:\n            return CustomUser.objects.filter(uid=uid)\n        return CustomUser.objects.all()\n    def update(self, request, *args, **kwargs):",
+        "detail": "chefWeb.myapp.views",
+        "documentation": {}
+    },
+    {
+        "label": "UpdateBioView",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.views",
+        "description": "chefWeb.myapp.views",
+        "peekOfCode": "class UpdateBioView(generics.UpdateAPIView):\n    queryset = CustomUser.objects.all()\n    serializer_class = CustomUserSerializer\n    permission_classes = [IsAuthenticated]\n    def update(self, request, *args, **kwargs):\n        uid = kwargs.get(\"uid\")\n        bio = request.data.get(\"bio\")\n        try:\n            user = CustomUser.objects.get(uid=uid)\n            user.bio = bio",
+        "detail": "chefWeb.myapp.views",
+        "documentation": {}
+    },
+    {
+        "label": "ProfileImageUploadView",
+        "kind": 6,
+        "importPath": "chefWeb.myapp.views",
+        "description": "chefWeb.myapp.views",
+        "peekOfCode": "class ProfileImageUploadView(APIView):\n    def post(self, request, *args, **kwargs):\n        uid = request.data.get(\"uid\")  # Get UID from request\n        try:\n            user = CustomUser.objects.get(uid=uid)  # Find user by UID\n            user.profile_picture = request.data.get(\"image\")\n            user.save()\n            print(\"profile updated\")\n            return Response(\n                {\"message\": \"Profile image updated successfully!\"}, status=201",
         "detail": "chefWeb.myapp.views",
         "documentation": {}
     },
@@ -1120,25 +1561,7 @@
         "kind": 6,
         "importPath": "chefWeb.myapp.views",
         "description": "chefWeb.myapp.views",
-        "peekOfCode": "class SearchUser(generics.ListAPIView):\n    serializer_class=ProfileSerializer\n    queryset=ProfileTable.objects.all()\n    permission_classes=[IsAuthenticated]\n    def list(self, request, *args, **kwargs):\n        username=self.kwargs['username']\n        logged_in_user=self.request.user\n        users=ProfileTable.objects.filter(\n            Q(user_id__username__icontains=username)|\n            Q(last_name__icontains=username)|",
-        "detail": "chefWeb.myapp.views",
-        "documentation": {}
-    },
-    {
-        "label": "JobsTitle",
-        "kind": 2,
-        "importPath": "chefWeb.myapp.views",
-        "description": "chefWeb.myapp.views",
-        "peekOfCode": "def JobsTitle(request):\n    queryset=JobsTable.objects.values('title')\n    print(queryset)\n    serializer=JobsTitleSerializer(queryset,many=True)\n    return serializer.data\n        # json_data=json.dumps(queryset)\n# This view does the CRUD operations on the ApplicationsTable\nclass ApplicationsList(generics.ListCreateAPIView):\n    queryset=ApplicationTable.objects.all()\n    serializer_class=ApplicationSerializer",
-        "detail": "chefWeb.myapp.views",
-        "documentation": {}
-    },
-    {
-        "label": "jobsfakeData",
-        "kind": 2,
-        "importPath": "chefWeb.myapp.views",
-        "description": "chefWeb.myapp.views",
-        "peekOfCode": "def jobsfakeData():\n    jobs=[]\n    user_instance=CustomUser.objects.get(user_id=5)\n    country_instance=Countries.objects.get(id=1)\n    print(country_instance)\n    with open('fake_jobs_dataset.csv', mode='r') as file:\n    # Create a CSV reader object\n        csv_reader = csv.reader(file)\n    # Iterate over each row in the CSV file\n        for row in csv_reader:",
+        "peekOfCode": "class SearchUser(generics.ListAPIView):\n    serializer_class = CustomUserSerializer\n    queryset = CustomUser.objects.all()\n    permission_classes = [IsAuthenticated]\n    def list(self, request, *args, **kwargs):\n        username = self.kwargs[\"username\"]\n        logged_in_user = self.request.user\n        users = CustomUser.objects.filter(\n            Q(user_id__username__icontains=username)\n            | Q(last_name__icontains=username)",
         "detail": "chefWeb.myapp.views",
         "documentation": {}
     },
@@ -1185,141 +1608,6 @@
         "description": "frontend_v1.node_modules.flatted.python.flatted",
         "peekOfCode": "def stringify(value, *args, **kwargs):\n    known = _Known()\n    input = []\n    output = []\n    i = int(_index(known, input, value))\n    while i < len(input):\n        output.append(_transform(known, input, input[i]))\n        i += 1\n    return _json.dumps(output, *args, **kwargs)",
         "detail": "frontend_v1.node_modules.flatted.python.flatted",
-        "documentation": {}
-    },
-    {
-        "label": "stringify",
-        "kind": 2,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "def stringify(value):\n    return _stringify(value, separators=(',', ':'))\nassert stringify([None, None]) == '[[null,null]]'\na = []\no = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "a",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "a = []\no = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "o",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "o = {}\nassert stringify(a) == '[[]]'\nassert stringify(o) == '[{}]'\na.append(a)\no['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "o['o']",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "o['o'] = o\nassert stringify(a) == '[[\"0\"]]'\nassert stringify(o) == '[{\"o\":\"0\"}]'\nb = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)\na.append('two')\na.append(True)\no['one'] = 1\no['two'] = 'two'",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "b",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "b = parse(stringify(a))\nassert isinstance(b, list) and b[0] == b\na.append(1)\na.append('two')\na.append(True)\no['one'] = 1\no['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "o['one']",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "o['one'] = 1\no['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "o['two']",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "o['two'] = 'two'\no['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "o['three']",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "o['three'] = True\nassert stringify(a) == '[[\"0\",1,\"1\",true],\"two\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true},\"two\"]'\na.append(o)\no['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])\no['test'] = {'test': 'OK'}",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "o['a']",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "o['a'] = a\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\"}]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\"},\"two\",[\"2\",1,\"1\",true,\"0\"]]'\na.append({'test': 'OK'})\na.append([1, 2, 3])\no['test'] = {'test': 'OK'}\no['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "o['test']",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "o['test'] = {'test': 'OK'}\no['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "o['array']",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "o['array'] = [1, 2, 3]\nassert stringify(a) == '[[\"0\",1,\"1\",true,\"2\",\"3\",\"4\"],\"two\",{\"o\":\"2\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"0\",\"test\":\"3\",\"array\":\"4\"},{\"test\":\"5\"},[1,2,3],\"OK\"]'\nassert stringify(o) == '[{\"o\":\"0\",\"one\":1,\"two\":\"1\",\"three\":true,\"a\":\"2\",\"test\":\"3\",\"array\":\"4\"},\"two\",[\"2\",1,\"1\",true,\"0\",\"3\",\"4\"],{\"test\":\"5\"},[1,2,3],\"OK\"]'\na2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "a2",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "a2 = parse(stringify(a));\no2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "o2",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "o2 = parse(stringify(o));\nassert a2[0] == a2\nassert o2['o'] == o2\nassert a2[1] == 1 and a2[2] == 'two' and a2[3] == True and isinstance(a2[4], dict)\nassert a2[4] == a2[4]['o'] and a2 == a2[4]['o']['a']\nstr = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "str",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "str = parse('[{\"prop\":\"1\",\"a\":\"2\",\"b\":\"3\"},{\"value\":123},[\"4\",\"5\"],{\"e\":\"6\",\"t\":\"7\",\"p\":4},{},{\"b\":\"8\"},\"f\",{\"a\":\"9\"},[\"10\"],\"sup\",{\"a\":1,\"d\":2,\"c\":\"7\",\"z\":\"11\",\"h\":1},{\"g\":2,\"a\":\"7\",\"b\":\"12\",\"f\":6},{\"r\":4,\"u\":\"7\",\"c\":5}]')\nassert str['b']['t']['a'] == 'sup' and str['a'][1]['b'][0]['c'] == str['b']['t']\noo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
-        "documentation": {}
-    },
-    {
-        "label": "oo",
-        "kind": 5,
-        "importPath": "frontend_v1.node_modules.flatted.python.test",
-        "description": "frontend_v1.node_modules.flatted.python.test",
-        "peekOfCode": "oo = parse('[{\"a\":\"1\",\"b\":\"0\",\"c\":\"2\"},{\"aa\":\"3\"},{\"ca\":\"4\",\"cb\":\"5\",\"cc\":\"6\",\"cd\":\"7\",\"ce\":\"8\",\"cf\":\"9\"},{\"aaa\":\"10\"},{\"caa\":\"4\"},{\"cba\":\"5\"},{\"cca\":\"2\"},{\"cda\":\"4\"},\"value2\",\"value3\",\"value1\"]');\nassert oo['a']['aa']['aaa'] == 'value1' and oo == oo['b'] and oo['c']['ca']['caa'] == oo['c']['ca']\nprint('OK')",
-        "detail": "frontend_v1.node_modules.flatted.python.test",
         "documentation": {}
     }
 ]
