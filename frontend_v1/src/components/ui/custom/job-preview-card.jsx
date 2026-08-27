@@ -50,7 +50,7 @@ export function JobPreviewCard({
 
   return (
     <div ref={cardRef}>
-      <SurfaceCard className="cc-scroll-in flex h-full flex-col gap-5">
+      <SurfaceCard className="docket-card cc-scroll-in flex h-full flex-col gap-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
             <Avatar
@@ -127,7 +127,7 @@ export function JobPreviewCard({
           ) : null}
         </div>
 
-        <p className="text-sm leading-7 text-text-sub-light dark:text-text-sub-dark">
+        <p className="text-sm leading-7 text-text-main-light dark:text-text-main-dark">
           {job?.description
             ? String(job.description)
                 .replace(/<[^>]+>/g, " ")

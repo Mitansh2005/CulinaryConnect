@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { getFreshIdToken, getUid } from '@/firebase/authUtils';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { baseUrl } from '@/constants/constants';
 import { format, isToday, isYesterday } from 'date-fns';
@@ -30,6 +30,7 @@ export function MessageTemplate() {
 	const messagesContainerRef = useRef(null);
 	const currentUserId = getUid();
 	const navigate = useNavigate();
+	const location = useLocation();
 	const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
 	// WebSocket connection
@@ -91,6 +92,35 @@ export function MessageTemplate() {
 			console.error('Failed to fetch users:', error);
 		}
 	};
+
+	// Select user from query params if present
+	useEffect(() => {
+		const searchParams = new URLSearchParams(location.search);
+		const targetUid = searchParams.get('uid');
+		if (!targetUid || users.length === 0) return;
+
+		const existingUser = users.find(u => u.uid === targetUid);
+		if (existingUser) {
+			setSelectedUser(existingUser);
+		} else {
+			const fetchTargetUserProfile = async () => {
+				try {
+					const token = await getFreshIdToken();
+					const res = await axios.get(`${baseUrl}/profile/${targetUid}/`, {
+						headers: { Authorization: `Bearer ${token}` },
+					});
+					const userData = Array.isArray(res.data) ? res.data[0] : res.data;
+					if (userData) {
+						setUsers(prev => [userData, ...prev]);
+						setSelectedUser(userData);
+					}
+				} catch (err) {
+					console.error('Failed to load redirect message user:', err);
+				}
+			};
+			fetchTargetUserProfile();
+		}
+	}, [location.search, users]);
 
 	// Fetch messages when user is selected
 	useEffect(() => {
@@ -205,10 +235,10 @@ export function MessageTemplate() {
 	return (
 		<div className="relative flex w-full flex-1 overflow-hidden">
 			{/* Conversation List Pane */}
-			<div className="flex w-96 flex-shrink-0 flex-col border-r border-border-light/80 bg-white/92 dark:border-border-dark dark:bg-[#211c18]">
+			<div className="flex w-96 flex-shrink-0 flex-col border-r border-border-light/80 bg-white/92 dark:border-border-dark dark:bg-surface-dark">
 				<div className="p-5 pb-0">
 					<div className="flex justify-between items-center mb-4">
-						<h2 className="text-xl font-bold text-text-main-light dark:text-text-main-dark">Messages</h2>
+						<h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-text-main-light dark:text-text-main-dark">Messages</h2>
 						<button className="rounded-full p-2 text-primary transition-colors hover:bg-ember-50 dark:hover:bg-ember-500/10">
 							<span className="material-symbols-outlined text-[20px]">edit_square</span>
 						</button>
@@ -222,7 +252,7 @@ export function MessageTemplate() {
 							</span>
 						</div>
 						<input
-							className="block w-full rounded-xl border border-border-light/80 bg-stone-50/90 py-2.5 pl-10 pr-3 text-sm font-normal text-text-main-light transition-all placeholder:text-text-sub-light focus:outline-none focus:ring-2 focus:ring-primary/30 dark:border-border-dark dark:bg-white/10 dark:text-text-main-dark dark:placeholder:text-text-sub-dark"
+							className="soft-input block pl-10 pr-3"
 							placeholder="Search chefs or conversations..."
 							type="text"
 							value={searchQuery}
@@ -239,7 +269,7 @@ export function MessageTemplate() {
 									: 'border-transparent text-text-sub-light hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark'
 								}`}
 						>
-							<span className="text-sm font-medium tracking-wide">All</span>
+							<span className="font-tags text-xs font-semibold uppercase tracking-[0.16em]">All</span>
 						</button>
 						<button
 							onClick={() => setFilterTab('unread')}
@@ -248,7 +278,7 @@ export function MessageTemplate() {
 									: 'border-transparent text-text-sub-light hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark'
 								}`}
 						>
-							<span className="text-sm font-semibold tracking-wide">Unread</span>
+							<span className="font-tags text-xs font-semibold uppercase tracking-[0.16em]">Unread</span>
 						</button>
 						<button
 							onClick={() => setFilterTab('archived')}
@@ -257,7 +287,7 @@ export function MessageTemplate() {
 									: 'border-b-transparent text-text-sub-light hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark'
 								}`}
 						>
-							<span className="text-sm font-semibold tracking-wide">Archived</span>
+							<span className="font-tags text-xs font-semibold uppercase tracking-[0.16em]">Archived</span>
 						</button>
 					</div>
 				</div>
@@ -266,8 +296,9 @@ export function MessageTemplate() {
 				<div className="flex-1 overflow-y-auto">
 					{filteredUsers.length === 0 ? (
 						<div className="flex h-full flex-col items-center justify-center p-8 text-text-sub-light dark:text-text-sub-dark">
-							<span className="material-symbols-outlined text-[48px] mb-2">chat_bubble</span>
-							<p className="text-sm text-center">No conversations yet</p>
+							<span className="material-symbols-outlined text-[48px] mb-3 opacity-60 text-primary">chat_bubble</span>
+							<p className="font-display text-lg font-medium text-text-main-light dark:text-text-main-dark text-center">No conversations yet</p>
+							<p className="text-xs text-text-sub-light dark:text-text-sub-dark text-center mt-1">Start a dialogue from your application track record.</p>
 						</div>
 					) : (
 						filteredUsers.map((user) => (
@@ -281,7 +312,7 @@ export function MessageTemplate() {
 							>
 								<div className="relative shrink-0">
 									<div
-										className="h-12 w-12 rounded-full border border-border-light bg-stone-100 bg-cover bg-center bg-no-repeat dark:border-border-dark dark:bg-[#332b25]"
+										className="h-12 w-12 rounded-full border border-border-light bg-stone-100 bg-cover bg-center bg-no-repeat dark:border-border-dark dark:bg-charcoal-800"
 										style={
 											profileImageUrl(user.profile_picture)
 												? { backgroundImage: `url(${profileImageUrl(user.profile_picture)})` }
@@ -320,10 +351,10 @@ export function MessageTemplate() {
 				{selectedUser ? (
 					<>
 						{/* Chat Header */}
-						<header className="z-10 flex h-[72px] shrink-0 items-center justify-between border-b border-border-light/80 bg-white/92 px-6 dark:border-border-dark dark:bg-[#211c18]">
+						<header className="z-10 flex h-[72px] shrink-0 items-center justify-between border-b border-border-light/80 bg-white/92 px-6 dark:border-border-dark dark:bg-surface-dark">
 							<div className="flex items-center gap-4">
 								<div
-									className="h-10 w-10 rounded-full border border-border-light bg-stone-100 bg-cover bg-center bg-no-repeat dark:border-border-dark dark:bg-[#332b25]"
+									className="h-10 w-10 rounded-full border border-border-light bg-stone-100 bg-cover bg-center bg-no-repeat dark:border-border-dark dark:bg-charcoal-800"
 									style={
 										profileImageUrl(selectedUser.profile_picture)
 											? { backgroundImage: `url(${profileImageUrl(selectedUser.profile_picture)})` }
@@ -387,7 +418,7 @@ export function MessageTemplate() {
 										>
 											{!isSent && (
 												<div
-													className="mb-1 h-8 w-8 shrink-0 self-end rounded-full bg-stone-100 bg-cover bg-center bg-no-repeat dark:bg-[#332b25]"
+													className="mb-1 h-8 w-8 shrink-0 self-end rounded-full bg-stone-100 bg-cover bg-center bg-no-repeat dark:bg-charcoal-800"
 													style={
 														profileImageUrl(selectedUser.profile_picture)
 															? { backgroundImage: `url(${profileImageUrl(selectedUser.profile_picture)})` }
@@ -406,7 +437,7 @@ export function MessageTemplate() {
 												<div
 													className={`rounded-xl border border-border-light/60 p-4 shadow-sm ${isSent
 															? 'rounded-tr-sm bg-primary/14 dark:bg-primary/22'
-															: 'rounded-tl-sm bg-white/95 dark:bg-[#241f1b]'
+															: 'rounded-tl-sm bg-white/95 dark:bg-[#0f100f]'
 														}`}
 												>
 													<p className="text-sm leading-relaxed text-text-main-light dark:text-text-main-dark">
@@ -433,14 +464,14 @@ export function MessageTemplate() {
 							{isTyping && (
 								<div className="flex gap-4 max-w-[80%]">
 									<div
-										className="mb-1 h-8 w-8 shrink-0 self-end rounded-full bg-stone-100 bg-cover bg-center bg-no-repeat opacity-50 dark:bg-[#332b25]"
+										className="mb-1 h-8 w-8 shrink-0 self-end rounded-full bg-stone-100 bg-cover bg-center bg-no-repeat opacity-50 dark:bg-charcoal-800"
 										style={
 											profileImageUrl(selectedUser.profile_picture)
 												? { backgroundImage: `url(${profileImageUrl(selectedUser.profile_picture)})` }
 												: {}
 										}
 									/>
-									<div className="self-start rounded-2xl rounded-bl-none border border-border-light/60 bg-white/95 px-4 py-3 shadow-sm dark:border-border-dark dark:bg-[#241f1b]">
+									<div className="self-start rounded-2xl rounded-bl-none border border-border-light/60 bg-white/95 px-4 py-3 shadow-sm dark:border-border-dark dark:bg-[#0f100f]">
 										<div className="flex gap-1 items-center h-4">
 											<div
 												className="h-2 w-2 animate-bounce rounded-full bg-text-sub-light dark:bg-text-sub-dark"
@@ -463,7 +494,7 @@ export function MessageTemplate() {
 						</div>
 
 							{/* Input Area */}
-							<div className="shrink-0 border-t border-border-light/80 bg-white/92 px-4 py-3 dark:border-border-dark dark:bg-[#211c18]">
+							<div className="shrink-0 border-t border-border-light/80 bg-white/92 px-4 py-3 dark:border-border-dark dark:bg-surface-dark">
 								<div className="flex items-center gap-3 max-w-4xl mx-auto">
 									<div className="flex flex-1 items-center rounded-2xl border border-border-light/80 bg-stone-50/90 shadow-sm transition-all focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10 dark:border-border-dark dark:bg-white/10">
 										<textarea
@@ -483,7 +514,7 @@ export function MessageTemplate() {
 									<button
 										onClick={sendMessage}
 										disabled={!messageInput.trim()}
-										className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary via-ember-500 to-ember-600 text-primary-foreground shadow-md shadow-primary/20 transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
+										className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
 									>
 										<Send className="w-5 h-5" />
 									</button>

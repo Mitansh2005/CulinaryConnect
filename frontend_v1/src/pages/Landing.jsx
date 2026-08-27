@@ -81,12 +81,9 @@ export default function Landing() {
   }
 
   return (
-    <div className="shell-canvas overflow-hidden" ref={scopeRef}>
-      <div className="absolute inset-x-0 top-0 z-0 h-[34rem] bg-[radial-gradient(circle_at_top,rgba(224,106,33,0.24),transparent_42%)]" />
-      <div className="absolute inset-x-0 bottom-0 z-0 h-[28rem] bg-[radial-gradient(circle_at_bottom_right,rgba(47,100,68,0.18),transparent_36%)]" />
-
+    <div className="shell-canvas" ref={scopeRef}>
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-4 pb-10 pt-5 sm:px-6 lg:px-10 lg:pb-14">
-        <header className="glass-panel cc-reveal flex items-center justify-between gap-4 px-5 py-4 sm:px-6">
+        <header className="cc-reveal flex items-center justify-between gap-4 py-4 border-b border-border/50 dark:border-white/10 mb-6">
           <BrandMark subtitle="Culinary hiring atelier" />
           <div className="flex items-center gap-3">
             <Link
@@ -151,44 +148,34 @@ export default function Landing() {
             </div>
           </section>
 
-          <section className="relative">
-            <div className="glass-panel cc-reveal relative overflow-hidden p-6 sm:p-7 lg:p-8">
-              <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0.42),transparent)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.06),transparent)]" />
-              <div className="relative space-y-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="section-kicker">Studio view</p>
-                    <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.04em] text-text-main-light dark:text-text-main-dark">
-                      Designed around real service rhythms
-                    </h2>
-                  </div>
-                  <div className="rounded-full border border-forest-200 bg-forest-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/10 dark:text-forest-200">
-                    Live workflow
-                  </div>
-                </div>
+          <section className="relative flex flex-col justify-center">
+            <div className="cc-reveal space-y-6">
+              <div>
+                <p className="section-kicker">Studio view</p>
+                <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.04em] text-text-main-light dark:text-text-main-dark">
+                  Designed around real service rhythms
+                </h2>
+              </div>
 
-                <div className="grid gap-4">
-                  {pillars.map(({ icon: Icon, title, description }) => (
-                    <article
-                      key={title}
-                      className="cc-stagger-item cc-scroll-in rounded-[1.6rem] border border-white/80 bg-white/88 p-5 shadow-sm dark:border-white/10 dark:bg-white/5"
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/12 text-primary dark:bg-primary/16">
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-text-main-light dark:text-text-main-dark">
-                            {title}
-                          </h3>
-                          <p className="mt-2 text-sm leading-7 text-text-sub-light dark:text-text-sub-dark">
-                            {description}
-                          </p>
-                        </div>
-                      </div>
-                    </article>
-                  ))}
-                </div>
+              <div className="mt-8 flex flex-col gap-6">
+                {pillars.map(({ icon: Icon, title, description }) => (
+                  <article
+                    key={title}
+                    className="cc-stagger-item cc-scroll-in flex items-start gap-5 border-b border-stone-200/60 pb-6 last:border-0 last:pb-0 dark:border-white/5"
+                  >
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-primary/15">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-text-main-light dark:text-text-main-dark">
+                        {title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-7 text-text-sub-light dark:text-text-sub-dark">
+                        {description}
+                      </p>
+                    </div>
+                  </article>
+                ))}
               </div>
             </div>
           </section>

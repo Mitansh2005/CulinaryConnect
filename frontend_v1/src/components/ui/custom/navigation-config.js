@@ -21,6 +21,7 @@ export const chefNavigation = [
 
 export const recruiterNavigation = [
   { label: "Dashboard", path: "/home", icon: LayoutDashboard },
+  { label: "Explorer", path: "/talent-explorer", icon: Compass },
   { label: "Jobs", path: "/jobs/manage", icon: BriefcaseBusiness },
   { label: "Post Role", path: "/post-job", icon: PlusCircle },
   { label: "Candidates", path: "/applications", icon: Users },

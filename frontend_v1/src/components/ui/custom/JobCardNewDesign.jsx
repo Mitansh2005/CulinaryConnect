@@ -167,7 +167,7 @@ export const JobCardDesign = ({
 						</div>
 						<div className="mt-4 flex justify-end">
 							<button
-								className="rounded-xl bg-gradient-to-br from-primary to-primary/85 text-white px-4 py-2 text-sm font-semibold hover:brightness-105 transition-all"
+								className="rounded-xl bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold hover:bg-primary/90 transition-all"
 							onClick={() => handleLearnMoreClick(item.job_id)}
 							>
 								View Details

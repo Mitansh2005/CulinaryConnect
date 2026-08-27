@@ -4,58 +4,58 @@
 
 @layer base {
   :root {
-    --background: 34 100% 98%;
-    --foreground: 28 13% 17%;
-    --card: 36 100% 99%;
-    --card-foreground: 28 13% 17%;
-    --popover: 36 100% 99%;
-    --popover-foreground: 28 13% 17%;
-    --primary: 25 75% 50%;
-    --primary-foreground: 34 100% 98%;
-    --secondary: 142 36% 29%;
-    --secondary-foreground: 34 100% 98%;
-    --muted: 29 52% 90%;
-    --muted-foreground: 27 17% 40%;
-    --accent: 37 64% 89%;
-    --accent-foreground: 28 13% 17%;
-    --destructive: 11 53% 48%;
-    --destructive-foreground: 34 100% 98%;
-    --border: 32 42% 84%;
-    --input: 34 78% 97%;
-    --ring: 25 75% 50%;
+    --background: 0 0% 95%;
+    --foreground: 156 54% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 156 54% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 156 54% 12%;
+    --primary: 156 54% 20%;
+    --primary-foreground: 0 0% 95%;
+    --secondary: 156 22% 54%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 88%;
+    --muted-foreground: 156 54% 20%;
+    --accent: 156 54% 20%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 54% 20%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 80%;
+    --input: 0 0% 95%;
+    --ring: 156 54% 20%;
     --radius: 1.25rem;
-    --chart-1: 25 75% 50%;
-    --chart-2: 142 36% 29%;
+    --chart-1: 156 54% 20%;
+    --chart-2: 156 22% 54%;
     --chart-3: 38 81% 47%;
     --chart-4: 18 60% 54%;
-    --chart-5: 28 28% 36%;
+    --chart-5: 156 54% 12%;
   }
 
   .dark {
-    --background: 30 13% 10%;
-    --foreground: 34 56% 93%;
-    --card: 26 14% 14%;
-    --card-foreground: 34 56% 93%;
-    --popover: 26 14% 14%;
-    --popover-foreground: 34 56% 93%;
-    --primary: 25 86% 63%;
-    --primary-foreground: 30 13% 10%;
-    --secondary: 143 28% 60%;
-    --secondary-foreground: 30 13% 10%;
-    --muted: 25 12% 18%;
-    --muted-foreground: 31 31% 74%;
-    --accent: 24 14% 19%;
-    --accent-foreground: 34 56% 93%;
-    --destructive: 10 64% 60%;
-    --destructive-foreground: 34 56% 93%;
-    --border: 28 15% 24%;
-    --input: 28 14% 16%;
-    --ring: 25 86% 63%;
-    --chart-1: 25 86% 63%;
-    --chart-2: 143 28% 60%;
+    --background: 156 54% 8%;
+    --foreground: 0 0% 92%;
+    --card: 156 54% 11%;
+    --card-foreground: 0 0% 92%;
+    --popover: 156 54% 11%;
+    --popover-foreground: 0 0% 92%;
+    --primary: 156 30% 60%;
+    --primary-foreground: 156 54% 8%;
+    --secondary: 156 54% 20%;
+    --secondary-foreground: 0 0% 92%;
+    --muted: 156 54% 14%;
+    --muted-foreground: 156 30% 80%;
+    --accent: 156 54% 16%;
+    --accent-foreground: 0 0% 92%;
+    --destructive: 0 54% 20%;
+    --destructive-foreground: 0 0% 92%;
+    --border: 156 54% 18%;
+    --input: 156 54% 16%;
+    --ring: 156 30% 60%;
+    --chart-1: 156 30% 60%;
+    --chart-2: 156 54% 20%;
     --chart-3: 38 74% 58%;
     --chart-4: 12 66% 65%;
-    --chart-5: 31 25% 70%;
+    --chart-5: 156 30% 80%;
   }
 }
 
@@ -71,33 +71,25 @@
 
   body {
     @apply m-0 min-h-screen bg-background-light font-body text-text-main-light antialiased;
-    background-image:
-      radial-gradient(circle at top left, rgba(192, 133, 82, 0.16), transparent 30%),
-      radial-gradient(circle at top right, rgba(218, 180, 157, 0.25), transparent 28%),
-      linear-gradient(180deg, rgba(243, 233, 220, 0.96) 0%, rgba(232, 214, 196, 1) 50%, rgba(218, 180, 157, 0.3) 100%);
   }
 
-  body::before {
+  body::after {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
-    background-size: 88px 88px;
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 70%);
-    opacity: 0.34;
-    z-index: -2;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.022;
+    z-index: 99;
+  }
+
+  html.dark body::after {
+    opacity: 0.032;
   }
 
   html.dark body,
   body.dark {
     @apply bg-background-dark text-text-main-dark;
-    background-image:
-      radial-gradient(circle at top left, rgba(192, 133, 82, 0.18), transparent 24%),
-      radial-gradient(circle at top right, rgba(137, 87, 55, 0.2), transparent 22%),
-      linear-gradient(180deg, rgba(61, 31, 23, 0.96) 0%, rgba(94, 48, 35, 1) 52%, rgba(61, 31, 23, 1) 100%);
   }
 
   #root {
@@ -115,38 +107,12 @@
     @apply relative min-h-screen overflow-hidden;
   }
 
-  .shell-canvas::before,
-  .shell-canvas::after {
-    content: "";
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(80px);
-    opacity: 0.8;
-    pointer-events: none;
-  }
-
-  .shell-canvas::before {
-    top: -10rem;
-    left: -6rem;
-    height: 18rem;
-    width: 18rem;
-    background: rgba(192, 133, 82, 0.16);
-  }
-
-  .shell-canvas::after {
-    right: -10rem;
-    top: 8rem;
-    height: 20rem;
-    width: 20rem;
-    background: rgba(218, 180, 157, 0.25);
-  }
-
   .glass-panel {
-    @apply rounded-[1.75rem] border border-white/70 bg-white/85 shadow-atelier backdrop-blur-xl dark:border-white/10 dark:bg-white/10;
+    @apply rounded-xl border border-stone-200/80 bg-white shadow-sm dark:border-white/10 dark:bg-surface-dark;
   }
 
   .executive-panel {
-    @apply rounded-[1.5rem] border border-white/70 bg-white/90 shadow-float backdrop-blur-xl dark:border-white/10 dark:bg-white/10;
+    @apply rounded-xl border border-stone-200 bg-white shadow-sm dark:border-white/10 dark:bg-surface-dark;
   }
 
   .section-kicker {
@@ -165,24 +131,24 @@
   select.soft-input {
     appearance: none;
     -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23C86A1C' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23174d38' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
     padding-right: 2.5rem;
   }
 
   .dark select.soft-input {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23F0A05A' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23749e8a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   }
 
   .soft-input option {
-    background-color: #fffaf6;
-    color: #3b2a1a;
+    background-color: #ffffff;
+    color: #0e231b;
   }
 
   .dark .soft-input option {
-    background-color: #241f1b;
-    color: #f5e6d3;
+    background-color: #0a120e;
+    color: #f2f2f2;
   }
 
   /* Form submit animation helper */
@@ -200,21 +166,32 @@
     @apply animate-skeletonShimmer rounded-2xl;
     background: linear-gradient(
       90deg,
-      rgba(243, 233, 220, 0.5) 20%, /* Linen */
-      rgba(250, 245, 239, 0.92) 50%, /* Lighter Linen */
-      rgba(243, 233, 220, 0.5) 80%
+      hsl(var(--muted)) 20%,
+      hsl(var(--accent)) 50%,
+      hsl(var(--muted)) 80%
     );
     background-size: 200% 100%;
   }
 
-  .dark .skeleton-shimmer {
-    background: linear-gradient(
-      90deg,
-      rgba(84, 45, 36, 0.6) 20%, /* Base Brown */
-      rgba(150, 95, 60, 0.85) 50%, /* Lighter Toffee */
-      rgba(84, 45, 36, 0.6) 80%
-    );
-    background-size: 200% 100%;
+
+
+  /* Fine-art Editorial divider accent */
+  .editorial-divider {
+    position: relative;
+  }
+
+  .editorial-divider::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(23, 77, 56, 0.15) 20%, rgba(23, 77, 56, 0.15) 80%, transparent);
+  }
+
+  .dark .editorial-divider::after {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08) 20%, rgba(255, 255, 255, 0.08) 80%, transparent);
   }
 }
 
@@ -225,7 +202,7 @@
 
   .scrollbar-subtle {
     scrollbar-width: thin;
-    scrollbar-color: rgba(192, 133, 82, 0.35) transparent;
+    scrollbar-color: rgba(23, 77, 56, 0.35) transparent;
   }
 
   .scrollbar-subtle::-webkit-scrollbar {
@@ -234,7 +211,7 @@
   }
 
   .scrollbar-subtle::-webkit-scrollbar-thumb {
-    background: rgba(192, 133, 82, 0.3);
+    background: rgba(23, 77, 56, 0.3);
     border-radius: 9999px;
   }
 

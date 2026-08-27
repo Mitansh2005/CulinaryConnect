@@ -25,6 +25,7 @@ import ErrorPage from "./pages/ErrorPage";
 import { JobDetailPage } from "./pages/JobDetailPage";
 import JobManagement from "./pages/JobManagement";
 import ApplicantDetail from "./pages/ApplicantDetail";
+import { TalentExplorer } from "./pages/TalentExplorer";
 
 function AppInner() {
   const { setUserData } = useUser();
@@ -84,6 +85,7 @@ function AppInner() {
             <Route element={<ProfileForm />} path="/contact_form" />
             <Route element={<MessageTemplate />} path="/messages" />
             <Route element={<LikedJobs />} path="/liked-jobs" />
+            <Route element={<TalentExplorer />} path="/talent-explorer" />
             <Route element={<ErrorPage />} path="*" />
           </Route>
         </Routes>

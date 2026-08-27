@@ -187,6 +187,7 @@ psd
 thumb
 sketch
 service_account.json
+firebase_config.json
 docs/
 uploads/
 chefWeb/fake_jobs_dataset.csv

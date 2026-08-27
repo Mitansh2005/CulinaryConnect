@@ -31,8 +31,8 @@ export function ChefNavbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/60 bg-white/65 backdrop-blur-2xl dark:border-white/10 dark:bg-black/15">
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-10">
+    <header className="sticky top-0 z-50 h-20 border-b border-white/60 bg-white/65 backdrop-blur-2xl dark:border-white/10 dark:bg-black/15">
+      <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
         <button
           className="flex items-center gap-3"
           onClick={() => navigate("/home")}
@@ -157,15 +157,30 @@ export function ChefNavbar() {
             return (
               <Link
                 key={path}
-                className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition ${
-                  active
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "border border-white/60 bg-white/70 text-text-sub-light dark:border-white/10 dark:bg-white/5 dark:text-text-sub-dark"
-                }`}
                 to={path}
+                className="relative inline-flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold"
               >
-                <Icon className="h-4 w-4" />
-                <span>{label}</span>
+                {active && (
+                  <motion.div
+                    layoutId="mobile-nav-pill"
+                    className="absolute inset-0 rounded-full bg-primary shadow-sm"
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 30,
+                    }}
+                  />
+                )}
+                <span
+                  className={`relative z-10 flex items-center gap-2 ${
+                    active
+                      ? "text-primary-foreground"
+                      : "text-text-sub-light hover:text-text-main-light dark:text-text-sub-dark dark:hover:text-text-main-dark"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </span>
               </Link>
             );
           })}
