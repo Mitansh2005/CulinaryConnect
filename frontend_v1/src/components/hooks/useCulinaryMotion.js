@@ -59,14 +59,21 @@ export function useCulinaryPageMotion(options = {}) {
             return;
           }
 
-          const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+          const intro = gsap.timeline({
+            defaults: { ease: "power2.out" },
+            onComplete: () => {
+              gsap.set([...revealElements, ...staggerElements], {
+                clearProps: "transform,opacity,visibility",
+              });
+            },
+          });
 
           if (revealElements.length) {
             intro.from(revealElements, {
               autoAlpha: 0,
-              y: 24,
-              duration: 0.65,
-              stagger: 0.08,
+              y: 10,
+              duration: 0.38,
+              stagger: 0.04,
             });
           }
 
@@ -75,47 +82,39 @@ export function useCulinaryPageMotion(options = {}) {
               staggerElements,
               {
                 autoAlpha: 0,
-                y: 30,
-                duration: 0.55,
+                y: 10,
+                duration: 0.34,
                 stagger: {
-                  each: 0.07,
+                  each: 0.035,
                   from: "start",
                 },
               },
-              revealElements.length ? "-=0.3" : 0,
+              revealElements.length ? "-=0.15" : 0,
             );
           }
 
           if (scrollElements.length) {
-            gsap.set(scrollElements, { autoAlpha: 0, y: 18 });
+            gsap.set(scrollElements, { autoAlpha: 0, y: 8 });
 
             ScrollTrigger.batch(scrollElements, {
-              start: "top 88%",
+              start: "top 95%",
+              once: true,
               onEnter: (batch) => {
                 gsap.to(batch, {
                   autoAlpha: 1,
                   y: 0,
-                  duration: 0.65,
-                  stagger: 0.08,
+                  duration: 0.32,
+                  stagger: 0.03,
                   ease: "power2.out",
+                  clearProps: "transform,opacity,visibility",
                   overwrite: true,
                 });
-              },
-              onLeaveBack: (batch) => {
-                gsap.set(batch, { autoAlpha: 0, y: 18, overwrite: true });
               },
             });
           }
 
-          if (pulseElements.length) {
-            gsap.to(pulseElements, {
-              scale: 1.03,
-              duration: 1.1,
-              repeat: -1,
-              yoyo: true,
-              ease: "sine.inOut",
-            });
-          }
+          // Continuous infinite pulse removed per animation guidelines (Emil Kowalski)
+          // Buttons use responsive hover/active micro-interactions instead of constant pulsing.
         },
       );
 

@@ -19,12 +19,13 @@ import {
 import ProfilePictureUploader from "@/components/ui/custom/profile_component/profile_picture_uploader";
 import {
   Bookmark,
-  Pencil,
   ChevronRight,
-  User,
+  FileText,
   MapPin,
+  Pencil,
   Phone,
   Trophy,
+  User,
 } from "lucide-react";
 
 const sanitizedHtml = (html) =>
@@ -173,6 +174,13 @@ export function ProfileTemplate() {
               {userType === "chef" && (
                 <>
                   <button
+                    onClick={() => navigate("/applications")}
+                    className="flex items-center justify-between rounded-xl border border-white/70 bg-white/60 px-4 py-3 text-sm font-medium text-text-main-light transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark"
+                  >
+                    <span>My applications</span>
+                    <FileText className="h-4 w-4 text-text-sub-light" />
+                  </button>
+                  <button
                     onClick={() => setShowQualEditor(true)}
                     className="flex items-center justify-between rounded-xl border border-white/70 bg-white/60 px-4 py-3 text-sm font-medium text-text-main-light transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-text-main-dark"
                   >
@@ -267,14 +275,18 @@ export function ProfileTemplate() {
                         dangerouslySetInnerHTML={{ __html: sanitizedHtml(bioText) }}
                       />
                     ) : (
-                      <div className="flex flex-col items-center gap-3 py-8 text-center">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary dark:bg-primary/16">
+                      <button
+                        type="button"
+                        onClick={() => setShowBioEditor(true)}
+                        className="group flex w-full flex-col items-center gap-3 py-8 text-center rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+                      >
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary transition-transform duration-200 group-hover:scale-105 dark:bg-primary/16">
                           <User className="h-5 w-5" />
                         </div>
-                        <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
-                          No bio yet — tell recruiters about your culinary journey.
+                        <p className="text-sm text-text-sub-light transition-colors group-hover:text-primary dark:text-text-sub-dark">
+                          No bio yet — click here to tell recruiters about your culinary journey.
                         </p>
-                      </div>
+                      </button>
                     )}
                   </div>
                 </motion.div>
@@ -356,14 +368,18 @@ export function ProfileTemplate() {
                           dangerouslySetInnerHTML={{ __html: sanitizedHtml(qualifications) }}
                         />
                       ) : (
-                        <div className="flex flex-col items-center gap-3 py-8 text-center">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary dark:bg-primary/16">
+                        <button
+                          type="button"
+                          onClick={() => setShowQualEditor(true)}
+                          className="group flex w-full flex-col items-center gap-3 py-8 text-center rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+                        >
+                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary transition-transform duration-200 group-hover:scale-105 dark:bg-primary/16">
                             <Trophy className="h-5 w-5" />
                           </div>
-                          <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
-                            Add your qualifications to build recruiter trust.
+                          <p className="text-sm text-text-sub-light transition-colors group-hover:text-primary dark:text-text-sub-dark">
+                            Add your qualifications to build recruiter trust — click here to add.
                           </p>
-                        </div>
+                        </button>
                       )}
                     </div>
                   </motion.div>

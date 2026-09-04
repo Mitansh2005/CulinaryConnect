@@ -50,7 +50,29 @@ export function JobPreviewCard({
 
   return (
     <div ref={cardRef}>
-      <SurfaceCard className="docket-card cc-scroll-in flex h-full flex-col gap-5">
+      <SurfaceCard
+        role={onPrimaryAction ? "button" : undefined}
+        tabIndex={onPrimaryAction ? 0 : undefined}
+        onClick={onPrimaryAction}
+        onKeyDown={
+          onPrimaryAction
+            ? (e) => {
+                if (
+                  (e.key === "Enter" || e.key === " ") &&
+                  e.target === e.currentTarget
+                ) {
+                  e.preventDefault();
+                  onPrimaryAction();
+                }
+              }
+            : undefined
+        }
+        className={cn(
+          "docket-card cc-scroll-in flex h-full flex-col gap-5 transition-all duration-200",
+          onPrimaryAction &&
+            "cursor-pointer hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
+        )}
+      >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
             <Avatar
@@ -78,19 +100,20 @@ export function JobPreviewCard({
                   onToggleSave();
                 }}
                 disabled={saveLoading}
+                aria-label={isSaved ? "Remove from saved roles" : "Save this role"}
                 title={isSaved ? "Remove from saved" : "Save this role"}
                 className={cn(
-                  "flex h-9 w-9 items-center justify-center rounded-xl border transition-all duration-200",
+                  "group flex h-9 w-9 items-center justify-center rounded-[14px] border transition-[border-radius,background-color,border-color,color,box-shadow,transform] duration-300 [transition-timing-function:cubic-bezier(0.34,1.4,0.64,1)] hover:rounded-[8px] active:scale-[0.93] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                   isSaved
                     ? "border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 dark:border-primary/40 dark:bg-primary/20 dark:text-primary"
-                    : "border-border-light/70 bg-white/60 text-text-sub-light hover:border-primary/20 hover:bg-primary/5 hover:text-primary dark:border-border-dark dark:bg-white/5 dark:text-text-sub-dark dark:hover:bg-primary/10 dark:hover:text-primary",
+                    : "border-slate-300 bg-white/70 text-slate-600 hover:border-primary/40 hover:bg-primary/5 hover:text-primary dark:border-slate-700 dark:bg-white/5 dark:text-slate-400 dark:hover:border-primary/40 dark:hover:bg-primary/10 dark:hover:text-primary",
                   saveLoading && "opacity-50 cursor-wait",
                 )}
               >
                 {isSaved ? (
-                  <BookmarkCheck className="h-4 w-4" />
+                  <BookmarkCheck className="h-4 w-4 transition-transform duration-300 ease-out group-hover:scale-110" />
                 ) : (
-                  <Bookmark className="h-4 w-4" />
+                  <Bookmark className="h-4 w-4 transition-transform duration-300 ease-out group-hover:scale-110" />
                 )}
               </button>
             )}
@@ -152,14 +175,23 @@ export function JobPreviewCard({
           <div className="flex flex-wrap gap-2">
             {secondaryLabel && onSecondaryAction ? (
               <Button
-                onClick={onSecondaryAction}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSecondaryAction(e);
+                }}
                 type="button"
                 variant="outline"
               >
                 {secondaryLabel}
               </Button>
             ) : null}
-            <Button onClick={onPrimaryAction} type="button">
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                onPrimaryAction?.(e);
+              }}
+              type="button"
+            >
               {primaryLabel}
             </Button>
           </div>

@@ -50,11 +50,20 @@ export const ApplicantApplications = ({ applications }) => {
         return (
           <div
             key={app.application_id}
-            className="cc-scroll-in flex flex-col gap-4 rounded-[1.5rem] border border-white/80 bg-white/90 p-5 shadow-sm dark:border-white/10 dark:bg-white/10"
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate(`/job/${job.job_id}`)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                navigate(`/job/${job.job_id}`);
+              }
+            }}
+            className="cc-scroll-in group flex flex-col gap-4 rounded-[1.5rem] border border-white/80 bg-white/90 p-5 shadow-sm transition-all duration-200 cursor-pointer hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 dark:border-white/10 dark:bg-white/10"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <p className="font-display text-lg font-semibold tracking-tight text-text-main-light dark:text-text-main-dark">
+                <p className="font-display text-lg font-semibold tracking-tight text-text-main-light dark:text-text-main-dark group-hover:text-primary transition-colors">
                   {job.title}
                 </p>
                 <p className="mt-1 text-sm text-text-sub-light dark:text-text-sub-dark">
@@ -64,13 +73,12 @@ export const ApplicantApplications = ({ applications }) => {
                   {job.location?.city}, {job.location?.state}
                 </p>
               </div>
-              <button
-                onClick={() => navigate(`/job/${job.job_id}`)}
-                className="mt-0.5 rounded-lg p-1.5 text-text-sub-light transition hover:text-primary dark:text-text-sub-dark"
+              <span
+                className="mt-0.5 rounded-lg p-1.5 text-text-sub-light transition-colors group-hover:text-primary dark:text-text-sub-dark"
                 title="View job posting"
               >
                 <ExternalLink className="h-4 w-4" />
-              </button>
+              </span>
             </div>
 
             <div className="flex items-center justify-between">

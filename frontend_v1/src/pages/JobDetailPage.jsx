@@ -5,6 +5,8 @@ import DOMPurify from "dompurify";
 import gsap from "gsap";
 import {
   ArrowLeft,
+  Bookmark,
+  BookmarkCheck,
   Building2,
   CalendarDays,
   MapPin,
@@ -13,6 +15,8 @@ import {
 } from "lucide-react";
 import { useJobDetails } from "@/api/jobs-data";
 import { applyForJob } from "@/api/apply-for-job";
+import { useLikedJobs, useToggleLikeJob } from "@/api/home-data";
+import { cn } from "@/lib/utils";
 import { getUid } from "@/firebase/authUtils";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/ui/custom/spinner";
@@ -43,6 +47,9 @@ export function JobDetailPage() {
   const uid = getUid();
   const { userData } = useUser();
   const userType = userData?.user_type;
+  const { data: likedJobs = [] } = useLikedJobs();
+  const { mutate: toggleLike, isPending: togglePending } = useToggleLikeJob();
+  const isJobSaved = likedJobs.some((j) => String(j.job_id) === String(id));
   const { data, isLoading, isFetching, isPending, isError, error } =
     useJobDetails(id);
   const [applyState, setApplyState] = useState("idle");
@@ -150,11 +157,12 @@ export function JobDetailPage() {
         <EmptyPanel
           action={
             <Button onClick={() => navigate("/home")} type="button">
-              Return home
+              Return to discovery
             </Button>
           }
           description={
-            error || "The job may have been removed or is no longer accessible."
+            error ||
+            "This listing may have closed or been removed. Return to discovery to explore open opportunities."
           }
           title="This listing is unavailable."
         />
@@ -176,7 +184,34 @@ export function JobDetailPage() {
               Back
             </Button>
             {userType !== "restaurant" ? (
-              <div className="flex flex-col items-end gap-2 relative">
+              <>
+                <button
+                  type="button"
+                  onClick={() =>
+                    toggleLike({
+                      jobId: Number(id),
+                      isSaved: isJobSaved,
+                      jobData: data,
+                    })
+                  }
+                  disabled={togglePending}
+                  aria-label={isJobSaved ? "Remove from saved roles" : "Save this role"}
+                  title={isJobSaved ? "Remove from saved" : "Save this role"}
+                  className={cn(
+                    "group flex h-10 w-10 items-center justify-center rounded-[16px] border transition-[border-radius,background-color,border-color,color,box-shadow,transform] duration-300 [transition-timing-function:cubic-bezier(0.34,1.4,0.64,1)] hover:rounded-[10px] active:scale-[0.93] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    isJobSaved
+                      ? "border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 dark:border-primary/40 dark:bg-primary/20 dark:text-primary"
+                      : "border-slate-300 bg-white/70 text-slate-600 hover:border-primary/40 hover:bg-primary/5 hover:text-primary dark:border-slate-700 dark:bg-white/5 dark:text-slate-400 dark:hover:border-primary/40 dark:hover:bg-primary/10 dark:hover:text-primary",
+                    togglePending && "opacity-50 cursor-wait",
+                  )}
+                >
+                  {isJobSaved ? (
+                    <BookmarkCheck className="h-5 w-5 transition-transform duration-300 ease-out group-hover:scale-110" />
+                  ) : (
+                    <Bookmark className="h-5 w-5 transition-transform duration-300 ease-out group-hover:scale-110" />
+                  )}
+                </button>
+                <div className="flex flex-col items-end gap-2 relative">
                 <Button
                   disabled={
                     applyState === "loading" || applyState === "success"
@@ -256,7 +291,8 @@ export function JobDetailPage() {
                   </div>
                 )}
               </div>
-            ) : (
+            </>
+          ) : (
               <Button onClick={() => navigate("/jobs/manage")} type="button">
                 Manage role
               </Button>

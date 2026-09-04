@@ -1,10 +1,11 @@
-import { Bookmark } from "lucide-react";
+import { ArrowLeft, Bookmark, BookmarkCheck, Building2, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLikedJobs, useToggleLikeJob } from "@/api/home-data";
 import { Button } from "@/components/ui/button";
 import { JobCardSkeleton } from "@/components/ui/custom/skeletons/Skeletons";
 import {
   EmptyPanel,
+  MetricCard,
   PageShell,
   SectionHeading,
   SurfaceCard,
@@ -55,6 +56,7 @@ export function LikedJobs() {
     <PageShell
       actions={
         <Button onClick={() => navigate("/home")} type="button" variant="outline">
+          <ArrowLeft className="mr-2 h-4 w-4" />
           Back to discovery
         </Button>
       }
@@ -62,13 +64,31 @@ export function LikedJobs() {
       eyebrow="Saved pipeline"
       title="Saved jobs"
     >
-      <SurfaceCard className="p-5 sm:p-6">
-        <SectionHeading
-          description="Use this space as a deliberate shortlist before you commit applications."
-          eyebrow="Saved roles"
-          title={`${likedJobs.length} bookmarked ${likedJobs.length === 1 ? "opportunity" : "opportunities"}`}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <MetricCard
+          className="cc-stagger-item"
+          helper="Roles saved for closer review."
+          icon={BookmarkCheck}
+          label="Bookmarked roles"
+          value={likedJobs.length}
         />
-      </SurfaceCard>
+        <MetricCard
+          className="cc-stagger-item"
+          helper="Unique culinary employers represented."
+          icon={Building2}
+          label="Kitchens"
+          tone="brass"
+          value={new Set(likedJobs.map((j) => j.company_name).filter(Boolean)).size}
+        />
+        <MetricCard
+          className="cc-stagger-item"
+          helper="Different kitchen locations."
+          icon={MapPin}
+          label="Locations"
+          tone="primary"
+          value={new Set(likedJobs.map((j) => j.location?.city).filter(Boolean)).size}
+        />
+      </div>
 
       {likedJobs.length === 0 ? (
         <EmptyPanel

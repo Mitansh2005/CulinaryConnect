@@ -18,12 +18,15 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["Manrope", "sans-serif"],
+        sans: ["Geist", "system-ui", "sans-serif"],
         display: ["Fraunces", "serif"],
         title: ["Fraunces", "serif"],
         heading: ["Fraunces", "serif"],
-        body: ["Manrope", "sans-serif"],
-        tags: ["IBM Plex Mono", "monospace"],
+        editorial: ["Newsreader", "serif"],
+        luxury: ["Cormorant Garamond", "serif"],
+        body: ["Geist", "system-ui", "sans-serif"],
+        tags: ["Geist Mono", "monospace"],
+        mono: ["Geist Mono", "monospace"],
       },
       colors: {
         ember: {
@@ -96,8 +99,8 @@ module.exports = {
           foreground: "hsl(var(--primary-foreground))",
         },
         background: {
-          light: "#f2f2f2",
-          dark: "#0a120e",
+          light: "#fbf9f6",
+          dark: "#091610",
         },
         surface: {
           light: "#e2e4e2",

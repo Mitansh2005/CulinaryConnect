@@ -117,7 +117,7 @@ export default function Landing() {
             </div>
 
             <div className="cc-reveal flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg" className="cc-pulse gap-2">
+              <Button asChild size="lg" className="gap-2">
                 <Link to="/register">
                   Start hiring or applying
                   <ArrowRight className="h-4 w-4" />

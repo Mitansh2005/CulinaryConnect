@@ -6,6 +6,7 @@ import {
   Compass,
   Search,
   UserRound,
+  X,
 } from "lucide-react";
 import { useJobs } from "@/api/jobs-data";
 import {
@@ -34,8 +35,8 @@ import { useCulinaryPageMotion } from "@/components/hooks/useCulinaryMotion";
 
 export default function JobSeekerHome() {
   const scopeRef = useRef(null);
+  const searchInputRef = useRef(null);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("feed");
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 250);
   const uid = getUid();
@@ -86,11 +87,11 @@ export default function JobSeekerHome() {
   const activeApplications = applications.filter((app) =>
     ["p", "a", "h"].includes(app.status),
   );
-  const displayedJobs = activeTab === "saved" ? likedJobs : filteredJobs;
+  const displayedJobs = filteredJobs;
 
   useCulinaryPageMotion({
     scopeRef,
-    dependencies: [activeTab, profileCompletion, activeApplications.length],
+    dependencies: [],
   });
 
   if (jobsLoading) {
@@ -143,14 +144,10 @@ export default function JobSeekerHome() {
             <Button
               onClick={() => navigate("/liked-jobs")}
               type="button"
-              variant="outline dark:default"
-              className="
-              border-border text-foreground
-              hover:bg-muted hover:text-foreground
-              dark:border-white/20 dark:text-white
-              dark:bg-white/10 dark:hover:bg-white/20
-            "
+              variant="outline"
+              className="border-border text-foreground hover:bg-muted dark:border-white/20 dark:text-white dark:bg-white/10 dark:hover:bg-white/20"
             >
+              <BookmarkCheck className="mr-2 h-4 w-4 transition-transform duration-300 ease-out group-hover:scale-110" />
               Open saved jobs
             </Button>
             <Button onClick={() => navigate("/profile")} type="button">
@@ -170,106 +167,100 @@ export default function JobSeekerHome() {
             label="Open roles"
             value={jobs.length}
             className="cc-stagger-item"
+            onClick={() => searchInputRef.current?.focus()}
           />
           <MetricCard
-            helper="Applications still moving through review."
+            helper="Applications currently moving through review."
             icon={Compass}
             label="Active applications"
             tone="brass"
             value={activeApplications.length}
             className="cc-stagger-item"
+            onClick={() => navigate("/applications")}
           />
           <MetricCard
             helper="Roles you bookmarked for a second look."
             icon={BookmarkCheck}
             label="Saved jobs"
-            tone="slate"
+            tone="brass"
             value={likedJobs.length}
             className="cc-stagger-item"
+            onClick={() => navigate("/liked-jobs")}
           />
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="grid gap-6">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px] items-start">
+          <div className="flex flex-col gap-6">
             <SurfaceCard className="cc-reveal p-5 sm:p-6">
               <SectionHeading
                 description="Search by role, kitchen, location, salary, employment type — anything on the listing."
                 eyebrow="Discovery"
                 title="Curated role pipeline"
+                action={
+                  <StatusPill tone={displayedJobs.length > 0 ? "salary" : "neutral"}>
+                    {displayedJobs.length}{" "}
+                    {displayedJobs.length === 1 ? "role" : "roles"}
+                  </StatusPill>
+                }
               />
-              <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-center">
-                <label className="relative block flex-1">
-                  <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-sub-light dark:text-text-sub-dark" />
-                  <input
-                    className="soft-input pl-11"
-                    onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder="Search jobs by title, city, salary, type..."
-                    type="text"
-                    value={searchQuery}
-                  />
-                </label>
-                <div className="flex flex-wrap gap-2">
+              <div className="mt-5 relative w-full">
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-sub-light dark:text-text-sub-dark" />
+                <input
+                  ref={searchInputRef}
+                  aria-label="Search jobs by title, city, salary, or type"
+                  className="soft-input w-full pl-11 pr-10"
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search jobs by title, city, salary, type..."
+                  type="text"
+                  value={searchQuery}
+                />
+                {searchQuery ? (
                   <button
-                    className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                      activeTab === "feed"
-                        ? "bg-primary text-primary-foreground"
-                        : "border border-white/70 bg-white/80 text-text-sub-light dark:border-white/10 dark:bg-white/5 dark:text-text-sub-dark"
-                    }`}
-                    onClick={() => setActiveTab("feed")}
                     type="button"
+                    onClick={() => {
+                      setSearchQuery("");
+                      searchInputRef.current?.focus();
+                    }}
+                    aria-label="Clear search query"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full text-text-sub-light hover:bg-black/5 hover:text-text-main-light dark:text-text-sub-dark dark:hover:bg-white/10 dark:hover:text-text-main-dark transition-colors"
                   >
-                    Job feed
+                    <X className="h-3.5 w-3.5" />
                   </button>
-                  <button
-                    className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                      activeTab === "saved"
-                        ? "bg-primary text-primary-foreground"
-                        : "border border-white/70 bg-white/80 text-text-sub-light dark:border-white/10 dark:bg-white/5 dark:text-text-sub-dark"
-                    }`}
-                    onClick={() => setActiveTab("saved")}
-                    type="button"
-                  >
-                    Saved roles
-                  </button>
-                </div>
+                ) : null}
               </div>
             </SurfaceCard>
 
             <div className="grid gap-4">
-              {activeTab === "saved" && likedLoading ? (
-                <>
-                  <JobCardSkeleton />
-                  <JobCardSkeleton />
-                </>
-              ) : displayedJobs.length === 0 ? (
+              {displayedJobs.length === 0 ? (
                 <EmptyPanel
                   className="cc-scroll-in"
                   action={
-                    <Button
-                      onClick={() => {
-                        setActiveTab("feed");
-                        setSearchQuery("");
-                      }}
-                      type="button"
-                    >
-                      Browse fresh roles
-                    </Button>
+                    searchQuery ? (
+                      <Button
+                        onClick={() => {
+                          setSearchQuery("");
+                          searchInputRef.current?.focus();
+                        }}
+                        type="button"
+                      >
+                        Clear search filter
+                      </Button>
+                    ) : null
                   }
                   description={
-                    activeTab === "saved"
-                      ? "Save interesting openings to build a shortlist you can return to later."
-                      : "Try widening the search criteria or explore your saved shortlist instead."
+                    searchQuery
+                      ? "Try widening your search terms or clearing the filter to see more roles."
+                      : "New kitchen opportunities are posted regularly. Check back soon."
                   }
                   title={
-                    activeTab === "saved"
-                      ? "No saved jobs yet"
-                      : "No jobs match this search"
+                    searchQuery
+                      ? "No jobs match this search"
+                      : "No open roles right now"
                   }
                 />
               ) : (
                 displayedJobs.map((job) => (
                   <JobPreviewCard
-                    accentLabel={activeTab === "saved" ? "Saved" : undefined}
                     job={job}
                     key={job.job_id}
                     isSaved={savedJobIds.has(job.job_id)}
@@ -283,17 +274,7 @@ export default function JobSeekerHome() {
                       })
                     }
                     onPrimaryAction={() => navigate(`/job/${job.job_id}`)}
-                    onSecondaryAction={
-                      activeTab === "feed"
-                        ? () => navigate(`/job/${job.job_id}`)
-                        : undefined
-                    }
-                    primaryLabel={
-                      activeTab === "saved" ? "Review role" : "Open role"
-                    }
-                    secondaryLabel={
-                      activeTab === "feed" ? "Quick apply" : undefined
-                    }
+                    primaryLabel="Open role"
                   />
                 ))
               )}
@@ -372,10 +353,10 @@ export default function JobSeekerHome() {
               </div>
               <Button
                 className="mt-5 w-full"
-                onClick={() => navigate("/contact_form")}
+                onClick={() => navigate("/profile")}
                 type="button"
               >
-                Update profile details
+                View & update profile
               </Button>
             </SurfaceCard>
 
@@ -417,7 +398,7 @@ export default function JobSeekerHome() {
                       <StatusPill
                         tone={
                           application.status === "a" ||
-                          application.status === "h"
+                            application.status === "h"
                             ? "success"
                             : application.status === "r"
                               ? "danger"

@@ -107,13 +107,25 @@ export const ApplicationCard = ({ application }) => {
         "
       >
         {/* Top row — avatar + info + status */}
-        <div className="flex items-start gap-3">
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={handleViewResume}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              handleViewResume();
+            }
+          }}
+          className="group/applicant flex cursor-pointer items-start gap-3 rounded-xl p-1 -m-1 transition-colors hover:bg-primary/[0.04] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+          title="Click to view candidate profile & resume"
+        >
           <Avatar name={user.username} />
 
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="font-semibold leading-tight text-text-main-light dark:text-text-main-dark">
+                <p className="font-semibold leading-tight text-text-main-light transition-colors group-hover/applicant:text-primary dark:text-text-main-dark">
                   {user.username}
                 </p>
                 <p className="mt-0.5 truncate text-xs text-text-sub-light dark:text-text-sub-dark">
@@ -242,14 +254,14 @@ export const ApplicationCard = ({ application }) => {
             />
             {/* Panel */}
             <motion.div
-              className="relative z-[201] w-full max-w-3xl overflow-hidden rounded-3xl border border-stone-200/60 bg-[#fdf8f3] shadow-2xl dark:border-white/10 dark:bg-[#1e1a15]"
+              className="relative z-[201] w-full max-w-3xl overflow-hidden rounded-2xl sm:rounded-3xl border border-stone-200/60 bg-[#fdf8f3] shadow-2xl dark:border-white/10 dark:bg-[#1e1a15]"
               initial={{ opacity: 0, scale: 0.96, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
             >
               {/* Header bar */}
-              <div className="flex items-center justify-between border-b border-stone-200/60 px-6 py-4 dark:border-white/[0.07]">
+              <div className="flex items-center justify-between border-b border-stone-200/60 px-4 py-3 sm:px-6 sm:py-4 dark:border-white/[0.07]">
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4 text-primary" />
                   <span className="text-sm font-semibold text-text-main-light dark:text-text-main-dark">
@@ -258,13 +270,14 @@ export const ApplicationCard = ({ application }) => {
                 </div>
                 <button
                   onClick={() => setShowProfile(false)}
-                  className="flex h-8 w-8 items-center justify-center rounded-xl text-text-sub-light transition hover:bg-rose-50 hover:text-rose-500 dark:text-text-sub-dark dark:hover:bg-rose-500/12 dark:hover:text-rose-300"
+                  aria-label="Close profile modal"
+                  className="flex h-8 w-8 items-center justify-center rounded-[10px] text-text-sub-light transition-[border-radius,background-color,color,transform] duration-200 hover:rounded-[6px] hover:bg-rose-50 hover:text-rose-500 active:scale-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-text-sub-dark dark:hover:bg-rose-500/12 dark:hover:text-rose-300"
                 >
-                  ✕
+                  <span aria-hidden="true" className="text-base leading-none">✕</span>
                 </button>
               </div>
               {/* Content */}
-              <div className="max-h-[80vh] overflow-y-auto p-6">
+              <div className="max-h-[80vh] overflow-y-auto p-4 sm:p-6">
                 <JobSeekerProfileCard profile={selectedProfile} />
               </div>
             </motion.div>

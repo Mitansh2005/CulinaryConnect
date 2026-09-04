@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Bell, MoonStar, SunMedium, LogOut } from "lucide-react";
 import { getUid } from "@/firebase/authUtils";
@@ -18,6 +18,28 @@ export function ChefNavbar() {
   const { profile: userProfile } = useProfile(uid);
   const { theme, toggleTheme } = useTheme();
   const [profileOpen, setProfileOpen] = useState(false);
+  const profileMenuRef = useRef(null);
+
+  useEffect(() => {
+    if (!profileOpen) return;
+    const handleClickOutside = (event) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target)
+      ) {
+        setProfileOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setProfileOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [profileOpen]);
 
   const navItems = useMemo(() => chefNavigation, []);
 
@@ -80,6 +102,7 @@ export function ChefNavbar() {
         </nav>
         <div className="flex items-center gap-2 sm:gap-3">
           <Button
+            aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
             className="hidden sm:inline-flex"
             onClick={toggleTheme}
             size="icon"
@@ -92,14 +115,15 @@ export function ChefNavbar() {
               <SunMedium className="h-4 w-4" />
             )}
           </Button>
-          <Button size="icon" type="button" variant="outline">
+          <Button aria-label="Notifications" size="icon" type="button" variant="outline">
             <Bell className="h-4 w-4" />
           </Button>
-          <div className="relative">
-            <button
-              className="flex items-center gap-3 rounded-full border border-white/60 bg-white/70 p-1 pr-3 shadow-sm transition hover:border-primary/20 dark:border-white/10 dark:bg-white/5"
+          <div className="relative" ref={profileMenuRef}>
+            <Button
+              className="h-auto gap-3 p-1 pr-3.5 rounded-[24px] hover:rounded-[12px]"
               onClick={() => setProfileOpen((open) => !open)}
               type="button"
+              variant="outline"
             >
               <Avatar
                 className="h-10 w-10 rounded-full"
@@ -114,7 +138,7 @@ export function ChefNavbar() {
                   {userProfile?.job_search_status || "Job seeker"}
                 </p>
               </div>
-            </button>
+            </Button>
 
             {profileOpen && (
               <div className="absolute right-0 mt-3 w-64 rounded-[1.5rem] border border-white/70 bg-white/90 p-3 shadow-atelier backdrop-blur-xl dark:border-white/10 dark:bg-[#13211b]">
@@ -129,18 +153,18 @@ export function ChefNavbar() {
                 </div>
                 <div className="mt-3 grid gap-2">
                   <Link
-                    className="rounded-2xl px-4 py-3 text-sm font-semibold text-text-main-light transition hover:bg-primary/10 hover:text-primary dark:text-text-main-dark"
+                    className="rounded-[16px] px-4 py-3 text-sm font-semibold text-text-main-light transition-[border-radius,background-color,color] duration-300 [transition-timing-function:cubic-bezier(0.34,1.4,0.64,1)] hover:rounded-[10px] hover:bg-primary/10 hover:text-primary dark:text-text-main-dark"
                     onClick={() => setProfileOpen(false)}
                     to="/profile"
                   >
                     Open profile hub
                   </Link>
                   <button
-                    className="inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-left text-sm font-semibold text-rose-700 transition hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-500/10"
+                    className="group inline-flex items-center gap-2 rounded-[16px] px-4 py-3 text-left text-sm font-semibold text-rose-700 transition-[border-radius,background-color,color,transform] duration-300 [transition-timing-function:cubic-bezier(0.34,1.4,0.64,1)] hover:rounded-[10px] hover:bg-rose-50 active:scale-[0.98] dark:text-rose-300 dark:hover:bg-rose-500/10"
                     onClick={handleLogout}
                     type="button"
                   >
-                    <LogOut className="h-4 w-4" />
+                    <LogOut className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
                     Sign out
                   </button>
                 </div>
@@ -151,7 +175,7 @@ export function ChefNavbar() {
       </div>
 
       <div className="border-t border-white/60 px-4 py-3 md:hidden dark:border-white/10">
-        <nav className="scrollbar-subtle flex gap-2 overflow-x-auto pb-1">
+        <nav className="scrollbar-subtle flex gap-2 overflow-x-auto pb-1 [mask-image:linear-gradient(to_right,black_88%,transparent)]">
           {navItems.map(({ label, path, icon: Icon }) => {
             const active = isNavItemActive(location.pathname, path);
             return (

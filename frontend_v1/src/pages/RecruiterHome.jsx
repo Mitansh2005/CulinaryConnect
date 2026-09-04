@@ -159,6 +159,7 @@ export default function RecruiterHome() {
             label="Active roles"
             value={stats.activeJobs}
             className="cc-stagger-item"
+            onClick={() => navigate("/jobs/manage")}
           />
           <MetricCard
             helper="Applicants currently in your pipeline."
@@ -167,6 +168,7 @@ export default function RecruiterHome() {
             tone="brass"
             value={stats.totalApplicants}
             className="cc-stagger-item"
+            onClick={() => navigate("/applications")}
           />
           <MetricCard
             helper="Candidates you have moved forward."
@@ -175,6 +177,7 @@ export default function RecruiterHome() {
             tone="slate"
             value={stats.shortlisted}
             className="cc-stagger-item"
+            onClick={() => navigate("/applications")}
           />
           <MetricCard
             helper="Roles converted into confirmed hires."
@@ -183,6 +186,7 @@ export default function RecruiterHome() {
             tone="primary"
             value={stats.hired}
             className="cc-stagger-item"
+            onClick={() => navigate("/applications")}
           />
         </div>
 
@@ -385,7 +389,7 @@ export default function RecruiterHome() {
                 consistent review strengthens trust in the marketplace.
               </p>
               <Button
-                className="cc-pulse mt-6 w-full border-white/20 bg-white/15 text-white hover:bg-white/20"
+                className="mt-6 w-full border-white/20 bg-white/15 text-white hover:bg-white/20"
                 onClick={() => navigate("/post-job")}
                 type="button"
                 variant="outline"

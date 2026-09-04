@@ -8,6 +8,7 @@ import {
   Sparkles,
   Users,
   Workflow,
+  X,
 } from "lucide-react";
 import {
   useCompanyJobs,
@@ -35,6 +36,7 @@ function statusTone(status) {
 
 export default function JobManagement() {
   const scopeRef = useRef(null);
+  const searchInputRef = useRef(null);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -158,6 +160,7 @@ export default function JobManagement() {
             icon={BriefcaseBusiness}
             label="Total roles"
             value={stats.totalRoles}
+            onClick={() => setFilterStatus("all")}
           />
           <MetricCard
             className="cc-stagger-item"
@@ -166,6 +169,7 @@ export default function JobManagement() {
             label="Active roles"
             tone="primary"
             value={stats.activeRoles}
+            onClick={() => setFilterStatus("active")}
           />
           <MetricCard
             className="cc-stagger-item"
@@ -174,6 +178,7 @@ export default function JobManagement() {
             label="Drafts"
             tone="warning"
             value={stats.draftRoles}
+            onClick={() => setFilterStatus("draft")}
           />
           <MetricCard
             className="cc-stagger-item"
@@ -182,6 +187,7 @@ export default function JobManagement() {
             label="Applicants"
             tone="brass"
             value={stats.applicants}
+            onClick={() => navigate("/applications")}
           />
         </div>
 
@@ -192,24 +198,37 @@ export default function JobManagement() {
             title="Role board"
           />
           <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <label className="relative block flex-1">
+            <div className="relative flex-1">
               <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-sub-light dark:text-text-sub-dark" />
               <input
-                className="soft-input pl-11"
+                ref={searchInputRef}
+                aria-label="Search roles by title, city, or brand"
+                className="soft-input pl-11 pr-10"
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="Search by title, city, or brand..."
                 type="text"
                 value={searchQuery}
               />
-            </label>
+              {searchQuery ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery("");
+                    searchInputRef.current?.focus();
+                  }}
+                  aria-label="Clear search query"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full text-text-sub-light hover:bg-black/5 hover:text-text-main-light dark:text-text-sub-dark dark:hover:bg-white/10 dark:hover:text-text-main-dark transition-colors"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              ) : null}
+            </div>
             <div className="flex flex-wrap gap-2">
               {["all", "active", "closed", "draft"].map((status) => (
-                <button
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                    filterStatus === status
-                      ? "bg-primary text-primary-foreground"
-                      : "border border-white/70 bg-white/80 text-text-sub-light dark:border-white/10 dark:bg-white/5 dark:text-text-sub-dark"
-                  }`}
+                <Button
+                  variant={filterStatus === status ? "default" : "outline"}
+                  size="sm"
+                  className="h-10 px-4 text-sm font-semibold"
                   key={status}
                   onClick={() => setFilterStatus(status)}
                   type="button"
@@ -217,7 +236,7 @@ export default function JobManagement() {
                   {status === "all"
                     ? "All roles"
                     : status[0].toUpperCase() + status.slice(1)}
-                </button>
+                </Button>
               ))}
             </div>
           </div>

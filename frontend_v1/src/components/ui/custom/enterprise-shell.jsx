@@ -164,6 +164,7 @@ export function MetricCard({
   value,
   helper,
   tone = "primary",
+  onClick,
   className,
 }) {
   const toneStyles = {
@@ -173,32 +174,52 @@ export function MetricCard({
     slate: "bg-charcoal-100 text-charcoal-700 dark:bg-charcoal-800 dark:text-charcoal-300",
   };
 
+  const isInteractive = Boolean(onClick);
+
   return (
     <SurfaceCard
-      className={cn("flex h-full flex-col justify-between gap-6", className)}
+      role={isInteractive ? "button" : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
+      onClick={onClick}
+      onKeyDown={
+        isInteractive
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClick(e);
+              }
+            }
+          : undefined
+      }
+      className={cn(
+        "flex h-full flex-col justify-between gap-3 p-3.5 sm:p-4.5 transition-all duration-200",
+        isInteractive &&
+          "cursor-pointer hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
+        className,
+      )}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-sm font-medium text-text-sub-light dark:text-text-sub-dark">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-xs sm:text-sm font-medium text-text-sub-light dark:text-text-sub-dark truncate">
             {label}
           </p>
-          <p className="mt-3 font-display text-4xl font-semibold tracking-[-0.05em] text-text-main-light dark:text-text-main-dark">
+          <p className="mt-1 font-display text-2xl sm:text-3xl font-semibold tracking-[-0.04em] tabular-nums text-text-main-light dark:text-text-main-dark">
             {value}
           </p>
         </div>
         {Icon ? (
           <div
             className={cn(
-              "flex h-12 w-12 items-center justify-center rounded-2xl border border-border/20 dark:border-white/10",
+              "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border/20 dark:border-white/10 transition-colors",
               toneStyles[tone] || toneStyles.primary,
             )}
           >
-            <Icon className="h-5 w-5" />
+            <Icon className="h-4 w-4" />
           </div>
         ) : null}
       </div>
       {helper ? (
-        <p className="text-sm text-text-sub-light dark:text-text-sub-dark">
+        <p className="text-xs text-text-sub-light/90 dark:text-text-sub-dark/90 truncate">
           {helper}
         </p>
       ) : null}
@@ -209,7 +230,7 @@ export function MetricCard({
 export function StatusPill({ children, tone = "neutral", className }) {
   const toneStyles = {
     neutral:
-      "border-charcoal-200 bg-charcoal-100/60 text-charcoal-700 dark:border-white/10 dark:bg-white/5 dark:text-charcoal-300",
+      "border-charcoal-200 bg-charcoal-100/60 text-charcoal-700 dark:border-white/10 dark:bg-white/5 dark:text-stone-200",
     success:
       "border-forest-200 bg-forest-50 text-forest-700 dark:border-forest-500/20 dark:bg-forest-500/10 dark:text-forest-200",
     warning:
